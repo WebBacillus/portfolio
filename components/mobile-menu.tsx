@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { X, Menu, Home, Briefcase, User, Mail, Instagram, Linkedin, Github, Twitter } from "lucide-react"
+import { X, Menu, Home, Briefcase, User, Mail, Linkedin, Github } from "lucide-react"
 import gsap from "gsap"
 import TransitionLink from "@/components/transition-link"
 
@@ -22,16 +22,14 @@ export default function MobileMenu({ variant = "sidebar" }: MobileMenuProps) {
 
   const navItems = [
     { path: "/", label: "Home", icon: <Home className="w-5 h-5" /> },
-    { path: "/work", label: "Work", icon: <Briefcase className="w-5 h-5" /> },
+    { path: "/work", label: "AI & Projects", icon: <Briefcase className="w-5 h-5" /> },
     { path: "/about", label: "About", icon: <User className="w-5 h-5" /> },
     { path: "/contact", label: "Contact", icon: <Mail className="w-5 h-5" /> },
   ]
 
   const socialLinks = [
-    { href: "https://instagram.com/meesverberne", icon: <Instagram className="w-5 h-5" />, label: "Instagram" },
-    { href: "https://twitter.com/meesverberne", icon: <Twitter className="w-5 h-5" />, label: "Twitter" },
-    { href: "https://linkedin.com/in/meesverberne", icon: <Linkedin className="w-5 h-5" />, label: "LinkedIn" },
-    { href: "https://github.com/meesverberne", icon: <Github className="w-5 h-5" />, label: "GitHub" },
+    { href: "https://www.linkedin.com/in/pasit-khumsena-918616352/", icon: <Linkedin className="w-5 h-5" />, label: "LinkedIn" },
+    { href: "https://github.com/WebBacillus", icon: <Github className="w-5 h-5" />, label: "GitHub" },
   ]
 
   // Check if a path is active
@@ -128,7 +126,7 @@ export default function MobileMenu({ variant = "sidebar" }: MobileMenuProps) {
         {/* Menu Button */}
         <button
           onClick={toggleMenu}
-          className="md:hidden fixed top-6 right-4 z-50 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full shadow-md"
+          className="md:hidden fixed top-5 right-4 z-50 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full shadow-md"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
         >
@@ -159,9 +157,9 @@ export default function MobileMenu({ variant = "sidebar" }: MobileMenuProps) {
             <div className="p-6 border-b border-purple/10">
               <TransitionLink href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
                 <div className="w-10 h-10 mr-3 relative">
-                  <Image src="/images/logo.png" alt="Ghost Logo" fill className="object-contain" sizes="40px" />
+                  <Image src="/images/logo.png" alt="Pasit Khumsena" fill className="object-contain" sizes="40px" />
                 </div>
-                <span className="text-xl font-bold">Mees Verberne</span>
+                <span className="text-xl font-bold">Pasit Khumsena</span>
               </TransitionLink>
             </div>
 

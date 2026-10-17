@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation"
 import { useRef, useEffect, useState } from "react"
 import gsap from "gsap"
 import TransitionLink from "@/components/transition-link"
-import { addHoverAnimation } from "@/lib/gsap-utils"
 
 export default function Header() {
   const pathname = usePathname()
@@ -102,35 +101,14 @@ export default function Header() {
     }
   }, [scrolled])
 
-  // Setup hover animations for nav links
-  useEffect(() => {
-    if (!navRef.current) return
-    const cleanupFunctions: (() => void)[] = []
-
-    const navLinks = navRef.current.querySelectorAll("a")
-    navLinks.forEach((link) => {
-      // Skip the active link
-      if (link.getAttribute("href") === pathname) return
-
-      const cleanup = addHoverAnimation(link as HTMLElement, { color: "#6b46c1", y: -2 }, { color: "#1a1a1a", y: 0 })
-
-      if (cleanup) cleanupFunctions.push(cleanup)
-    })
-
-    // Clean up
-    return () => {
-      cleanupFunctions.forEach((cleanup) => cleanup())
-    }
-  }, [pathname])
-
   return (
     <header
       ref={headerRef}
       className="fixed top-0 left-0 right-0 z-40 transition-all duration-300 pt-safe"
       style={{ height: "80px" }}
     >
-      <div className="container mx-auto px-4">
-        <div className="relative flex justify-between items-center h-full">
+      <div className="container mx-auto h-full px-4">
+        <div className="grid h-full grid-cols-[1fr_auto_1fr] items-center">
           {/* Logo */}
           <TransitionLink href="/" className="flex items-center">
             <div
@@ -157,67 +135,76 @@ export default function Header() {
             </div>
           </TransitionLink>
 
-          {/* Navigation - Only visible on desktop */}
-          <nav ref={navRef} className="hidden md:flex space-x-8 relative">
-            {[
-              { path: "/", label: "INDEX" },
-              { path: "/work", label: "WORK" },
-              { path: "/about", label: "ABOUT" },
-              { path: "/contact", label: "CONTACT" },
-            ].map((item) => (
-              <TransitionLink
-                key={item.path}
-                href={item.path}
-                className={`py-2 px-1 transition-colors duration-300 relative ${
-                  isActive(item.path) ? "text-purple font-medium" : "text-black"
-                }`}
-              >
-                {item.label}
-              </TransitionLink>
-            ))}
+          {/* Navigation stays centered independently of the logo and social group widths. */}
+          <nav
+            ref={navRef}
+            aria-label="Main navigation"
+            className="hidden md:flex items-center justify-self-center gap-7"
+          >
+              {[
+                { path: "/", label: "INDEX" },
+                { path: "/work", label: "AI & PROJECTS" },
+                { path: "/about", label: "ABOUT" },
+                { path: "/contact", label: "CONTACT" },
+              ].map((item) => (
+                <TransitionLink
+                  key={item.path}
+                  href={item.path}
+                    className={`py-2 px-1 relative transition-[color,transform] duration-150 ease-out hover:-translate-y-0.5 hover:text-purple focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple ${
+                    isActive(item.path) ? "text-purple font-medium" : "text-black"
+                  }`}
+                >
+                  {item.label}
+                </TransitionLink>
+              ))}
           </nav>
 
           {/* Social icons - Only visible on desktop */}
-          <div ref={socialRef} className="hidden md:flex space-x-4">
-            {[
-              {
-                href: "https://github.com/WebBacillus",
-                icon: <Github className="w-5 h-5" />,
-                label: "Github",
-              },
-              {
-                href: "https://www.linkedin.com/in/pasit-khumsena-918616352/",
-                icon: <Linkedin className="w-5 h-5" />,
-                label: "LinkedIn",
-              },
-            ].map((social, index) => (
-              <a
-                key={index}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.label}
-                className="hover:text-purple transition-colors duration-300"
-                onMouseEnter={(e) => {
-                  gsap.to(e.currentTarget, {
-                    scale: 1.2,
-                    rotate: index === 0 ? 5 : -5,
-                    duration: 0.3,
-                    ease: "back.out(1.7)",
-                  })
-                }}
-                onMouseLeave={(e) => {
-                  gsap.to(e.currentTarget, {
-                    scale: 1,
-                    rotate: 0,
-                    duration: 0.3,
-                    ease: "power2.out",
-                  })
-                }}
-              >
-                {social.icon}
-              </a>
-            ))}
+          <div
+            ref={socialRef}
+            role="group"
+            aria-label="Social links"
+            className="hidden md:flex items-center justify-self-end gap-4 border-l border-purple/20 pl-6"
+          >
+              {[
+                {
+                  href: "https://github.com/WebBacillus",
+                  icon: <Github className="w-5 h-5" />,
+                  label: "GitHub",
+                },
+                {
+                  href: "https://www.linkedin.com/in/pasit-khumsena-918616352/",
+                  icon: <Linkedin className="w-5 h-5" />,
+                  label: "LinkedIn",
+                },
+              ].map((social, index) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="hover:text-purple transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple"
+                  onMouseEnter={(e) => {
+                    gsap.to(e.currentTarget, {
+                      scale: 1.2,
+                      rotate: index === 0 ? 5 : -5,
+                      duration: 0.3,
+                      ease: "back.out(1.7)",
+                    })
+                  }}
+                  onMouseLeave={(e) => {
+                    gsap.to(e.currentTarget, {
+                      scale: 1,
+                      rotate: 0,
+                      duration: 0.3,
+                      ease: "power2.out",
+                    })
+                  }}
+                >
+                  {social.icon}
+                </a>
+              ))}
           </div>
         </div>
       </div>
