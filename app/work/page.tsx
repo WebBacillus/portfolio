@@ -131,6 +131,7 @@ export default function WorkPage() {
 
     return () => {
       // Clean up animations
+      timeline.kill()
       if (introText) gsap.killTweensOf(introText)
       if (filters) gsap.killTweensOf(filters.children)
       if (container) gsap.killTweensOf(container.children)
@@ -144,6 +145,7 @@ export default function WorkPage() {
     if (container) {
       // First, animate out the current projects
       const timeline = gsap.timeline()
+      let entranceAnimation: gsap.core.Tween | undefined
 
       timeline.to(container.children, {
         opacity: 0,
@@ -164,7 +166,7 @@ export default function WorkPage() {
       // Then animate in the new projects after state update
       timeline.add(() => {
         if (container.children.length > 0) {
-          gsap.fromTo(
+          entranceAnimation = gsap.fromTo(
             container.children,
             { opacity: 0, y: 20 },
             {
@@ -178,7 +180,15 @@ export default function WorkPage() {
           )
         }
       })
+
+      return () => {
+        timeline.kill()
+        entranceAnimation?.kill()
+        gsap.killTweensOf(container.children)
+      }
     }
+
+    return
   }, [activeFilter])
 
   // Handle empty state animation
@@ -191,6 +201,10 @@ export default function WorkPage() {
       } else {
         gsap.to(emptyState, { opacity: 0, duration: 0.3, ease: "power2.out" })
       }
+    }
+
+    return () => {
+      if (emptyState) gsap.killTweensOf(emptyState)
     }
   }, [filteredProjects.length])
 

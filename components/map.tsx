@@ -14,12 +14,13 @@ export default function Map({ address, zoom = 15 }: MapProps) {
     // This is a placeholder for a real map implementation
     // In a real application, you would use a library like Google Maps, Mapbox, or Leaflet
 
-    if (!mapRef.current) return
+    const mapElement = mapRef.current
+    if (!mapElement) return
 
     const loadMap = async () => {
       try {
         // Simulate map loading with a colored background
-        mapRef.current.innerHTML = `
+        mapElement.innerHTML = `
           <div class="w-full h-full flex items-center justify-center bg-purple/10 rounded-lg">
             <div class="text-center">
               <div class="text-purple text-xl font-bold mb-2">Map Location</div>
@@ -35,5 +36,5 @@ export default function Map({ address, zoom = 15 }: MapProps) {
     loadMap()
   }, [address])
 
-  return <div ref={mapRef} className="w-full h-[300px] rounded-lg overflow-hidden"></div>
+  return <div ref={mapRef} data-zoom={zoom} className="w-full h-[300px] rounded-lg overflow-hidden"></div>
 }

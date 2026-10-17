@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import Header from "@/components/header"
@@ -15,14 +15,20 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Webbacillus-Portfolio",
   description: "Webbacillus-Portfolio",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover",
-  themeColor: "#6b46c1",
   manifest: "/manifest.json",
   icons: {
     icon: "/images/logo.png",
     apple: "/images/logo.png",
   },
     generator: 'v0.app'
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#6b46c1",
 }
 
 export default function RootLayout({

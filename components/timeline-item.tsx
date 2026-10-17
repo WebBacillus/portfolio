@@ -14,8 +14,6 @@ interface TimelineItemProps {
 
 export default function TimelineItem({ year, title, description, index, skills = [] }: TimelineItemProps) {
   const itemRef = useRef<HTMLDivElement>(null)
-  const dotRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     if (typeof window === "undefined" || !itemRef.current) return
 
@@ -181,7 +179,8 @@ export default function TimelineItem({ year, title, description, index, skills =
       tl.kill()
       item.removeEventListener("mouseenter", handleMouseEnter)
       item.removeEventListener("mouseleave", handleMouseLeave)
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+      tl.scrollTrigger?.kill()
+      gsap.killTweensOf([item, ...(dot ? [dot] : []), ...Array.from(skillTags)])
     }
   }, [index])
 

@@ -4,7 +4,6 @@ import { Github, Linkedin } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useRef, useEffect, useState } from "react"
 import gsap from "gsap"
-import useMobile from "@/hooks/use-mobile"
 import TransitionLink from "@/components/transition-link"
 import { addHoverAnimation } from "@/lib/gsap-utils"
 
@@ -15,7 +14,6 @@ export default function Header() {
   const navRef = useRef<HTMLElement>(null)
   const socialRef = useRef<HTMLDivElement>(null)
   const [scrolled, setScrolled] = useState(false)
-  const isMobile = useMobile()
 
   // Check if a path is active
   const isActive = (path: string) => pathname === path
@@ -61,19 +59,23 @@ export default function Header() {
       )
     }
 
-    return () => tl.kill()
+    return () => {
+      tl.kill()
+    }
   }, [])
 
   // Handle scroll effects
   useEffect(() => {
+    const header = headerRef.current
+    const logo = logoRef.current
     const handleScroll = () => {
       const isScrolled = window.scrollY > 20
       if (isScrolled !== scrolled) {
         setScrolled(isScrolled)
 
         // Animate header on scroll
-        if (headerRef.current) {
-          gsap.to(headerRef.current, {
+        if (header) {
+          gsap.to(header, {
             backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.9)" : "transparent",
             boxShadow: isScrolled ? "0 4px 20px rgba(0, 0, 0, 0.05)" : "none",
             height: isScrolled ? "70px" : "80px",
@@ -83,8 +85,8 @@ export default function Header() {
         }
 
         // Scale logo slightly on scroll
-        if (logoRef.current) {
-          gsap.to(logoRef.current, {
+        if (logo) {
+          gsap.to(logo, {
             scale: isScrolled ? 0.9 : 1,
             duration: 0.3,
             ease: "power2.out",
@@ -94,7 +96,10 @@ export default function Header() {
     }
 
     window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      gsap.killTweensOf([header, logo])
+    }
   }, [scrolled])
 
   // Setup hover animations for nav links

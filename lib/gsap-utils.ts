@@ -83,7 +83,7 @@ export const createScrollTrigger = (
 
 // Hook for scroll-triggered animations
 export const useScrollAnimation = (
-  ref: React.RefObject<HTMLElement>,
+  ref: React.RefObject<HTMLElement | null>,
   animationType: "fadeIn" | "slideInLeft" | "slideInRight" | "slideInTop" | "slideInBottom",
   options = { delay: 0, start: "top 80%" },
 ) => {
@@ -124,7 +124,7 @@ export const useScrollAnimation = (
 
 // Hook for staggered animations
 export const useStaggerAnimation = (
-  containerRef: React.RefObject<HTMLElement>,
+  containerRef: React.RefObject<HTMLElement | null>,
   selector: string,
   options = { stagger: 0.1, delay: 0, start: "top 80%" },
 ) => {

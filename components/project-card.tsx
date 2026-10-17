@@ -1,11 +1,10 @@
 "use client"
 
 import Image from "next/image"
-import { ExternalLink, Github, ArrowRight } from "lucide-react"
+import { ExternalLink, Github } from "lucide-react"
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import TransitionLink from "@/components/transition-link"
 import { addHoverAnimation } from "@/lib/gsap-utils"
 
 interface ProjectCardProps {
@@ -84,8 +83,10 @@ export default function ProjectCard({
       .to(card, { boxShadow: "0 10px 30px rgba(107, 70, 193, 0.15)", y: -5, duration: 0.5, ease: "power2.out" }, 0)
 
     // Add event listeners for hover
-    card.addEventListener("mouseenter", () => hoverTimeline.play())
-    card.addEventListener("mouseleave", () => hoverTimeline.reverse())
+    const handleMouseEnter = () => hoverTimeline.play()
+    const handleMouseLeave = () => hoverTimeline.reverse()
+    card.addEventListener("mouseenter", handleMouseEnter)
+    card.addEventListener("mouseleave", handleMouseLeave)
 
     // Set up link hover animations
     const links = card.querySelectorAll("a")
@@ -102,8 +103,9 @@ export default function ProjectCard({
       // Clean up animations and event listeners
       scrollTrigger.kill()
       hoverTimeline.kill()
-      card.removeEventListener("mouseenter", () => {})
-      card.removeEventListener("mouseleave", () => {})
+      card.removeEventListener("mouseenter", handleMouseEnter)
+      card.removeEventListener("mouseleave", handleMouseLeave)
+      gsap.killTweensOf([card, image, content.children, tagsContainer.children])
       cleanupFunctions.forEach((cleanup) => cleanup())
     }
   }, [])

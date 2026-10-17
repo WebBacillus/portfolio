@@ -51,9 +51,12 @@ export class PerformanceMonitor {
 }
 
 // Throttle function for better performance
-export function throttle<T extends (...args: any[]) => any>(func: T, limit: number): (...args: Parameters<T>) => void {
+export function throttle<This, Args extends unknown[], Result>(
+  func: (this: This, ...args: Args) => Result,
+  limit: number,
+): (this: This, ...args: Args) => void {
   let inThrottle: boolean
-  return function (this: any, ...args: Parameters<T>) {
+  return function (this: This, ...args: Args) {
     if (!inThrottle) {
       func.apply(this, args)
       inThrottle = true
@@ -63,9 +66,12 @@ export function throttle<T extends (...args: any[]) => any>(func: T, limit: numb
 }
 
 // Debounce function for resize events
-export function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout
-  return function (this: any, ...args: Parameters<T>) {
+export function debounce<This, Args extends unknown[], Result>(
+  func: (this: This, ...args: Args) => Result,
+  wait: number,
+): (this: This, ...args: Args) => void {
+  let timeout: ReturnType<typeof setTimeout> | undefined
+  return function (this: This, ...args: Args) {
     clearTimeout(timeout)
     timeout = setTimeout(() => func.apply(this, args), wait)
   }
@@ -92,7 +98,7 @@ export function getDevicePerformanceTier(): "low" | "medium" | "high" {
   if (typeof window === "undefined") return "medium"
 
   const hardwareConcurrency = navigator.hardwareConcurrency || 2
-  const memory = (navigator as any).deviceMemory || 4
+  const memory = (Reflect.get(navigator, "deviceMemory") as number | undefined) || 4
 
   if (hardwareConcurrency >= 8 && memory >= 8) {
     return "high"

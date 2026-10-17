@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { X, Menu, Home, Briefcase, User, Mail, Instagram, Linkedin, Github, Twitter } from "lucide-react"
@@ -12,8 +12,10 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ variant = "sidebar" }: MobileMenuProps) {
-  const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  const [menuState, setMenuState] = useState({ pathname, isOpen: false })
+  const isOpen = menuState.pathname === pathname && menuState.isOpen
+  const setIsOpen = useCallback((open: boolean) => setMenuState({ pathname, isOpen: open }), [pathname])
   const menuRef = useRef<HTMLDivElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const menuContentRef = useRef<HTMLDivElement>(null)
@@ -48,12 +50,7 @@ export default function MobileMenu({ variant = "sidebar" }: MobileMenuProps) {
 
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [isOpen])
-
-  // Close menu when route changes
-  useEffect(() => {
-    setIsOpen(false)
-  }, [pathname])
+  }, [isOpen, setIsOpen])
 
   // Handle menu animations
   useEffect(() => {
@@ -99,6 +96,15 @@ export default function MobileMenu({ variant = "sidebar" }: MobileMenuProps) {
           ease: "power3.in",
         })
       }
+    }
+
+    const animatedElements = [overlayRef.current, menuContentRef.current].filter(
+      (element): element is HTMLDivElement => element !== null,
+    )
+    const menuItems = menuContentRef.current?.querySelectorAll(".menu-item")
+    return () => {
+      gsap.killTweensOf(animatedElements)
+      if (menuItems) gsap.killTweensOf(menuItems)
     }
   }, [isOpen, variant])
 

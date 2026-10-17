@@ -12,8 +12,6 @@ export default function ScrollingText() {
     if (!scrollRef.current) return
 
     // Create a smoother scrolling animation with GSAP
-    const scrollingElements = scrollRef.current.children
-
     // Reset the default CSS animation
     gsap.set(scrollRef.current, {
       animation: "none",
@@ -37,21 +35,19 @@ export default function ScrollingText() {
 
     // Add hover effect to pause animation
     const container = scrollRef.current.parentElement
+    const handleMouseEnter = () => gsap.to(tl, { timeScale: 0.2, duration: 0.5 })
+    const handleMouseLeave = () => gsap.to(tl, { timeScale: 1, duration: 0.5 })
     if (container) {
-      container.addEventListener("mouseenter", () => {
-        gsap.to(tl, { timeScale: 0.2, duration: 0.5 })
-      })
-
-      container.addEventListener("mouseleave", () => {
-        gsap.to(tl, { timeScale: 1, duration: 0.5 })
-      })
+      container.addEventListener("mouseenter", handleMouseEnter)
+      container.addEventListener("mouseleave", handleMouseLeave)
     }
 
     return () => {
       tl.kill()
+      gsap.killTweensOf(tl)
       if (container) {
-        container.removeEventListener("mouseenter", () => {})
-        container.removeEventListener("mouseleave", () => {})
+        container.removeEventListener("mouseenter", handleMouseEnter)
+        container.removeEventListener("mouseleave", handleMouseLeave)
       }
     }
   }, [])

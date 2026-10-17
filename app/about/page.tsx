@@ -62,7 +62,7 @@ const timelineData = [
 ]
 
 // Skills data
-const skillsData = [
+const skillsData: { name: string; level: "beginner" | "intermediate" | "advanced" | "expert" }[] = [
   { name: "Go", level: "intermediate" },
   { name: "C++", level: "intermediate" },
   { name: "Python", level: "intermediate" },
@@ -91,11 +91,12 @@ export default function AboutPage() {
   const headshotRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!headshotRef.current) return
+    const headshot = headshotRef.current
+    if (!headshot) return
 
     // Simple headshot animation without scroll trigger
-    gsap.fromTo(
-      headshotRef.current,
+    const animation = gsap.fromTo(
+      headshot,
       { opacity: 0, scale: 0.8, rotation: -5 },
       {
         opacity: 1,
@@ -106,6 +107,11 @@ export default function AboutPage() {
         ease: "elastic.out(1, 0.5)",
       },
     )
+
+    return () => {
+      animation.kill()
+      gsap.killTweensOf(headshot)
+    }
   }, [])
 
   return (
@@ -115,22 +121,22 @@ export default function AboutPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
         <AnimatedSection animation="slideInLeft" delay={1.5} className="order-2 md:order-1">
-            <h2 className="text-3xl font-bold mb-6">Hello, I'm Pasit Khumsena</h2>
+            <h2 className="text-3xl font-bold mb-6">Hello, I&apos;m Pasit Khumsena</h2>
 
             <p className="text-black/80 text-lg leading-relaxed mb-4">
-              A Computer Engineering student at Chulalongkorn University, I'm focused on backend development and driven
+              A Computer Engineering student at Chulalongkorn University, I&apos;m focused on backend development and driven
               by a passion for leveraging FinTech and Automation to build impactful solutions. I believe in the power of
-              robust and scalable systems to transform industries and improve people's lives.
+              robust and scalable systems to transform industries and improve people&apos;s lives.
             </p>
 
             <p className="text-black/80 text-lg leading-relaxed mb-4">
-              Beyond my studies, I'm dedicated to creating novel software solutions that harness the potential of
-              cutting-edge AI technologies. I'm also deeply interested in developing automation tools to simplify and
+              Beyond my studies, I&apos;m dedicated to creating novel software solutions that harness the potential of
+              cutting-edge AI technologies. I&apos;m also deeply interested in developing automation tools to simplify and
               enhance daily routines, always seeking opportunities to streamline processes and boost efficiency.
             </p>
 
             <p className="text-black/80 text-lg leading-relaxed mb-6">
-              When I'm not actively coding, my curiosity leads me to explore the ever-evolving world of AI. I enjoy
+              When I&apos;m not actively coding, my curiosity leads me to explore the ever-evolving world of AI. I enjoy
               discovering new tools, techniques, and applications, always seeking inspiration and opportunities to
               leverage these technologies in my own projects and beyond.
             </p>

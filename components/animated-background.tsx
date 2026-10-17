@@ -35,7 +35,8 @@ export default function AnimatedBackground() {
   const mouseX = useRef(0)
   const mouseY = useRef(0)
   const isVisible = useRef(true)
-  const performanceMonitor = useRef<PerformanceMonitor>()
+  const animateRef = useRef<() => void>(() => {})
+  const performanceMonitor = useRef<PerformanceMonitor | null>(null)
   const [settings, setSettings] = useState<AdaptiveSettings>(getAdaptiveSettings())
 
   // Throttled scroll handler for better performance
@@ -55,7 +56,7 @@ export default function AnimatedBackground() {
     if (!isVisible.current && animationRef.current) {
       cancelAnimationFrame(animationRef.current)
     } else if (isVisible.current) {
-      animate()
+      animateRef.current()
     }
   }, [])
 
@@ -69,7 +70,7 @@ export default function AnimatedBackground() {
     const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1)
     const scrollProgress = Math.min(scrollY.current / maxScroll, 1)
 
-    squares.current.forEach((square, index) => {
+    squares.current.forEach((square) => {
       // Update position with bounds checking
       square.x += square.speedX * settings.animationSpeed
       square.y += square.speedY * settings.animationSpeed
@@ -108,8 +109,12 @@ export default function AnimatedBackground() {
       })
     })
 
-    animationRef.current = requestAnimationFrame(animate)
+    animationRef.current = requestAnimationFrame(() => animateRef.current())
   }, [settings])
+
+  useEffect(() => {
+    animateRef.current = animate
+  }, [animate])
 
   useEffect(() => {
     const container = containerRef.current
@@ -188,7 +193,7 @@ export default function AnimatedBackground() {
     }
 
     // Create scroll-triggered background effects
-    ScrollTrigger.create({
+    const scrollTrigger = ScrollTrigger.create({
       trigger: document.body,
       start: "top top",
       end: "bottom bottom",
@@ -250,7 +255,7 @@ export default function AnimatedBackground() {
 
     // Initialize
     handleResize()
-    animate()
+    animateRef.current()
 
     return () => {
       // Cleanup
@@ -271,7 +276,7 @@ export default function AnimatedBackground() {
       })
 
       // Kill ScrollTrigger instances
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+      scrollTrigger.kill()
 
       clearTimeout(scrollTimeout)
       clearTimeout(mouseTimeout)

@@ -3,7 +3,7 @@
 import type React from "react"
 import { useRouter } from "next/navigation"
 import type { ReactNode } from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { animatePageOut } from "@/lib/transition-utils"
 import useMobile from "@/hooks/use-mobile"
 
@@ -18,10 +18,12 @@ export default function TransitionLink({ href, children, className = "", onClick
   const router = useRouter()
   const isMobile = useMobile()
   const [isNavigating, setIsNavigating] = useState(false)
+  const navigationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Reset navigation state when component unmounts
   useEffect(() => {
-    return () => setIsNavigating(false)
+    return () => {
+      if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current)
+    }
   }, [])
 
   const handleClick = (e: React.MouseEvent) => {
@@ -48,7 +50,7 @@ export default function TransitionLink({ href, children, className = "", onClick
         animatePageOut(href, router)
 
         // Reset navigation state after timeout as safety
-        setTimeout(() => {
+        navigationTimeoutRef.current = setTimeout(() => {
           setIsNavigating(false)
         }, 2000)
       } catch (error) {
@@ -62,7 +64,7 @@ export default function TransitionLink({ href, children, className = "", onClick
       animatePageOut(href, router)
 
       // Reset navigation state after timeout as safety
-      setTimeout(() => {
+      navigationTimeoutRef.current = setTimeout(() => {
         setIsNavigating(false)
       }, 2000)
     }

@@ -9,7 +9,9 @@ declare global {
   }
 }
 
-export const animatePageIn = () => {
+let activeTransition: gsap.core.Timeline | undefined
+
+export const animatePageIn = (): gsap.core.Timeline | undefined => {
   if (typeof window === "undefined") return
 
   // Get the transition container
@@ -23,6 +25,7 @@ export const animatePageIn = () => {
   window.isTransitioning = false
 
   if (container && bannerOne && bannerTwo && bannerThree && bannerFour) {
+    activeTransition?.kill()
     // Make container visible first
     gsap.set(container, { display: "block", autoAlpha: 1 })
 
@@ -31,8 +34,10 @@ export const animatePageIn = () => {
         // Ensure banners are hidden and not interfering with UI after animation
         gsap.set(container, { display: "none", autoAlpha: 0 })
         window.isTransitioning = false
+        activeTransition = undefined
       },
     })
+    activeTransition = tl
 
     // Set initial positions
     tl.set([bannerOne, bannerTwo, bannerThree, bannerFour], {
@@ -47,6 +52,8 @@ export const animatePageIn = () => {
       duration: 0.8,
       ease: "power4.inOut",
     })
+
+    return tl
   }
 }
 
@@ -68,14 +75,17 @@ export const animatePageOut = (href: string, router: AppRouterInstance) => {
   const bannerFour = document.getElementById("banner-4")
 
   if (container && bannerOne && bannerTwo && bannerThree && bannerFour) {
+    activeTransition?.kill()
     // Make the transition container visible first
     gsap.set(container, { display: "block", autoAlpha: 1 })
 
     const tl = gsap.timeline({
       onComplete: () => {
+        activeTransition = undefined
         router.push(href)
       },
     })
+    activeTransition = tl
 
     // Set initial positions (banners above viewport)
     tl.set([bannerOne, bannerTwo, bannerThree, bannerFour], {
@@ -101,6 +111,8 @@ export const animatePageOut = (href: string, router: AppRouterInstance) => {
 export const abortTransition = () => {
   if (typeof window === "undefined") return
 
+  activeTransition?.kill()
+  activeTransition = undefined
   const container = window.pageTransitionContainer || document.getElementById("page-transition-container")
 
   if (container) {

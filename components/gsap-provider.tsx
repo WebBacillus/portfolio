@@ -1,7 +1,7 @@
 "use client"
 
 import { type ReactNode, useEffect } from "react"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
@@ -13,7 +13,6 @@ interface GSAPProviderProps {
 
 export default function GSAPProvider({ children }: GSAPProviderProps) {
   const pathname = usePathname()
-  const router = useRouter()
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -28,12 +27,6 @@ export default function GSAPProvider({ children }: GSAPProviderProps) {
 
     // Initialize flags for transition management
     window.isTransitioning = false
-
-    // Animate page in on initial load
-    animatePageIn()
-
-    // Refresh ScrollTrigger on route change
-    ScrollTrigger.refresh()
 
     // Clean up on unmount
     return () => {
@@ -50,13 +43,18 @@ export default function GSAPProvider({ children }: GSAPProviderProps) {
     if (typeof window === "undefined") return
 
     // Animate page in when pathname changes
-    animatePageIn()
+    const transition = animatePageIn()
 
     // Scroll to top on page change
     window.scrollTo(0, 0)
 
     // Refresh ScrollTrigger
     ScrollTrigger.refresh()
+
+    return () => {
+      transition?.kill()
+      abortTransition()
+    }
   }, [pathname])
 
   // Add event listeners for mobile-specific issues
@@ -72,9 +70,10 @@ export default function GSAPProvider({ children }: GSAPProviderProps) {
     }
 
     // Handle page load complete to ensure transitions are cleaned up
+    let loadTimeout: ReturnType<typeof setTimeout> | undefined
     const handleLoad = () => {
       // Slight delay to ensure DOM is fully loaded
-      setTimeout(() => {
+      loadTimeout = setTimeout(() => {
         abortTransition()
       }, 300)
     }
@@ -85,6 +84,7 @@ export default function GSAPProvider({ children }: GSAPProviderProps) {
 
     // Clean up event listeners
     return () => {
+      if (loadTimeout) clearTimeout(loadTimeout)
       document.removeEventListener("visibilitychange", handleVisibilityChange)
       window.removeEventListener("load", handleLoad)
     }

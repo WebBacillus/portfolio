@@ -12,43 +12,48 @@ import type { ContactFormResponse } from "@/app/actions/contact"
 
 export default function ContactPage() {
   const formRef = useRef<HTMLFormElement>(null)
-  const inputRefs = useRef<(HTMLInputElement | HTMLTextAreaElement)[]>([])
+  const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formResponse, setFormResponse] = useState<ContactFormResponse | null>(null)
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    if (!formRef.current) return
+    const form = formRef.current
+    if (!form) return
     const cleanupFunctions: (() => void)[] = []
 
     // Add focus and blur animations to form inputs
-    const inputs = formRef.current.querySelectorAll("input, textarea")
+    const inputs = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input, textarea"))
 
     inputs.forEach((input) => {
-      // Store refs for cleanup
-      inputRefs.current.push(input as HTMLInputElement | HTMLTextAreaElement)
-
       // Focus animation
-      input.addEventListener("focus", () => {
+      const handleFocus = () => {
         gsap.to(input, {
           borderColor: "rgba(107, 70, 193, 0.8)",
           boxShadow: "0 0 0 2px rgba(107, 70, 193, 0.2)",
           duration: 0.3,
         })
-      })
+      }
 
       // Blur animation
-      input.addEventListener("blur", () => {
+      const handleBlur = () => {
         gsap.to(input, {
           borderColor: "rgba(107, 70, 193, 0.2)",
           boxShadow: "none",
           duration: 0.3,
         })
+      }
+
+      input.addEventListener("focus", handleFocus)
+      input.addEventListener("blur", handleBlur)
+      cleanupFunctions.push(() => {
+        input.removeEventListener("focus", handleFocus)
+        input.removeEventListener("blur", handleBlur)
       })
     })
 
     // Button hover animation
-    const button = formRef.current.querySelector("button")
+    const button = form.querySelector("button")
     if (button) {
       const cleanup = addHoverAnimation(button as HTMLElement, { scale: 1.05 }, { scale: 1 })
       if (cleanup) cleanupFunctions.push(cleanup)
@@ -56,9 +61,9 @@ export default function ContactPage() {
 
     return () => {
       // Clean up all animations
-      inputRefs.current.forEach((input) => {
-        gsap.killTweensOf(input)
-      })
+      if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current)
+      inputs.forEach((input) => gsap.killTweensOf(input))
+      gsap.killTweensOf(form.querySelector(".success-message"))
       cleanupFunctions.forEach((cleanup) => cleanup())
     }
   }, [])
@@ -66,9 +71,10 @@ export default function ContactPage() {
   // Basic client-side validation
   const validateForm = () => {
     const errors: Record<string, string> = {}
-    const name = formRef.current?.name.value
-    const email = formRef.current?.email.value
-    const message = formRef.current?.message.value
+    const form = formRef.current
+    const name = (form?.elements.namedItem("name") as HTMLInputElement | null)?.value
+    const email = (form?.elements.namedItem("email") as HTMLInputElement | null)?.value
+    const message = (form?.elements.namedItem("message") as HTMLTextAreaElement | null)?.value
 
     if (!name || name.length < 2) {
       errors.name = "Name must be at least 2 characters"
@@ -119,7 +125,7 @@ export default function ContactPage() {
           gsap.fromTo(successMessage, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 })
 
           // Hide success message after 5 seconds
-          setTimeout(() => {
+          successTimeoutRef.current = setTimeout(() => {
             gsap.to(successMessage, {
               opacity: 0,
               y: -20,

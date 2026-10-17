@@ -41,45 +41,21 @@ export default function Home() {
     },
   ]
 
-  // Experience data
-  const experienceData = [
-    {
-      title: "Backend Developer Intern",
-      company: "NITMX",
-      period: "May 2024 - July 2024",
-      description:
-        "Developed high-traffic backend systems with Go, microservices, and Kafka. Gained experience with banking-level system architecture and performance optimization.",
-      skills: ["Go", "Microservices", "Kafka", "gRPC", "Load Balancing"],
-    },
-    {
-      title: "Software Engineer Intern",
-      company: "ITMX",
-      period: "April 2025 - Present",
-      description:
-        "Contributing to scalable backend systems and performance optimization. Working on enterprise-level applications with focus on reliability and scalability.",
-      skills: ["Backend Development", "System Design", "Performance", "Scalability"],
-    },
-    {
-      title: "AI Builders Program",
-      company: "Participant",
-      period: "March 2023 - June 2023",
-      description:
-        "Developed AI-powered Thai profanity detection system using NLP. Presented project at Bangkok Art and Culture Centre to industry professionals.",
-      skills: ["AI", "NLP", "Python", "ASR", "Machine Learning"],
-    },
-  ]
-
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     const timeline = gsap.timeline()
+    const scrollTriggers: ScrollTrigger[] = []
+    const animatedElements: Element[] = []
 
     // Scrolling text animation
     if (scrollTextRef.current) {
+      animatedElements.push(scrollTextRef.current)
       timeline.fromTo(scrollTextRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5, delay: 1.25 })
     }
 
     // Profile picture animation
     if (profileRef.current) {
+      animatedElements.push(profileRef.current)
       timeline.fromTo(
         profileRef.current,
         { opacity: 0, scale: 0.9, rotation: -5 },
@@ -89,6 +65,7 @@ export default function Home() {
 
     // Intro text animation
     if (introTextRef.current) {
+      animatedElements.push(introTextRef.current)
       timeline.fromTo(
         introTextRef.current,
         { opacity: 0, y: 20 },
@@ -98,6 +75,7 @@ export default function Home() {
 
     // Buttons animation
     if (buttonsRef.current) {
+      animatedElements.push(buttonsRef.current)
       timeline.fromTo(
         buttonsRef.current,
         { opacity: 0, y: 20 },
@@ -107,9 +85,10 @@ export default function Home() {
 
     // Stats section animation
     if (statsRef.current) {
+      animatedElements.push(statsRef.current)
       gsap.set(statsRef.current, { opacity: 0, y: 50 })
 
-      ScrollTrigger.create({
+      scrollTriggers.push(ScrollTrigger.create({
         trigger: statsRef.current,
         start: "top 80%",
         once: true,
@@ -121,7 +100,7 @@ export default function Home() {
             ease: "power3.out",
           })
         },
-      })
+      }))
     }
 
     // Experience section animation
@@ -129,10 +108,11 @@ export default function Home() {
       const experienceTitle = experienceRef.current.querySelector("h2")
       const experienceCards = experienceRef.current.querySelectorAll(".experience-card")
       const experienceCTA = experienceRef.current.querySelector(".experience-cta")
+      animatedElements.push(...Array.from([experienceTitle, ...experienceCards, experienceCTA]).filter((element): element is Element => element !== null))
 
       gsap.set([experienceTitle, experienceCards, experienceCTA], { opacity: 0, y: 30 })
 
-      ScrollTrigger.create({
+      scrollTriggers.push(ScrollTrigger.create({
         trigger: experienceRef.current,
         start: "top 75%",
         once: true,
@@ -167,16 +147,17 @@ export default function Home() {
               "-=0.2",
             )
         },
-      })
+      }))
     }
 
     // About section animation
     if (aboutSectionRef.current) {
       const aboutElements = aboutSectionRef.current.querySelectorAll(".about-element")
+      animatedElements.push(...Array.from(aboutElements))
 
       gsap.set(aboutElements, { opacity: 0, y: 40, scale: 0.95 })
 
-      ScrollTrigger.create({
+      scrollTriggers.push(ScrollTrigger.create({
         trigger: aboutSectionRef.current,
         start: "top 70%",
         once: true,
@@ -190,16 +171,17 @@ export default function Home() {
             ease: "back.out(1.7)",
           })
         },
-      })
+      }))
     }
 
     // Contact section animation
     if (contactSectionRef.current) {
       const contactElements = contactSectionRef.current.querySelectorAll(".contact-element")
+      animatedElements.push(...Array.from(contactElements))
 
       gsap.set(contactElements, { opacity: 0, y: 30 })
 
-      ScrollTrigger.create({
+      scrollTriggers.push(ScrollTrigger.create({
         trigger: contactSectionRef.current,
         start: "top 75%",
         once: true,
@@ -212,10 +194,14 @@ export default function Home() {
             ease: "power3.out",
           })
         },
-      })
+      }))
     }
 
-    return () => timeline.kill()
+    return () => {
+      timeline.kill()
+      scrollTriggers.forEach((trigger) => trigger.kill())
+      gsap.killTweensOf(animatedElements)
+    }
   }, [])
 
   return (
@@ -288,7 +274,7 @@ export default function Home() {
                     <div>
                       <h3 className="text-xl md:text-2xl font-bold mb-3 text-black">Takluz TTS</h3>
                       <p className="text-black/70 mb-4 text-sm md:text-base leading-relaxed">
-                        AI-powered text-to-speech system for Twitch streams using OpenAI's TTS model with channel points
+                        AI-powered text-to-speech system for Twitch streams using OpenAI&apos;s TTS model with channel points
                         integration. Offers diverse voices for enhanced viewer engagement.
                       </p>
                       <div className="flex flex-wrap gap-2 mb-4">

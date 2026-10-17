@@ -21,7 +21,7 @@ export default function AnimatedTimelineLine() {
     })
 
     // Create scroll trigger for timeline line
-    gsap.to(line, {
+    const animation = gsap.to(line, {
       scaleY: 1,
       duration: 2,
       ease: "power2.out",
@@ -61,7 +61,8 @@ export default function AnimatedTimelineLine() {
     })
 
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+      animation.scrollTrigger?.kill()
+      animation.kill()
       gsap.killTweensOf(line)
     }
   }, [])
