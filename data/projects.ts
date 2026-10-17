@@ -72,4 +72,3 @@ export const categories = [
   { id: "ai", label: "AI & Machine Learning" },
   { id: "iot", label: "IoT & Hardware" },
 ]
-
