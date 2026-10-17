@@ -26,7 +26,7 @@ Copy `.env.example` to `.env.local` and fill in the values.
 
 CI sets `RESEND_API_KEY` to a placeholder because the build step only needs to be able to import the contact action; the key is never sent to Resend during the build.
 
-The maintainer's local `.env.local` previously also listed `EMAIL_USER` and `EMAIL_PASSWORD`. A repo-wide grep confirms no application code reads them, so they are not part of the project contract. Remove them from `.env.local` if they are still there.
+If your `.env.local` still contains `EMAIL_USER` or `EMAIL_PASSWORD`, delete those lines — no application code reads them.
 
 ## Project checks
 
