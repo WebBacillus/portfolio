@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --white: #ffffff;
+  --purple: #6b46c1;
+  --dark-purple: #4c1d95;
+  --black: #1a1a1a;
+  --beige: #d6c7ad;
+  --gold: #e89f1e;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--white);
+  color: var(--black);
+  background-image: none;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Improve touch targets on mobile */
+button,
+a {
+  touch-action: manipulation;
+}
+
+/* Improve form elements on mobile */
+input,
+textarea,
+select,
+button {
+  font-size: 16px; /* Prevents iOS zoom on focus */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scrolling-text {
+  animation: scroll 20s linear infinite;
+  white-space: nowrap;
+  width: 200%;
+}
+
+.barcode {
+  font-family: "Libre Barcode 39", cursive;
+  font-size: 4rem;
+  line-height: 1;
+}
+
+/* Add responsive utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Safe area utilities for notched devices */
+  .pt-safe {
+    padding-top: var(--safe-top);
+  }
+
+  .pb-safe {
+    padding-bottom: var(--safe-bottom);
+  }
+
+  .pl-safe {
+    padding-left: var(--safe-left);
+  }
+
+  .pr-safe {
+    padding-right: var(--safe-right);
+  }
+
+  /* Add bottom padding for pages when using bottom navigation */
+  .pb-nav {
+    padding-bottom: calc(4rem + var(--safe-bottom));
+  }
+}
+
+/* Improve mobile scrolling */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Mobile menu transitions */
+.menu-transition-enter {
+  transform: translateX(-100%);
+}
+
+.menu-transition-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms ease-in-out;
+}
+
+.menu-transition-exit {
+  transform: translateX(0);
+}
+
+.menu-transition-exit-active {
+  transform: translateX(-100%);
+  transition: transform 300ms ease-in-out;
+}
+
+/* Ensure animated background is visible */
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.animated-background-particle {
+  position: absolute;
+  background-color: rgba(107, 70, 193, 0.3);
+  border-radius: 2px;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* Debug styles */
+.bg-debug {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  background: rgba(107, 70, 193, 0.5);
+  z-index: 1;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Ensure content is above background */
+.content-layer {
+  position: relative;
+  z-index: 10;
+}
