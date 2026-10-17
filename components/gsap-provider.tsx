@@ -25,9 +25,6 @@ export default function GSAPProvider({ children }: GSAPProviderProps) {
       ease: "power2.out",
     })
 
-    // Initialize flags for transition management
-    window.isTransitioning = false
-
     // Clean up on unmount
     return () => {
       // Kill all ScrollTrigger instances
@@ -69,24 +66,12 @@ export default function GSAPProvider({ children }: GSAPProviderProps) {
       }
     }
 
-    // Handle page load complete to ensure transitions are cleaned up
-    let loadTimeout: ReturnType<typeof setTimeout> | undefined
-    const handleLoad = () => {
-      // Slight delay to ensure DOM is fully loaded
-      loadTimeout = setTimeout(() => {
-        abortTransition()
-      }, 300)
-    }
-
     // Add event listeners
     document.addEventListener("visibilitychange", handleVisibilityChange)
-    window.addEventListener("load", handleLoad)
 
     // Clean up event listeners
     return () => {
-      if (loadTimeout) clearTimeout(loadTimeout)
       document.removeEventListener("visibilitychange", handleVisibilityChange)
-      window.removeEventListener("load", handleLoad)
     }
   }, [])
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import gsap from "gsap"
+import { registerTransitionContainer, unregisterTransitionContainer } from "@/lib/transition-utils"
 
 export default function PageTransition() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -10,14 +10,10 @@ export default function PageTransition() {
     const container = containerRef.current
     if (!container) return
 
-    window.pageTransitionContainer = container
+    registerTransitionContainer(container)
 
     return () => {
-      gsap.killTweensOf(container.querySelectorAll("[id^='banner-']"))
-      gsap.set(container, { display: "none", autoAlpha: 0 })
-      if (window.pageTransitionContainer === container) {
-        window.pageTransitionContainer = null
-      }
+      unregisterTransitionContainer(container)
     }
   }, [])
 
