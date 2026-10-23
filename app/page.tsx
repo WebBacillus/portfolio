@@ -9,7 +9,9 @@ import Image from "next/image"
 import useMobile from "@/hooks/use-mobile"
 import TransitionLink from "@/components/transition-link"
 import QuickStats from "@/components/quick-stats"
+import ProjectCard from "@/components/project-card"
 import { ExternalLink, Github } from "lucide-react"
+import { projects } from "@/data/projects"
 
 export default function Home() {
   const scrollTextRef = useRef<HTMLDivElement>(null)
@@ -207,8 +209,8 @@ export default function Home() {
   return (
     <main className={`min-h-screen ${isMobile ? "pb-nav" : ""}`}>
       <div className="container mx-auto px-4 pt-16 pb-16">
-        <AnimatedTitle className="text-purple leading-none tracking-tighter text-center">WEB</AnimatedTitle>
-        <AnimatedTitle className="text-purple leading-none tracking-tighter text-center">BACILLUS</AnimatedTitle>
+        <AnimatedTitle className="text-purple leading-none tracking-normal text-center">WEB</AnimatedTitle>
+        <AnimatedTitle className="text-purple leading-none tracking-normal text-center">BACILLUS</AnimatedTitle>
         <div ref={scrollTextRef} className="w-full overflow-hidden py-4 border-y border-purple/20 my-4">
           <ScrollingText />
         </div>
@@ -224,15 +226,13 @@ export default function Home() {
           <div className="justify-items-end">
             <div className="flex flex-col items-start">
               <p ref={introTextRef} className="text-lg text-black/80 mt-6 max-w-xl opacity-0 mb-6">
-                Computer Engineering student at Chulalongkorn University, specializing in backend development and
-                passionate about leveraging FinTech and Automation to build impactful solutions.
+                Computer Engineering student at Chulalongkorn University focused on AI engineering and backend development. I build practical products with AI, automation, and reliable software systems.
               </p>
 
               <div ref={buttonsRef} className="flex flex-wrap gap-4 mt-2 opacity-0">
                 <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://webbacillus-portfolio-1.s3.us-east-1.amazonaws.com/pdf/REAL-RESUME.pdf"
+                  href="/resume-general.pdf"
+                  download="resume-general.pdf"
                   className="px-6 py-3 bg-purple text-white rounded-full hover:bg-dark-purple transition-colors transform hover:scale-105 duration-300"
                 >
                   Download Resume
@@ -257,13 +257,26 @@ export default function Home() {
         <div ref={experienceRef} className="mt-16 mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-purple">Featured Projects</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-            {/* Featured Project 1 - Takluz TTS */}
+            {projects.filter((project) => (project.category === "ai" || project.tags.includes("AI")) && project.title !== "Takluz TTS").map((project, index) => (
+              <div key={project.id} className={`experience-card ${index === 0 ? "lg:col-span-2" : ""}`}>
+                <ProjectCard
+                  title={project.title}
+                  description={project.description}
+                  image={project.image}
+                  tags={project.tags}
+                  liveUrl={project.liveUrl}
+                  repoUrl={project.repoUrl}
+                  featured={index === 0}
+                />
+              </div>
+            ))}
+            {/* Takluz TTS is also an AI project; keep its existing featured layout here. */}
             <div className="experience-card lg:col-span-2">
               <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-purple/10 overflow-hidden">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                   <div className="relative h-[250px] md:h-[300px] overflow-hidden">
                     <Image
-                      src="https://webbacillus-portfolio-1.s3.us-east-1.amazonaws.com/gif/takluz.gif"
+                      src="/images/projects/takluz-tts.gif"
                       alt="Takluz TTS - AI-powered text-to-speech for Twitch streams"
                       fill
                       className="object-cover"
@@ -318,7 +331,7 @@ export default function Home() {
               <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-purple/10 overflow-hidden h-full">
                 <div className="relative h-[200px] overflow-hidden">
                   <Image
-                    src="https://webbacillus-portfolio-1.s3.us-east-1.amazonaws.com/img/employee-management-2.jpg"
+                    src="/images/projects/employee-management.jpg"
                     alt="Employee Management System - Microservices architecture"
                     fill
                     className="object-cover"
@@ -363,7 +376,7 @@ export default function Home() {
               <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-purple/10 overflow-hidden h-full">
                 <div className="relative h-[200px] overflow-hidden">
                   <Image
-                    src="https://webbacillus-portfolio-1.s3.us-east-1.amazonaws.com/gif/leaderboards-2.gif"
+                    src="/images/projects/takluz-leaderboards.gif"
                     alt="Takluz Leaderboards - Real-time Twitch chat analytics"
                     fill
                     className="object-cover"
@@ -378,7 +391,7 @@ export default function Home() {
                       scalability.
                     </p>
                     <div className="flex flex-wrap gap-1 mb-4">
-                      {["Next.js", "Go", "Supabase", , "AWS-ECR", "AWS-ECS"].map((tag, index) => (
+                      {["Next.js", "Go", "Supabase", "AWS-ECR", "AWS-ECS"].map((tag, index) => (
                         <span
                           key={index}
                           className="text-xs px-2 py-1 bg-purple/10 text-purple rounded-full font-medium"

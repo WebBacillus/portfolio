@@ -152,7 +152,7 @@ export default function WorkPage() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 pt-16">
-        <AnimatedTitle className="text-purple text-center leading-none tracking-tighter mb-8">
+        <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8">
           WORK
         </AnimatedTitle>
 

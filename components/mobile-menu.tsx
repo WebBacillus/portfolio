@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { X, Menu, Home, Briefcase, User, Mail, Linkedin, Github } from "lucide-react"
+import { X, Menu, Home, Briefcase, User, Mail, BookOpen, Linkedin, Github } from "lucide-react"
 import gsap from "gsap"
 import TransitionLink from "@/components/transition-link"
 
@@ -24,6 +24,7 @@ export default function MobileMenu({ variant = "sidebar" }: MobileMenuProps) {
     { path: "/", label: "Home", icon: <Home className="w-5 h-5" /> },
     { path: "/work", label: "AI & Projects", icon: <Briefcase className="w-5 h-5" /> },
     { path: "/about", label: "About", icon: <User className="w-5 h-5" /> },
+    { path: "/articles", label: "Articles", icon: <BookOpen className="w-5 h-5" /> },
     { path: "/contact", label: "Contact", icon: <Mail className="w-5 h-5" /> },
   ]
 
