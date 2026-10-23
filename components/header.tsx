@@ -145,6 +145,7 @@ export default function Header() {
                 { path: "/", label: "INDEX" },
                 { path: "/work", label: "AI & PROJECTS" },
                 { path: "/about", label: "ABOUT" },
+                { path: "/articles", label: "ARTICLES" },
                 { path: "/contact", label: "CONTACT" },
               ].map((item) => (
                 <TransitionLink

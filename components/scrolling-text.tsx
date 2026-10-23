@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react"
 import gsap from "gsap"
 
 export default function ScrollingText() {
-  const items = ["Developer", "Automation", "Fintech", "Student"]
+  const items = ["AI Engineer", "LLM", "RAG", "Backend"]
   const repeatedItems = [...items, ...items, ...items, ...items]
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -57,7 +57,7 @@ export default function ScrollingText() {
       <div ref={scrollRef} className="flex">
         {repeatedItems.map((item, index) => (
           <div key={index} className="flex items-center">
-            <span className="text-purple/80 text-base sm:text-lg md:text-xl px-4 sm:px-6 md:px-8">{item}</span>
+            <span className="whitespace-nowrap text-purple/80 text-base sm:text-lg md:text-xl px-4 sm:px-6 md:px-8">{item}</span>
             <span className="text-purple/60 text-lg sm:text-xl md:text-2xl">✦</span>
           </div>
         ))}

@@ -13,8 +13,8 @@ const inter = Inter({ subsets: ["latin"] })
 
 // Add viewport meta tag and PWA support
 export const metadata: Metadata = {
-  title: "Webbacillus-Portfolio",
-  description: "Webbacillus-Portfolio",
+  title: "Pasit Khumsena | AI Engineer Portfolio",
+  description: "AI Engineer portfolio featuring practical AI projects, backend engineering, and event notes.",
   manifest: "/manifest.json",
   icons: {
     icon: "/images/logo.png",

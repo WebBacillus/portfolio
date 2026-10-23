@@ -6,7 +6,6 @@ import TimelineItem from "@/components/timeline-item"
 import AnimatedSection from "@/components/animated-section"
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
-import SkillTagCloud from "@/components/skill-tag-cloud"
 import TransitionLink from "@/components/transition-link"
 import AnimatedTimelineLine from "@/components/animated-timeline-line"
 
@@ -61,30 +60,26 @@ const timelineData = [
   },
 ]
 
-// Skills data
-const skillsData: { name: string; level: "beginner" | "intermediate" | "advanced" | "expert" }[] = [
-  { name: "Go", level: "intermediate" },
-  { name: "C++", level: "intermediate" },
-  { name: "Python", level: "intermediate" },
-  { name: "JavaScript", level: "intermediate" },
-  { name: "TypeScript", level: "intermediate" },
-  { name: "HTML", level: "intermediate" },
-  { name: "Tailwind CSS", level: "intermediate" },
-  { name: "Next.js", level: "beginner" },
-  { name: "Firebase", level: "intermediate" },
-  { name: "Vercel", level: "intermediate" },
-  { name: "AWS", level: "beginner" },
-  { name: "Apache Kafka", level: "beginner" },
-  { name: "Stripe", level: "beginner" },
-  { name: "Express.js", level: "intermediate" },
-  { name: "JWT", level: "expert" },
-  { name: "MySQL", level: "expert" },
-  { name: "MongoDB", level: "expert" },
-  { name: "PostgreSQL", level: "intermediate" },
-  { name: "Postman", level: "expert" },
-  { name: "Swagger", level: "beginner" },
-  { name: "NeoVim", level: "intermediate" },
-  { name: "VSCode", level: "expert" },
+// Skills data, grouped as listed in the resume and prioritized for the target role
+const skillsData = [
+  {
+    category: "Generative AI",
+    skills: ["OpenAI API", "LLM Tool Calling", "RAG", "Text-to-Speech (TTS)", "n8n", "LangChain", "Langraph", "Qdrant"],
+  },
+  {
+    category: "AI & ML",
+    skills: ["PyTorch", "Torchvision", "Scikit-learn", "Pandas", "NumPy", "Apache Airflow", "MLflow", "Streamlit", "Plotly"],
+  },
+  {
+    category: "Backend & Architecture",
+    skills: ["REST API", "gRPC", "Microservices", "Clean Architecture", "Hexagonal Architecture", "Kafka", "RabbitMQ"],
+  },
+  { category: "Languages", skills: ["Go", "Python", "C++", "TypeScript", "JavaScript", "Java"] },
+  { category: "Databases", skills: ["PostgreSQL", "MongoDB", "MySQL"] },
+  {
+    category: "Testing & Quality",
+    skills: ["Unit Testing", "Integration Testing", "Load Testing", "promptfoo (Red Teaming/Agent Evaluation)"],
+  },
 ]
 
 export default function AboutPage() {
@@ -117,16 +112,14 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 pt-16">
-        <AnimatedTitle className="text-purple text-center leading-none tracking-tighter mb-8">ABOUT</AnimatedTitle>
+        <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8">ABOUT</AnimatedTitle>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
         <AnimatedSection animation="slideInLeft" delay={1.5} className="order-2 md:order-1">
             <h2 className="text-3xl font-bold mb-6">Hello, I&apos;m Pasit Khumsena</h2>
 
             <p className="text-black/80 text-lg leading-relaxed mb-4">
-              A Computer Engineering student at Chulalongkorn University, I&apos;m focused on backend development and driven
-              by a passion for leveraging FinTech and Automation to build impactful solutions. I believe in the power of
-              robust and scalable systems to transform industries and improve people&apos;s lives.
+              Computer Engineering student at Chulalongkorn University, focused on AI engineering and backend development. I build practical AI products and reliable software systems, and I am interested in how automation can make useful tools easier to use.
             </p>
 
             <p className="text-black/80 text-lg leading-relaxed mb-4">
@@ -145,7 +138,8 @@ export default function AboutPage() {
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                href="https://webbacillus-portfolio-1.s3.us-east-1.amazonaws.com/pdf/REAL-RESUME.pdf"
+                href="/resume-general.pdf"
+                download="resume-general.pdf"
                 className="px-6 py-3 bg-purple text-white rounded-full hover:bg-dark-purple transition-colors transform hover:scale-105 duration-300"
               >
                 Download Resume
@@ -180,8 +174,26 @@ export default function AboutPage() {
         <AnimatedSection animation="fadeIn" delay={0} className="mt-20">
           <h2 className="text-3xl font-bold mb-8 text-center">My Skills</h2>
 
-          <div className="max-w-4xl mx-auto px-4">
-            <SkillTagCloud skills={skillsData} className="mb-8" />
+          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-x-14 gap-y-8 px-4 md:grid-cols-2">
+            {skillsData.map((group) => {
+              const categoryId = `skills-${group.category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
+
+              return (
+                <section key={group.category} aria-labelledby={categoryId} className="min-w-0 border-b border-purple/15 pb-6">
+                  <h3 id={categoryId} className="mb-4 flex items-center gap-3 text-base font-semibold text-black/80">
+                    <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-purple" />
+                    {group.category}
+                  </h3>
+                  <ul className="flex flex-wrap justify-start gap-2">
+                    {group.skills.map((skill) => (
+                      <li key={skill} className="rounded-full border border-purple/10 bg-white/75 px-3 py-1.5 text-xs font-medium text-purple md:text-sm">
+                        {skill}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )
+            })}
           </div>
         </AnimatedSection>
 
