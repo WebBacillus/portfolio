@@ -18,7 +18,7 @@
     "clsx": "^2.1.1",
     "gsap": "latest",
     "lucide-react": "^0.454.0",
-    "next": "16.4.0",
+    "next": "16.4.3",
     "react": "^19",
     "react-dom": "^19",
     "resend": "latest",
@@ -34,7 +34,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^10.12.0",
-    "eslint-config-next": "16.4.0",
+    "eslint-config-next": "16.4.3",
     "postcss": "^8.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^5"
