@@ -1,5 +1,16 @@
 export const projects = [
   {
+    id: 7,
+    title: "SE for ML",
+    description:
+      "I designed and created C4 diagrams at all four levels: Context, Container, Component, and Code. I also implemented model serving for an image classification system that predicts storefront industries and routes uncertain cases to human review. I contributed to the team's design of drift detection and retraining workflows. Through the project, I gained experience with Airflow, MLflow, PyTorch, torchvision, and scikit learn.",
+    image: "/images/projects/se-for-ml.png",
+    tags: ["AI", "Computer Vision", "FastAPI", "PyTorch", "Airflow", "MLflow", "Drift Detection", "C4"],
+    repoUrl: "https://github.com/AtipatSiwhatrakool/SE-for-ML-Project",
+    category: "ai",
+    featured: true,
+  },
+  {
     id: 1,
     title: "Takluz TTS",
     description:
