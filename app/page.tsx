@@ -257,8 +257,8 @@ export default function Home() {
         <div ref={experienceRef} className="mt-16 mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-purple">Featured Projects</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-            {projects.filter((project) => (project.category === "ai" || project.tags.includes("AI")) && project.title !== "Takluz TTS").map((project, index) => (
-              <div key={project.id} className={`experience-card ${index === 0 ? "lg:col-span-2" : ""}`}>
+            {projects.filter((project) => (project.category === "ai" || project.tags.includes("AI")) && project.title !== "Takluz TTS").map((project) => (
+              <div key={project.id} className={`experience-card ${project.featured ? "lg:col-span-2" : ""}`}>
                 <ProjectCard
                   title={project.title}
                   description={project.description}
@@ -266,7 +266,7 @@ export default function Home() {
                   tags={project.tags}
                   liveUrl={project.liveUrl}
                   repoUrl={project.repoUrl}
-                  featured={index === 0}
+                  featured={project.featured}
                 />
               </div>
             ))}
