@@ -1,16 +1,5 @@
 export const projects = [
   {
-    id: 7,
-    title: "SE for ML",
-    description:
-      "I designed and created C4 diagrams at all four levels: Context, Container, Component, and Code. I also implemented model serving for an image classification system that predicts storefront industries and routes uncertain cases to human review. I contributed to the team's design of drift detection and retraining workflows. Through the project, I gained experience with Airflow, MLflow, PyTorch, torchvision, and scikit learn.",
-    image: "/images/projects/se-for-ml.png",
-    tags: ["AI", "Computer Vision", "FastAPI", "PyTorch", "Airflow", "MLflow", "Drift Detection", "C4"],
-    repoUrl: "https://github.com/AtipatSiwhatrakool/SE-for-ML-Project",
-    category: "ai",
-    featured: true,
-  },
-  {
     id: 1,
     title: "Takluz TTS",
     description:
@@ -20,6 +9,17 @@ export const projects = [
     liveUrl: "https://www.twitch.tv/takluz/clip/CorrectEvilButterPogChamp-PmfPRK0Lz6-wpMai",
     repoUrl: "https://github.com/WebBacillus/Takluz_TTS",
     category: "backend",
+    featured: true,
+  },
+  {
+    id: 7,
+    title: "SE for ML",
+    description:
+      "I designed and created C4 diagrams at all four levels: Context, Container, Component, and Code. I also implemented model serving for an image classification system that predicts one of six storefront industries and routes uncertain cases to human review. I contributed to the team's design of drift detection and retraining workflows, where persistent drift can trigger retraining automatically while the serving model is reloaded manually by a reviewer. Through the project, I gained experience with Airflow, MLflow, PyTorch, torchvision, and scikit learn.",
+    image: "/images/projects/se-for-ml.png",
+    tags: ["AI", "Computer Vision", "FastAPI", "PyTorch", "Airflow", "MLflow", "Drift Detection", "C4"],
+    repoUrl: "https://github.com/AtipatSiwhatrakool/SE-for-ML-Project",
+    category: "ai",
     featured: true,
   },
   {
@@ -52,7 +52,7 @@ export const projects = [
     category: "backend",
     featured: true,
   },
-    {
+  {
     id: 5,
     title: "Takluz Leaderboards",
     description: "Takluz Leaderboard is a Next.js web platform designed to display various statistics and insights from Twitch chat. It leverages Go Twitch IRC for efficient real-time data collection from live streams. The application is deployed on AWS ECR and ECS, ensuring scalability and reliability, and provides valuable analytical tools for streamers to understand their chat activity and community engagement.",
@@ -73,7 +73,7 @@ export const projects = [
     repoUrl: "https://github.com/WebBacillus/MonkeyMassage-Backend",
     category: "fullStack",
     featured: true,
-  }
+  },
 ]
 
 export const categories = [
