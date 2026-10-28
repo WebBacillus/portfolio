@@ -28,6 +28,18 @@ choose the placement without re-deciding the behaviour.
 | **B. Page** | Its own route, `/ask` | A nav link | The chat deserves a full page and the visitor came to use it deliberately |
 | **C. Inline** | A section in the page flow, under the hero on the home page, at the foot of each project page | Scrolling to it | The chat is part of the story of the page rather than a layer on top of it |
 
+Screenshots of each variant are in `docs/chatbot/prototype-shots/`.
+
+| File | What it shows |
+| --- | --- |
+| `a-desktop-empty.png` | The dock, closed, then open on the empty state with both question groups |
+| `a-desktop-redirect.png` | The dock answering a project question with the link card |
+| `a-desktop-error.png` | The dock in the error state with the retry button |
+| `a-mobile-sheet.png` | The full screen sheet on a 390 by 844 phone |
+| `b-page-redirect.png` | The dedicated page, with the two suggestion columns |
+| `c-inline-empty.png` | The inline section in the page flow |
+| `c-inline-redirect.png` | The inline section answering a project question |
+
 **Recommendation: A (the dock).** The site already has a `/work` index and an `/about`
 page, so the portfolio content covers both. A dock adds the chat without adding a route,
 and it does not push the existing sections down the page. If the owner wants the chat to
