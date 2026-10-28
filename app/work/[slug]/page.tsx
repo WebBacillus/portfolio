@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ExternalLink, Github } from "lucide-react"
 import AnimatedTitle from "@/components/animated-title"
 import { getProjectCatalog, getProjectDetail } from "@/lib/project-details"
+import InlineChatSlot from "@/components/prototype/chat/inline-chat-slot"
 
 export const dynamicParams = false
 
@@ -91,7 +92,7 @@ export default async function ProjectPage({
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-purple hover:text-dark-purple transition-colors duration-300"
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-4 h-4" aria-hidden />
               <span>Live demo</span>
             </a>
           )}
@@ -103,11 +104,13 @@ export default async function ProjectPage({
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-purple hover:text-dark-purple transition-colors duration-300"
             >
-              <Github className="w-4 h-4" />
+              <Github className="w-4 h-4" aria-hidden />
               <span>Repository</span>
             </a>
           )}
         </div>
+
+        <InlineChatSlot />
       </article>
     </main>
   )

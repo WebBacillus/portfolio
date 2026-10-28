@@ -12,6 +12,7 @@ import QuickStats from "@/components/quick-stats"
 import ProjectCard from "@/components/project-card"
 import { ExternalLink, Github } from "lucide-react"
 import { projects } from "@/data/projects"
+import InlineChatSlot from "@/components/prototype/chat/inline-chat-slot"
 
 export default function Home() {
   const scrollTextRef = useRef<HTMLDivElement>(null)
@@ -254,6 +255,8 @@ export default function Home() {
         <div ref={statsRef} className="mt-16 mb-12">
           <QuickStats stats={statsData} />
         </div>
+
+        <InlineChatSlot />
 
         {/* Featured Projects Showcase */}
         <div ref={experienceRef} className="mt-16 mb-12">

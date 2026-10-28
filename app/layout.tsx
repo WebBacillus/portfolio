@@ -8,6 +8,7 @@ import GSAPProvider from "@/components/gsap-provider"
 import MobileMenu from "@/components/mobile-menu"
 import PageTransition from "@/components/page-transition"
 import BackgroundDebug from "@/components/background-debug"
+import ChatPrototype from "@/components/prototype/chat/chat-prototype"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -47,6 +48,7 @@ export default function RootLayout({
             <Header />
             <MobileMenu variant="sidebar" />
             {children}
+            <ChatPrototype />
           </div>
         </GSAPProvider>
       </body>
