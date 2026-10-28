@@ -30,34 +30,67 @@ def cold_start_ms() -> float:
     return float(out.stdout.strip())
 
 
+def _dependency_closure(roots: list[str]) -> set[str]:
+    """The distributions that would be installed for the declared requirements.
+
+    Walking site-packages instead would measure whatever else happens to be installed
+    in the current interpreter, which is not what Vercel would ship.
+    """
+    from importlib.metadata import PackageNotFoundError, requires
+
+    closure: set[str] = set()
+    queue = list(roots)
+    while queue:
+        name = queue.pop()
+        key = name.lower().replace("_", "-")
+        if key in closure:
+            continue
+        closure.add(key)
+        try:
+            deps = requires(name) or []
+        except PackageNotFoundError:
+            continue
+        for spec in deps:
+            # A spec looks like "httpx>=0.28", "httpx[http2]" or "httpx; python_version<'3.11'".
+            # The distribution name is the part before any version, extra or marker.
+            dep = spec.split(";", 1)[0].strip()
+            dep = dep.split("[", 1)[0].strip()
+            for sep in ("==", ">=", "<=", "~=", ">", "<", "!="):
+                dep = dep.split(sep, 1)[0].strip()
+            if not dep:
+                continue
+            base = dep.lower().replace("_", "-")
+            if base in closure:
+                continue
+            queue.append(dep)
+    return closure
+
+
 def bundle_bytes() -> int:
     """Total size of the installed dependency tree that would ship in the function."""
-    import fastapi
-    import httpx
-    import pydantic
+    from importlib.metadata import distribution
 
-    roots = []
-    for mod in (fastapi, httpx, pydantic):
-        root = os.path.dirname(os.path.dirname(os.path.abspath(mod.__file__)))
-        roots.append(root)
+    declared = ["fastapi", "httpx", "pydantic"]
+    closure = _dependency_closure(declared)
 
     total = 0
-    seen = set()
-    for root in roots:
-        for dirpath, _dirnames, filenames in os.walk(root):
-            if "__pycache__" in dirpath:
+    seen: set[str] = set()
+    for name in sorted(closure):
+        try:
+            dist = distribution(name)
+        except Exception:
+            continue
+        for file in dist.files or []:
+            path = str(file)
+            if not path.endswith((".py", ".so", ".pyd", ".typed", ".pyi")):
                 continue
-            for name in filenames:
-                if not name.endswith((".py", ".so", ".pyd", ".typed", ".pyi")):
-                    continue
-                path = os.path.join(dirpath, name)
-                if path in seen:
-                    continue
-                seen.add(path)
-                try:
-                    total += os.path.getsize(path)
-                except OSError:
-                    pass
+            if path in seen:
+                continue
+            seen.add(path)
+            try:
+                total += os.path.getsize(str(dist.locate_file(file)))
+            except OSError:
+                pass
     return total
 
 

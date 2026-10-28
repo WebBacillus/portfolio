@@ -16,6 +16,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from typing import Any
 
 BASE = os.environ.get("PROOF_BASE_URL", "http://127.0.0.1:8077")
 TOKEN = os.environ.get("CHAT_INTERNAL_TOKEN", "")
@@ -25,7 +26,7 @@ FAIL: list[str] = []
 
 
 def call(path: str, body=None, method: str = "POST", raw: bytes | None = None,
-         token: str | None = None, client: str | None = None):
+         token: str | None = None, client: str | None = None) -> tuple[int, Any]:
     url = f"{BASE}{path}"
     data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
     req = urllib.request.Request(url, data=data, method=method)
@@ -86,8 +87,15 @@ def main() -> int:
         answer = body.get("answer", "")
         check("answer is non-empty text", isinstance(answer, str) and len(answer.strip()) > 0,
               f"len={len(answer)}")
-        check("answer mentions the employer", "true" in answer.lower(), f"answer={answer[:120]!r}")
-        check("model is gpt-6-luna", body.get("model") == "gpt-6-luna", f"model={body.get('model')}")
+        if body.get("model") == "stub":
+            # STUB=1 is running, so the service answered without calling the model.
+            # The two assertions below are about the real model and cannot hold here.
+            print("      STUB mode: the service answered without calling the model.")
+            print("      Skipping the real-model assertions (answer mentions the employer,")
+            print("      model is gpt-6-luna). Run without STUB=1 to check them.")
+        else:
+            check("answer mentions the employer", "true" in answer.lower(), f"answer={answer[:120]!r}")
+            check("model is gpt-6-luna", body.get("model") == "gpt-6-luna", f"model={body.get('model')}")
         check("request_id present for tracing", bool(body.get("request_id")))
         print(f"      latency end-to-end through the service: {elapsed_ms} ms")
         print(f"      answer: {answer[:220]}")

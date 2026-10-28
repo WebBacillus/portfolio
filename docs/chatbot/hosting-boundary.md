@@ -36,7 +36,7 @@ a log.
 | Boundary properties | `boundary_checks.py`, 22 assertions | **22 passed, 0 failed** |
 | Cold start | `measure.py` | 320 to 375 ms with a warm bytecode cache, 895 ms on the first import |
 | Warm overhead | `measure.py` | 3.29 ms median, excluding the model call |
-| Dependency bundle | `measure.py` | 31.6 MB, against Vercel's 500 MB Python limit |
+| Dependency bundle | `measure.py` | 9.0 MB of code in the dependency closure, 31 MB including package data, against Vercel's 500 MB Python limit |
 | Proxy hop cost | `hop_cost.py`, 40 pairs | +9.07 ms median, p95 +13.41 ms |
 | Cost model | `cost_model.py` | see section 6 |
 
@@ -188,6 +188,12 @@ domestic and short. Setting a region is available but not needed.
 Hosting is four orders of magnitude below the model bill. The $5 monthly hard limit
 allows about **7,700 requests**, which is far more traffic than a portfolio site sees.
 
+That $5 figure is the budget the owner decided, not a limit that has been confirmed
+live. Ticket `t_00cf90ca` records that setting the project hard spend limit in the
+OpenAI API dashboard is the owner's manual step and is still unverified, so the
+figure below is what the limit *would* allow if it were in place. It must not be
+read as a control that is currently armed.
+
 **The binding constraint is abuse, not legitimate traffic.** This is the conclusion that
 should change how the spec is written. A shared secret and a per-IP limit are what
 actually protect the budget, and neither of them is the model bill's problem to solve.
@@ -219,18 +225,22 @@ reproduction table reads:
 | --- | --- | --- | --- |
 | `api/time.js` (root function) | 404 | 200 | 200 |
 | `app/api/random/route.ts` (app route) | 200 | 404 | 200 |
-| `app/api/hello/[slug]/route.ts` (**dynamic app route**) | 200 | 404 | **404** |
+| `app/api/hello/[slug]/route.ts` (**dynamic app route**) | 200 | 404 | **404, unless slug is "[slug]"** |
 
-The last row is the problem. This repository has two dynamic routes,
-`app/work/[slug]` and `app/articles/[slug]`, which are the ten project pages. Mixing a
-root `/api` function into this project makes those deployed dynamic routes return 404.
-A user of that issue reports the same thing: following the Python docs broke nested
-routes such as `/parent/child/[id]/route.ts`.
+The last row is the problem, with one caveat stated in the issue itself that the table
+transcription must not lose. The issue's deployed column reads "404, unless slug is
+'[slug]'", meaning a request for the literal path segment `[slug]` still resolves while a
+real slug value does not. This repository's dynamic routes are named exactly `[slug]`, so
+the literal segment does resolve and the caveat does not rescue the shape: a visitor
+opening `/work/se-for-ml` or `/articles/<slug>` requests a real slug value, and that is
+the request the issue reports as 404. The reproduction was made with a Python API
+function, which is the shape under consideration. The issue is still open, with no fix
+referenced in it.
 
 Two further costs in this shape: `next dev` and `vercel dev` disagree about which
 routes exist, so local development and deployment stop matching; and the `functions`
 property in `vercel.json` is restricted under Next.js to `memory` and `maxDuration`
-only, so `excludeFiles` is unavailable to keep the 451 MB `.next` directory out of the
+only, so `excludeFiles` is unavailable to keep the 452 MB `.next` directory out of the
 Python bundle. That bundle risk is the same one the azfuller write-up hit.
 
 **Shape B breaks the project catalogue. It is out.**
@@ -324,6 +334,17 @@ Stated plainly, because the implementation spec should not assume any of it.
   number is higher. The direction of the finding holds; the exact number does not.
 - **The Vercel function cost is a computed estimate** from published Fluid compute
   rates, not a measured bill.
+- **The dependency bundle is measured against the declared requirements, not the
+  current interpreter.** `measure.py` walks the dependency closure of `fastapi`,
+  `httpx` and `pydantic` and counts the code files, which is what Vercel would
+  install from `requirements.txt`. An earlier version walked the whole of
+  `site-packages`, which measured whatever else happened to be installed in the
+  interpreter running the script: 13.3 MB in a clean virtualenv, 45 MB in the shared
+  system interpreter, and 142 MB in the system interpreter before the measurement was
+  corrected. The reproducible figures are **9.0 MB of code** in the closure and
+  **31 MB** including package data and the installer itself. Both are far below
+  Vercel's 500 MB Python limit, so the conclusion does not move, but the number only
+  means something when the method is stated.
 - **Region latency was not measured against a real Vercel instance.** The claim that
   `iad1` is the right default rests on the OpenAI API being in the United States.
 - **The runtime logs claim about request bodies** rests on Vercel's documentation of
@@ -362,6 +383,34 @@ cost is measured on its own.
 
 The proof is throwaway. It lives on `prototype/vercel-python-hosting`, out of `main`,
 and the decision it produced is what belongs in the main branch.
+
+### The independent re-check
+
+A proof that verifies itself proves very little, so the boundary was re-checked with
+three scripts that do not reuse the proof's own assertions:
+
+| Script | What it does | Result |
+| --- | --- | --- |
+| `independent_boundary_check.py` | Drives the service directly over HTTP and re-derives every boundary property from the outside | 22 assertions, all pass |
+| `defect_reproduction.py` | Re-creates each of the three claimed defects to confirm they were real findings rather than narrative | 3 defects confirmed |
+| `hostile_upstream_check.py` | Points the proxy at an upstream that answers with a body full of secrets and checks what reaches the visitor | 9 assertions, all pass |
+
+`independent_boundary_check.py` runs in `STUB=1` mode with a dummy key, so it verifies
+the whole boundary without spending anything and without reading the real credential.
+The three properties that matter most, confirmed from outside the service:
+
+- An unauthenticated caller is refused before the body is parsed, before the rate
+  limiter, and before the model, so a refused call costs nothing.
+- A visitor's real IP is forwarded, so one visitor's burst does not trip the limit for
+  everyone, and one visitor who has exhausted the limit does not affect a second.
+- The backend origin answers an unauthenticated `/health` but refuses an
+  unauthenticated `/chat`, so the shared secret is what protects the budget, not the
+  obscurity of the URL.
+
+`hostile_upstream_check.py` confirms the proxy does not relay upstream internals. An
+upstream answering HTTP 500 with a secret, a stack trace, an internal path, an answer
+and an internal model ID reaches the visitor as a clean `502` with a human message and
+nothing else.
 
 ---
 

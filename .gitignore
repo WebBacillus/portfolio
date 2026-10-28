@@ -26,3 +26,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# python proof artifacts
+__pycache__/
+*.pyc
+.venv/
