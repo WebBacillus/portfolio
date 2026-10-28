@@ -19,6 +19,8 @@ export function PrototypeSwitcher() {
   const searchParams = useSearchParams()
 
   const current = searchParams.get("variant") ?? "a"
+  // ?clean=1 hides every prototype affordance, for screenshots that show only the design.
+  const clean = searchParams.get("clean") === "1"
   const index = Math.max(
     0,
     PROTOTYPE_VARIANTS.findIndex((variant) => variant.key === current),
@@ -59,6 +61,7 @@ export function PrototypeSwitcher() {
   }, [index, pathname, router, searchParams])
 
   if (process.env.NODE_ENV === "production") return null
+  if (clean) return null
 
   const go = (delta: number) => {
     const next =

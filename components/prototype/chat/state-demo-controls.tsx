@@ -3,10 +3,23 @@
 
 "use client"
 
+import { Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { setPendingTrigger } from "./mock-engine"
 
 export default function StateDemoControls({ compact = false }: { compact?: boolean }) {
+  return (
+    <Suspense fallback={null}>
+      <Controls compact={compact} />
+    </Suspense>
+  )
+}
+
+function Controls({ compact }: { compact: boolean }) {
+  const searchParams = useSearchParams()
+  // ?clean=1 hides every prototype affordance, for screenshots that show only the design.
   if (process.env.NODE_ENV === "production") return null
+  if (searchParams.get("clean") === "1") return null
 
   return (
     <div

@@ -41,6 +41,19 @@ export function consumePendingTrigger(): MockTrigger {
 }
 
 /**
+ * The next send produces this state instead of an answer. Lets a capture script reach
+ * the error and unavailable states without the demo buttons, which are hidden in a
+ * production build.
+ */
+export function armTriggerFromUrl() {
+  if (typeof window === "undefined") return
+  const next = new URLSearchParams(window.location.search).get("next")
+  if (next === "error" || next === "unavailable") {
+    pendingTrigger = next
+  }
+}
+
+/**
  * The suggested questions a visitor is offered. These are the CV topics the contract
  * allows, so the narrow scope is visible before anything is typed. The project questions
  * are separate and labelled, because a project question must land on a page, not in

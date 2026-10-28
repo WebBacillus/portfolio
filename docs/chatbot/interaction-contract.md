@@ -265,7 +265,7 @@ suggested questions in order, then the transcript links, then the composer.
 
 The prototype runs against a mock engine, so no model is called and no key is needed.
 
-- `pnpm prototype:check` runs 82 assertions over the real source: that every catalogue
+- `pnpm prototype:check` runs 86 assertions over the real source: that every catalogue
   project redirects to its own path, that every project is reachable by its title and by
   at least one alias, that a skill is only paired with a project that has the pairing,
   that an E3 skill never carries a pairing, that the answer shape follows the question

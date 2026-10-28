@@ -5,6 +5,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import {
+  armTriggerFromUrl,
   consumePendingTrigger,
   mockAnswer,
   type ChatMessage,
@@ -15,6 +16,10 @@ export function usePrototypeChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [status, setStatus] = useState<ChatStatus>("idle")
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    armTriggerFromUrl()
+  }, [])
 
   useEffect(() => {
     return () => {
