@@ -11,16 +11,38 @@ import AnimatedTimelineLine from "@/components/animated-timeline-line"
 
 // Timeline data
 const timelineData = [
-  //{
-  //   year: "May 2025 - Present",
-  //   title: "Software Engineer (Backend), ITMX (Part-time Contract)",
-  //   description:
-  //     "Developing backend systems and contributing to ongoing projects. Applying skills learned from internship experiences.",
-  // },
   {
-    year: "April 2025 - Present",
-    title: "Software Engineer Intern (Backend), ITMX",
-    description: "Gained experience in developing backend systems, focusing on scalability and performance.",
+    year: "August 2026 - Present",
+    title: "AI Engineer (Intern), True Corporation",
+    description:
+      "Product ownership for an AI customer support agent, including scope, timelines, and customer workflows. Built a document processing pipeline for Thai device manuals using Docling and font-aware Unicode recovery, prepared them for a RAG knowledge base, and developed a RAG prototype for TrueX smart home support with retrieval, evidence validation, and escalation to human support.",
+    skills: [
+      "RAG",
+      "Qdrant",
+      "OpenAI API",
+      "LLM Tool Calling",
+      "Docling",
+      "Thai PDF Processing",
+      "Product Ownership",
+    ],
+  },
+  {
+    year: "April 2025 - July 2026",
+    title: "Software Engineer (Part-time), NITMX",
+    description:
+      "Upgraded critical legacy applications from Java 11 to Java 25 while identifying and mitigating security vulnerabilities. Designed and ran automated API testing with Postman and Bruno for a national anti-mule account project. Developed a secure interbank financial adjustment web application in Go using Clean and Hexagonal Architecture, and contributed to a Hyperledger Besu blockchain network with DR automation through Ansible playbooks.",
+    skills: [
+      "Java",
+      "Go",
+      "Clean Architecture",
+      "Hexagonal Architecture",
+      "Hyperledger Besu",
+      "NestJS",
+      "Next.js",
+      "Ansible",
+      "Postman",
+      "Bruno",
+    ],
   },
   {
     year: "Oct 2024 - May 2025",
@@ -47,9 +69,10 @@ const timelineData = [
     ],
   },
   {
-    year: "July 2023",
+    year: "July 2023 - December 2026",
     title: "Bachelors of Engineering in Computer Engineering, Chulalongkorn University",
-    description: "Currently pursuing a Bachelors of Engineering in Computer Engineering at Chulalongkorn University.",
+    description:
+      "Expected December 2026, GPAX 3.71 out of 4.0. Coursework included Software Engineering for ML Systems, Digital and AI Transformation, Introduction to Data Science and Data Engineering, System Design for Software Development, and Software Engineering.",
   },
   {
     year: "March 2023 - June 2023",
@@ -119,7 +142,10 @@ export default function AboutPage() {
             <h2 className="text-3xl font-bold mb-6">Hello, I&apos;m Pasit Khumsena</h2>
 
             <p className="text-black/80 text-lg leading-relaxed mb-4">
-              Computer Engineering student at Chulalongkorn University, focused on AI engineering and backend development. I build practical AI products and reliable software systems, and I am interested in how automation can make useful tools easier to use.
+              Computer Engineering student at Chulalongkorn University, graduating in December 2026, with
+              hands-on experience developing LLM-powered applications and RAG-based customer support systems. I
+              build practical AI products and reliable software systems, and I am interested in how automation can
+              make useful tools easier to use.
             </p>
 
             <p className="text-black/80 text-lg leading-relaxed mb-4">

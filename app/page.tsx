@@ -27,17 +27,17 @@ export default function Home() {
   // Stats data
   const statsData = [
     {
-      number: "6+",
-      label: "Projects",
-      description: "Full-stack & backend solutions",
-    },
-    {
-      number: "5+",
-      label: "Months",
-      description: " Internships at leading tech companies",
-    },
-    {
       number: "10+",
+      label: "Projects",
+      description: "AI, backend, and full-stack solutions",
+    },
+    {
+      number: "20+",
+      label: "Months",
+      description: "In industry software engineering roles",
+    },
+    {
+      number: "35+",
       label: "Technologies",
       description: "Backend & AI expertise",
     },
@@ -226,7 +226,9 @@ export default function Home() {
           <div className="justify-items-end">
             <div className="flex flex-col items-start">
               <p ref={introTextRef} className="text-lg text-black/80 mt-6 max-w-xl opacity-0 mb-6">
-                Computer Engineering student at Chulalongkorn University focused on AI engineering and backend development. I build practical products with AI, automation, and reliable software systems.
+                Computer Engineering student at Chulalongkorn University, graduating December 2026, focused on AI
+                engineering and backend development. I build practical products with AI, automation, and reliable
+                software systems.
               </p>
 
               <div ref={buttonsRef} className="flex flex-wrap gap-4 mt-2 opacity-0">

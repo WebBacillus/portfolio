@@ -81,6 +81,37 @@ export const projects = [
     category: "fullStack",
     featured: true,
   },
+  {
+    id: 8,
+    slug: "scopus-gender-prediction",
+    title: "Scopus Gender Prediction",
+    description:
+      "A data pipeline that predicts the likely gender of an academic author from their name, then maps the result across the Scopus corpus by country and subject area. Built with the Elsevier and Crossref APIs, MongoDB, PySpark, and scikit-learn, with Streamlit and Plotly dashboards on top.",
+    image: "/images/projects/scopus-gender-prediction.png",
+    tags: ["Python", "Scikit-learn", "Streamlit", "Plotly", "PySpark", "MongoDB", "Data Pipeline"],
+    repoUrl: "https://github.com/Don-Yurillo/2110403_DSDE_Final_Project",
+    category: "ai",
+  },
+  {
+    id: 9,
+    slug: "nectec-medical-ai",
+    title: "NECTEC Medical AI",
+    description:
+      "A multi-label chest X-ray diagnostic system that predicts several findings at once from a single radiograph. Class imbalance was the main problem, addressed with augmentation and balancing before selecting EfficientNetV2 for the accuracy and efficiency trade-off.",
+    image: "/images/projects/nectec-medical-ai.png",
+    tags: ["AI", "PyTorch", "EfficientNetV2", "Multi-label", "Data Augmentation", "Medical Imaging"],
+    category: "ai",
+  },
+  {
+    id: 10,
+    slug: "scb-tech-x-loan-origination",
+    title: "SCB Tech X Loan Origination",
+    description:
+      "A loan origination pipeline that replaces manual steps with Go microservices and durable Temporal workflows, so a multi-step loan process survives a failed dependency instead of needing a manual re-run. PostgreSQL holds the records and Azure Blob Storage holds the documents.",
+    image: "/images/projects/scb-tech-x-loan-origination.png",
+    tags: ["Go", "Temporal", "Microservices", "PostgreSQL", "Azure Blob Storage", "Workflows"],
+    category: "backend",
+  },
 ]
 
 export const categories = [
