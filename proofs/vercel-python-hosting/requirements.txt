@@ -1,0 +1,5 @@
+# PROTOTYPE PROOF. The dependencies a Vercel Python function would install.
+# Pinned so the proof and the later implementation agree on versions.
+fastapi==0.133.1
+httpx==0.28.1
+pydantic==2.13.4
