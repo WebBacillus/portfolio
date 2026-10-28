@@ -1,6 +1,7 @@
 export const projects = [
   {
     id: 1,
+    slug: "takluz-tts",
     title: "Takluz TTS",
     description:
       "Takluz TTS enhances Twitch streams by using OpenAI's TTS model with a channel points system. Viewers can redeem points for diverse voices, offering a richer and more engaging TTS experience than standard bit/donation-based systems.",
@@ -13,6 +14,7 @@ export const projects = [
   },
   {
     id: 7,
+    slug: "se-for-ml",
     title: "SE for ML",
     description:
       "I designed and created C4 diagrams at all four levels: Context, Container, Component, and Code. I also implemented model serving for an image classification system that predicts one of six storefront industries and routes uncertain cases to human review. I contributed to the team's design of drift detection and retraining workflows, where persistent drift can trigger retraining automatically while the serving model is reloaded manually by a reviewer. Through the project, I gained experience with Airflow, MLflow, PyTorch, torchvision, and scikit learn.",
@@ -24,6 +26,7 @@ export const projects = [
   },
   {
     id: 2,
+    slug: "profanity-guard",
     title: "ProfanityGuard",
     description: "An AI-powered tool that detects and filters Thai-language profanity in speech, helping YouTubers and streamers avoid content restrictions. It enhances the airesearch/wav2vec2-large-xlsr-53-th model with additional Thai swear word data, improving Automatic Speech Recognition (ASR) accuracy.",
     image: "/images/projects/profanity-guard.png",
@@ -34,6 +37,7 @@ export const projects = [
   },
   {
     id: 3,
+    slug: "adozoil",
     title: "Adozoil (Anti + Doze off + Oil)",
     description: "An IoT solution for transport businesses, preventing accidents and fuel theft. It detects driver drowsiness with eye-tracking, triggering alarms and employer notifications. Fuel sensors flag unusual consumption as potential theft, sending alerts with location and speed.",
     image: "/images/projects/adozoil.gif",
@@ -44,6 +48,7 @@ export const projects = [
   },
   {
     id: 4,
+    slug: "employee-management",
     title: "Employee Management",
     description: "The Employee Management System is a comprehensive web application for managing employees, tracking attendance (check-in/check-out), processing leave requests, and delivering notifications. It uses a microservices architecture built with Go backend services and a Next.js frontend.",
     image: "/images/projects/employee-management.jpg",
@@ -54,6 +59,7 @@ export const projects = [
   },
   {
     id: 5,
+    slug: "takluz-leaderboards",
     title: "Takluz Leaderboards",
     description: "Takluz Leaderboard is a Next.js web platform designed to display various statistics and insights from Twitch chat. It leverages Go Twitch IRC for efficient real-time data collection from live streams. The application is deployed on AWS ECR and ECS, ensuring scalability and reliability, and provides valuable analytical tools for streamers to understand their chat activity and community engagement.",
     image: "/images/projects/takluz-leaderboards.gif",
@@ -65,6 +71,7 @@ export const projects = [
   },
   {
     id: 6,
+    slug: "monkey-massage",
     title: "Monkey Massage",
     description: "Next.js web platform that allows users to browse massage shops, view detailed information about each shop, make reservations, and manage their bookings.",
     image: "/images/projects/monkey-massage.jpg",

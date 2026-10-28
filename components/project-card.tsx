@@ -1,13 +1,15 @@
 "use client"
 
 import Image from "next/image"
-import { ExternalLink, Github } from "lucide-react"
+import { ExternalLink, Github, ArrowRight } from "lucide-react"
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { addHoverAnimation } from "@/lib/gsap-utils"
+import TransitionLink from "@/components/transition-link"
 
 interface ProjectCardProps {
+  slug: string
   title: string
   description: string
   image: string
@@ -18,6 +20,7 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({
+  slug,
   title,
   description,
   image,
@@ -171,15 +174,13 @@ export default function ProjectCard({
                 <span>Repository</span>
               </a>
             )}
-            {/*
             <TransitionLink
-              href="#"
+              href={`/work/${slug}`}
               className="flex items-center ml-auto text-purple hover:text-dark-purple transition-colors duration-300 text-sm md:text-base"
             >
               <span>Details</span>
               <ArrowRight className="w-4 h-4 ml-1 transition-transform" />
             </TransitionLink>
-            */}
           </div>
         </div>
       </div>

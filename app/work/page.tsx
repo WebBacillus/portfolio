@@ -176,6 +176,7 @@ export default function WorkPage() {
           {filteredProjects.map((project) => (
             <div key={project.id} className={`${project.featured ? "md:col-span-2" : ""}`}>
               <ProjectCard
+                slug={project.slug}
                 title={project.title}
                 description={project.description}
                 image={project.image}

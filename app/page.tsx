@@ -260,6 +260,7 @@ export default function Home() {
             {projects.filter((project) => (project.category === "ai" || project.tags.includes("AI")) && project.title !== "Takluz TTS").map((project) => (
               <div key={project.id} className={`experience-card ${project.featured ? "lg:col-span-2" : ""}`}>
                 <ProjectCard
+                  slug={project.slug}
                   title={project.title}
                   description={project.description}
                   image={project.image}
