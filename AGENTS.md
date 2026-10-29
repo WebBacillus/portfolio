@@ -2,15 +2,20 @@
 
 ### Issue tracker
 
-Issues and specs are tracked in GitHub Issues using the `gh` CLI. See `docs/agents/issue-tracker.md`.
+Issues and specs are tracked on the Hermes Kanban `default` board with tenant
+`portfolio`. Use the `hermes kanban` CLI, not `gh issue`. See
+`docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
-Use the default labels: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, and `wontfix`. See `docs/agents/triage-labels.md`.
+The five canonical roles are `needs-triage`, `needs-info`, `ready-for-agent`,
+`ready-for-human`, and `wontfix`, stored as body markers rather than Kanban labels.
+See `docs/agents/triage-labels.md`.
 
 ### Domain docs
 
-Use the single-context layout with root `CONTEXT.md` and `docs/adr/`. See `docs/agents/domain.md`.
+Use the single-context layout with root `GLOSSARY.md` and `docs/adr/`. See
+`docs/agents/domain.md`.
 
 ## Commit messages
 
