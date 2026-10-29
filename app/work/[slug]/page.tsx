@@ -78,7 +78,7 @@ export default async function ProjectPage({
         </div>
 
         <div
-          className="space-y-5 text-black/80 [&_a]:text-purple [&_a]:underline [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_li]:ml-6 [&_li]:list-disc [&_ol]:list-decimal [&_p]:leading-relaxed [&_table]:w-full [&_table]:my-6 [&_td]:border [&_td]:border-purple/15 [&_td]:px-3 [&_td]:py-2 [&_th]:border [&_th]:border-purple/15 [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_ul]:space-y-2"
+          className="project-article-content space-y-5 text-black/80 [&_a]:text-purple [&_a]:underline [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_li]:ml-6 [&_li]:list-disc [&_ol]:list-decimal [&_p]:leading-relaxed [&_ul]:space-y-2"
           dangerouslySetInnerHTML={{ __html: project.detail.html }}
         />
 

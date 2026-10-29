@@ -1,6 +1,6 @@
 "use client"
 
-import { type ReactNode, useEffect } from "react"
+import { type ReactNode, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -13,6 +13,7 @@ interface GSAPProviderProps {
 
 export default function GSAPProvider({ children }: GSAPProviderProps) {
   const pathname = usePathname()
+  const previousPathname = useRef<string | null>(null)
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -39,8 +40,11 @@ export default function GSAPProvider({ children }: GSAPProviderProps) {
   useEffect(() => {
     if (typeof window === "undefined") return
 
-    // Animate page in when pathname changes
-    const transition = animatePageIn()
+    // Project detail routes use direct navigation in both directions.
+    const projectNavigation = pathname.startsWith("/work/") || previousPathname.current?.startsWith("/work/")
+    const transition = projectNavigation ? undefined : animatePageIn()
+    if (projectNavigation) abortTransition()
+    previousPathname.current = pathname
 
     // Scroll to top on page change
     window.scrollTo(0, 0)
