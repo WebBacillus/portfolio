@@ -15,7 +15,7 @@ This milestone uses a single model request for an answer; it has no agent loop, 
 3. The interaction prototype and its 86 source assertions are on `prototype/chat-panel-variants` at `908779d`; its contract is `docs/chatbot/interaction-contract.md` on that branch. The owner chose variant A and the wording recorded in `docs/chatbot/owner-decisions.md` and `t_c940549b`. Those decisions supersede the contract's earlier recommendations in sections 3 and 11.
 4. The hosting proof and independent checks are on `prototype/vercel-python-hosting` at `26e5ed6`. The closed `t_ca72ff71` decision selects **Shape A**, a separate Python Vercel project, and supersedes the earlier Shape C recommendation in the proof document's section 8.
 
-The model is `gpt-6-luna` via a dedicated server-side OpenAI API Platform key. The proof's live call established access at the time it ran; deployment must verify access again. The hard $5 monthly project spend limit is a required owner dashboard setting **not yet verified live**.
+The model is `gpt-6-luna` via a dedicated server-side OpenAI API Platform key. The proof's live call established access at the time it ran; deployment must verify access again. The owner confirmed on 2026-10-29 that the hard $5 monthly project spend limit is set; the launch check must still verify the configured project and limit.
 
 ## Visitor interaction
 
@@ -49,7 +49,7 @@ Build the dock with plain Tailwind and the live `app/globals.css` tokens, plus a
 
 Publish a visible notice before public launch: the visitor's question and short tab-scoped conversation history are sent through the site's server to OpenAI; the site does not persist transcript content or log request bodies; hosting runtime logs may retain request metadata. State the contact route for people who prefer not to use the chat.
 
-Deploy the Next.js app and the Python service as separate Vercel projects. Configure `CHAT_API_URL` and the same `CHAT_INTERNAL_TOKEN` on their respective server environments; configure the API key only on the Python service. Confirm the $5 project hard spend limit in the OpenAI dashboard **before public traffic**. Verify the deployed proxy, secret rejection, per-IP isolation, privacy notice, all project pages, and a real model answer with controlled spend before opening the launcher publicly.
+Deploy the Next.js app and the Python service as separate Vercel projects. Configure `CHAT_API_URL` and the same `CHAT_INTERNAL_TOKEN` on their respective server environments; configure the API key only on the Python service. Verify the owner-confirmed $5 project hard spend limit in the OpenAI dashboard **before public traffic**. Verify the deployed proxy, secret rejection, per-IP isolation, privacy notice, all project pages, and a real model answer with controlled spend before opening the launcher publicly.
 
 ## Acceptance evidence
 

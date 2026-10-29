@@ -26,3 +26,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python chat service
+**/__pycache__/
+*.pyc
+chat-service/.venv/
