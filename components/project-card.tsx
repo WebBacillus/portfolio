@@ -6,7 +6,7 @@ import { useRef, useEffect } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { addHoverAnimation } from "@/lib/gsap-utils"
-import TransitionLink from "@/components/transition-link"
+import ProjectDetailDialog from "@/components/project-detail-dialog"
 
 interface ProjectCardProps {
   slug: string
@@ -120,10 +120,8 @@ export default function ProjectCard({
       style={{ opacity: 0 }} // Initial state for animation
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
-        <div
-          ref={imageRef}
-          className={`relative overflow-hidden ${featured ? "h-[250px] md:h-[400px]" : "h-[200px]"} ${!featured && "md:h-full"}`}
-        >
+        <div ref={imageRef} className={`relative overflow-hidden ${featured ? "h-[250px] md:h-[400px]" : "h-[200px]"} ${!featured && "md:h-full"}`}>
+          <ProjectDetailDialog slug={slug} title={title}>
           <Image
             src={image || "/placeholder.svg"}
             alt={title}
@@ -131,6 +129,7 @@ export default function ProjectCard({
             className="object-cover transition-transform duration-500 loaded"
             priority
           />
+          </ProjectDetailDialog>
         </div>
 
         <div ref={contentRef} className="p-4 md:p-6 flex flex-col justify-between">
@@ -174,13 +173,12 @@ export default function ProjectCard({
                 <span>Repository</span>
               </a>
             )}
-            <TransitionLink
-              href={`/work/${slug}`}
-              className="flex items-center ml-auto text-purple hover:text-dark-purple transition-colors duration-300 text-sm md:text-base"
-            >
+            <ProjectDetailDialog slug={slug} title={title}>
+              <span className="flex items-center ml-auto text-purple hover:text-dark-purple text-sm md:text-base">
               <span>Details</span>
-              <ArrowRight className="w-4 h-4 ml-1 transition-transform" />
-            </TransitionLink>
+              <ArrowRight className="w-4 h-4 ml-1" />
+              </span>
+            </ProjectDetailDialog>
           </div>
         </div>
       </div>

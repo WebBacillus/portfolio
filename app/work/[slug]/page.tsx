@@ -2,7 +2,6 @@ import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { ExternalLink, Github } from "lucide-react"
-import AnimatedTitle from "@/components/animated-title"
 import { getProjectCatalog, getProjectDetail } from "@/lib/project-details"
 
 export const dynamicParams = false
@@ -44,9 +43,9 @@ export default async function ProjectPage({
           ← All work
         </Link>
 
-        <AnimatedTitle className="text-purple text-center leading-tight tracking-normal mb-6">
+        <h1 className="mb-6 text-center font-black text-purple text-4xl leading-tight tracking-normal break-normal sm:text-5xl lg:text-6xl" style={{ fontFamily: "'Gabarito', sans-serif" }}>
           {project.title}
-        </AnimatedTitle>
+        </h1>
 
         <p className="mb-4 text-center text-black/70 text-lg leading-relaxed">
           {project.detail.summary}
