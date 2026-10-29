@@ -14,7 +14,6 @@ const cvQuestions = [
 ]
 const projectQuestions = [
   "Tell me about SE for ML",
-  "What did you build for NECTEC?",
   "What is SCB Tech X Loan Origination?",
 ]
 
@@ -142,6 +141,6 @@ export default function ChatDock() {
       </div>
     </div>
 
-    <button ref={launcherRef} type="button" onClick={() => open ? close() : setOpen(true)} aria-expanded={open} aria-controls="portfolio-chat-panel" className={`${open ? "hidden md:flex" : "flex"} fixed right-6 z-[70] items-center gap-2 rounded-full bg-purple px-5 py-3 text-white shadow-lg hover:bg-dark-purple`} style={{ bottom: "calc(1.5rem + env(safe-area-inset-bottom))" }}><MessageCircle className="size-5" aria-hidden /><span className="text-sm font-medium">{open ? "Close" : "Ask me anything"}</span></button>
+    <button ref={launcherRef} type="button" onClick={() => open ? close() : setOpen(true)} aria-expanded={open} aria-controls="portfolio-chat-panel" className={`${open ? "hidden md:flex" : "flex"} fixed right-4 z-[70] min-h-11 items-center gap-1.5 rounded-full bg-purple px-3.5 py-2 text-white shadow-lg hover:bg-dark-purple md:right-5 md:min-h-10`} style={{ bottom: "calc(1rem + env(safe-area-inset-bottom))" }}><MessageCircle className="size-4" aria-hidden /><span className="text-xs font-medium">{open ? "Close" : "Ask me anything"}</span></button>
   </>
 }
