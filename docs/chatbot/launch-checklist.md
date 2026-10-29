@@ -1,6 +1,6 @@
 # Ask me anything launch checklist
 
-**Status:** ready for owner review and deployment setup; public launcher remains off by default in production.
+**Status:** deployment setup in progress; public launcher remains off by default in production. See [deployment-notes.md](deployment-notes.md) for verified state and remaining gates.
 
 ## Deploy behind the off switch
 
