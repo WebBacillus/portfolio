@@ -121,7 +121,7 @@ export default function ProjectCard({
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
         <div ref={imageRef} className={`relative overflow-hidden ${featured ? "h-[250px] md:h-[400px]" : "h-[200px]"} ${!featured && "md:h-full"}`}>
-          <Link href={`/work/${slug}`} aria-label={`View details for ${title}`} className="block h-full w-full">
+          <Link href={`/work/${slug}`} aria-label={`View details for ${title}`} className="relative block h-full w-full">
           <Image
             src={image || "/placeholder.svg"}
             alt={title}
