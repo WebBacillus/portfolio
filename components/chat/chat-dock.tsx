@@ -7,14 +7,14 @@ import { useChat, type ChatEntry, type SourceLabel } from "./use-chat"
 
 const scope = "I answer questions about my CV: background, experience, skills, and education. For a project I will point you to its page."
 const cvQuestions = [
-  "What is your current role?",
-  "What did you do at NITMX?",
-  "Which skills do you list?",
-  "Where did you study?",
+  { label: "Current role?", question: "What is your current role?" },
+  { label: "Work at NITMX?", question: "What did you do at NITMX?" },
+  { label: "Listed skills?", question: "Which skills do you list?" },
+  { label: "Education?", question: "Where did you study?" },
 ]
 const projectQuestions = [
-  "Tell me about SE for ML",
-  "What is SCB Tech X Loan Origination?",
+  { label: "SE for ML", question: "Tell me about SE for ML" },
+  { label: "SCB Tech X Loan Origination", question: "What is SCB Tech X Loan Origination?" },
 ]
 
 function SourceTag({ source, href }: { source: SourceLabel; href?: string }) {
@@ -125,8 +125,8 @@ export default function ChatDock() {
       <div ref={logRef} role="log" aria-live="polite" aria-relevant="additions text" className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
         {messages.length === 0 && <div className="space-y-4">
           <p className="rounded-xl border border-black/10 bg-black/[0.025] px-3 py-2.5 text-[11px] leading-relaxed text-black/55">Your question and recent chat are sent through this site to OpenAI. This site does not save the conversation or log its text; hosting may retain request metadata. Prefer not to chat? <Link href="/contact" className="font-medium text-purple underline underline-offset-2">Contact me</Link>.</p>
-          <div className="space-y-2.5"><p className="text-sm text-black/70">Try one of these.</p><div className="grid grid-cols-2 gap-2">{cvQuestions.map((question) => <button key={question} type="button" onClick={() => submit(question)} disabled={status === "loading" || status === "unavailable"} className="min-h-11 rounded-xl border border-purple/25 px-3 py-1.5 text-left text-xs leading-snug text-purple hover:bg-purple/10 disabled:opacity-40">{question}</button>)}</div></div>
-          <div className="space-y-2.5 border-t border-purple/10 pt-3.5"><p className="text-xs leading-snug text-black/55">Ask about a project and I will link you to its page instead of answering here.</p><div className="grid grid-cols-2 gap-2">{projectQuestions.map((question) => <button key={question} type="button" onClick={() => submit(question)} disabled={status === "loading" || status === "unavailable"} className="flex min-h-11 items-center justify-between gap-1 rounded-xl border border-black/15 px-3 py-1.5 text-left text-xs leading-snug text-black/65 hover:border-purple/30 hover:text-purple disabled:opacity-40">{question}<ArrowUpRight className="size-3 shrink-0" aria-hidden /></button>)}</div></div>
+          <div className="space-y-2.5"><p className="text-sm text-black/70">Try one of these.</p><div className="grid grid-cols-2 gap-2">{cvQuestions.map(({ label, question }) => <button key={question} type="button" onClick={() => submit(question)} disabled={status === "loading" || status === "unavailable"} className="min-h-11 whitespace-nowrap rounded-xl border border-purple/25 px-3 py-1.5 text-left text-xs text-purple hover:bg-purple/10 disabled:opacity-40">{label}</button>)}</div></div>
+          <div className="space-y-2.5 border-t border-purple/10 pt-3.5"><p className="text-xs leading-snug text-black/55">Ask about a project and I will link you to its page instead of answering here.</p><div className="grid gap-2">{projectQuestions.map(({ label, question }) => <button key={question} type="button" onClick={() => submit(question)} disabled={status === "loading" || status === "unavailable"} className="flex min-h-11 items-center justify-between gap-2 whitespace-nowrap rounded-xl border border-black/15 px-3 py-1.5 text-left text-xs text-black/65 hover:border-purple/30 hover:text-purple disabled:opacity-40">{label}<ArrowUpRight className="size-3 shrink-0" aria-hidden /></button>)}</div></div>
         </div>}
         {messages.map((entry) => <Entry key={entry.id} entry={entry} />)}
         {status === "loading" && <div role="status" className="flex items-center gap-2 text-sm text-black/60"><Loader2 className="size-4 animate-spin text-purple" aria-hidden />Thinking</div>}
@@ -141,6 +141,6 @@ export default function ChatDock() {
       </div>
     </div>
 
-    <button ref={launcherRef} type="button" onClick={() => open ? close() : setOpen(true)} aria-expanded={open} aria-controls="portfolio-chat-panel" className={`${open ? "hidden md:flex" : "flex"} fixed right-4 z-[70] min-h-11 items-center gap-1.5 rounded-full bg-purple px-3.5 py-2 text-white shadow-lg hover:bg-dark-purple md:right-5 md:min-h-10`} style={{ bottom: "calc(1rem + env(safe-area-inset-bottom))" }}><MessageCircle className="size-4" aria-hidden /><span className="text-xs font-medium">{open ? "Close" : "Ask me anything"}</span></button>
+    <button ref={launcherRef} type="button" onClick={() => open ? close() : setOpen(true)} aria-expanded={open} aria-controls="portfolio-chat-panel" className={`${open ? "hidden md:flex" : "flex"} fixed right-6 z-[70] items-center gap-2 rounded-full bg-purple px-5 py-3 text-white shadow-lg hover:bg-dark-purple`} style={{ bottom: "calc(1.5rem + env(safe-area-inset-bottom))" }}><MessageCircle className="size-5" aria-hidden /><span className="text-sm font-medium">{open ? "Close" : "Ask me anything"}</span></button>
   </>
 }
