@@ -49,7 +49,7 @@ export default function RootLayout({
             <MobileMenu variant="sidebar" />
             {children}
           </div>
-          <ChatDock />
+          {(process.env.NODE_ENV !== "production" || process.env.CHAT_PUBLIC_ENABLED === "true") && <ChatDock />}
         </GSAPProvider>
       </body>
     </html>

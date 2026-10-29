@@ -14,6 +14,7 @@
 | Both servers | `CHAT_INTERNAL_TOKEN` | Same random shared secret; never exposed to browser |
 | Next.js server | `CHAT_SESSION_SECRET` | Independent random HMAC key for the 24-hour signed session cookie |
 | Next.js server | `CHAT_SESSION_CAP` | Optional positive integer; defaults to 30 accepted sends per session |
+| Next.js build | `CHAT_PUBLIC_ENABLED` | Set to `true` and redeploy only after launch checks pass; production launcher is hidden otherwise |
 | Python server | `OPENAI_API_KEY` | Dedicated API Platform project key |
 | Python server | `OPENAI_MODEL` | Optional; defaults to `gpt-6-luna` |
 
@@ -39,3 +40,7 @@ pnpm lint
 ```
 
 The HTTP tests use local mock services and dummy secrets. They make no OpenAI request. The production service was also exercised locally with one education question, one E3 skill question and one in-progress question against `gpt-6-luna`; all three returned 200 with the expected source labels. No key or token was printed.
+
+## Launch sequence
+
+Use [launch-checklist.md](launch-checklist.md) for the two-project setup, deployed checks, and the final launcher switch. Production builds hide the launcher until `CHAT_PUBLIC_ENABLED=true` is set on the Next.js project and that project is redeployed.

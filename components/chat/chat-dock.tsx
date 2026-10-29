@@ -59,7 +59,9 @@ export default function ChatDock() {
   }, [open])
 
   useEffect(() => {
-    if (open && logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
+    if (open && logRef.current) {
+      logRef.current.scrollTop = messages.length === 0 && status === "idle" ? 0 : logRef.current.scrollHeight
+    }
   }, [open, messages, status])
 
   useEffect(() => {
@@ -123,8 +125,9 @@ export default function ChatDock() {
 
       <div ref={logRef} role="log" aria-live="polite" aria-relevant="additions text" className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
         {messages.length === 0 && <div className="space-y-4">
-          <div className="space-y-2.5"><p className="text-sm text-black/70">Try one of these.</p><div className="flex flex-wrap gap-2">{cvQuestions.map((question) => <button key={question} type="button" onClick={() => submit(question)} disabled={status === "loading" || status === "unavailable"} className="rounded-full border border-purple/25 px-3 py-1.5 text-left text-xs text-purple hover:bg-purple/10 disabled:opacity-40">{question}</button>)}</div></div>
-          <div className="space-y-2.5 border-t border-purple/10 pt-3.5"><p className="text-xs leading-snug text-black/55">Ask about a project and I will link you to its page instead of answering here.</p><div className="flex flex-wrap gap-2">{projectQuestions.map((question) => <button key={question} type="button" onClick={() => submit(question)} disabled={status === "loading" || status === "unavailable"} className="inline-flex items-center gap-1 rounded-full border border-black/15 px-3 py-1.5 text-left text-xs text-black/65 hover:border-purple/30 hover:text-purple disabled:opacity-40">{question}<ArrowUpRight className="size-3" aria-hidden /></button>)}</div></div>
+          <p className="rounded-xl border border-black/10 bg-black/[0.025] px-3 py-2.5 text-[11px] leading-relaxed text-black/55">Your question and recent chat are sent through this site to OpenAI. This site does not save the conversation or log its text; hosting may retain request metadata. Prefer not to chat? <Link href="/contact" className="font-medium text-purple underline underline-offset-2">Contact me</Link>.</p>
+          <div className="space-y-2.5"><p className="text-sm text-black/70">Try one of these.</p><div className="grid grid-cols-2 gap-2">{cvQuestions.map((question) => <button key={question} type="button" onClick={() => submit(question)} disabled={status === "loading" || status === "unavailable"} className="min-h-11 rounded-xl border border-purple/25 px-3 py-1.5 text-left text-xs leading-snug text-purple hover:bg-purple/10 disabled:opacity-40">{question}</button>)}</div></div>
+          <div className="space-y-2.5 border-t border-purple/10 pt-3.5"><p className="text-xs leading-snug text-black/55">Ask about a project and I will link you to its page instead of answering here.</p><div className="grid grid-cols-2 gap-2">{projectQuestions.map((question) => <button key={question} type="button" onClick={() => submit(question)} disabled={status === "loading" || status === "unavailable"} className="flex min-h-11 items-center justify-between gap-1 rounded-xl border border-black/15 px-3 py-1.5 text-left text-xs leading-snug text-black/65 hover:border-purple/30 hover:text-purple disabled:opacity-40">{question}<ArrowUpRight className="size-3 shrink-0" aria-hidden /></button>)}</div></div>
         </div>}
         {messages.map((entry) => <Entry key={entry.id} entry={entry} />)}
         {status === "loading" && <div role="status" className="flex items-center gap-2 text-sm text-black/60"><Loader2 className="size-4 animate-spin text-purple" aria-hidden />Thinking</div>}
