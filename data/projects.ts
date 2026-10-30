@@ -112,6 +112,18 @@ export const projects = [
     tags: ["Go", "Temporal", "Microservices", "PostgreSQL", "Azure Blob Storage", "Workflows"],
     category: "backend",
   },
+  {
+    id: 11,
+    slug: "youtube-summarizer",
+    title: "YouTube Summarizer",
+    description:
+      "I built this local n8n workflow to get useful ideas from YouTube videos without sitting through clickbait framing. It turns new Notion entries into timestamped breakdowns and Markdown notes with metadata and inline wiki links for Obsidian.",
+    image: "/images/projects/youtube-summarizer-workflow.png",
+    tags: ["n8n", "Automation", "Apify", "OpenAI", "Notion", "Dropbox", "Obsidian"],
+    repoUrl: "https://github.com/WebBacillus/youtube-summarizer-n8n",
+    workflowUrl: "/workflows/youtube-summarizer.json",
+    category: "automation",
+  },
 ]
 
 export const categories = [
@@ -119,5 +131,6 @@ export const categories = [
   { id: "backend", label: "Backend" },
   { id: "fullStack", label: "Full Stack" },
   { id: "ai", label: "AI & Machine Learning" },
+  { id: "automation", label: "Automation" },
   { id: "iot", label: "IoT & Hardware" },
 ]

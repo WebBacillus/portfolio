@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { ExternalLink, Github, ArrowRight } from "lucide-react"
+import { ExternalLink, Github, ArrowRight, Download } from "lucide-react"
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -16,6 +16,7 @@ interface ProjectCardProps {
   tags: string[]
   liveUrl?: string
   repoUrl?: string
+  workflowUrl?: string
   featured?: boolean
 }
 
@@ -27,6 +28,7 @@ export default function ProjectCard({
   tags,
   liveUrl,
   repoUrl,
+  workflowUrl,
   featured = false,
 }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -171,6 +173,16 @@ export default function ProjectCard({
               >
                 <Github className="w-4 h-4 mr-1" />
                 <span>Repository</span>
+              </a>
+            )}
+            {workflowUrl && (
+              <a
+                href={workflowUrl}
+                download
+                className="flex items-center text-purple hover:text-dark-purple transition-colors duration-300 text-sm md:text-base"
+              >
+                <Download className="w-4 h-4 mr-1" />
+                <span>Workflow JSON</span>
               </a>
             )}
             <Link href={`/work/${slug}`} className="flex items-center ml-auto text-purple hover:text-dark-purple text-sm md:text-base">

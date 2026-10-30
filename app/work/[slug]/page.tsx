@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { ExternalLink, Github } from "lucide-react"
+import { ExternalLink, Github, Download } from "lucide-react"
 import { getProjectCatalog, getProjectDetail } from "@/lib/project-details"
 
 export const dynamicParams = false
@@ -104,6 +104,16 @@ export default async function ProjectPage({
             >
               <Github className="w-4 h-4" />
               <span>Repository</span>
+            </a>
+          )}
+          {project.workflowUrl && (
+            <a
+              href={project.workflowUrl}
+              download
+              className="flex items-center gap-2 text-purple hover:text-dark-purple transition-colors duration-300"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download workflow JSON</span>
             </a>
           )}
         </div>

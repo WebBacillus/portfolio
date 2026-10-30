@@ -183,6 +183,7 @@ export default function WorkPage() {
                 tags={project.tags}
                 liveUrl={project.liveUrl}
                 repoUrl={project.repoUrl}
+                workflowUrl={project.workflowUrl}
                 featured={project.featured}
               />
             </div>

@@ -1,0 +1,318 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "databaseId": {
+          "__rl": true,
+          "value": "YOUR_NOTION_DATABASE_ID",
+          "mode": "list",
+          "cachedResultName": "Select your Notion database",
+          "cachedResultUrl": ""
+        }
+      },
+      "type": "n8n-nodes-base.notionTrigger",
+      "typeVersion": 1,
+      "position": [
+        -816,
+        224
+      ],
+      "id": "176b9f43-f8e7-4891-b4c9-33810220df55",
+      "name": "Notion Trigger"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "=/Obsidian/YoutubeNote/{{ $('Loop Over Items').item.json.Title }}.md",
+        "fileContent": "={{ $json.Output }}"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        224
+      ],
+      "id": "a23e48a7-2cad-4397-8ec0-e77438eb9ad2",
+      "name": "Dropbox"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bf34968c-72dd-4bb7-8ed3-4d0ab7360ca5",
+              "name": "Output",
+              "value": "=---\ntags:\n  - YouTube\nChannel: {{ $json.formatChannel }}\nDuration: {{ $('Loop Over Items').item.json[\"Video Duration\"] }}\nRating: ☆☆☆☆☆\nStatus: To Watch\n---\n\n![]({{ $('Loop Over Items').item.json.URL }})",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        112
+      ],
+      "id": "a6926368-6b86-418d-a3a4-4b4f523edaa5",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.cleanChannelTitle = (item.json.snippet.channelTitle.split(\" \")).join(\"-\")\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        112
+      ],
+      "id": "ad880f7a-7283-438f-9484-0853b03c523f",
+      "name": "GetChannelTitle"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// $input.item.json.formatDate = $input.item.json.currentDate.split(\"T\")[0]\n$input.item.json.formatChannel = $('Loop Over Items').item.json.Channel\n// $input.item.json.formatChannel = $('Loop Over Items').item.json.Channel.split(\" \").join(\"-\")\n\n// const title = $input.item.json.title\n\nreturn $input.item;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        112
+      ],
+      "id": "e456897f-127f-45e0-a10d-91a37da087b6",
+      "name": "DataFormat"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -592,
+        224
+      ],
+      "id": "b09a7ecb-2258-4fb1-94df-a455f76d52e9",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const page = $json;\nconst fields = page.properties ?? page;\n\nfunction readValue(value) {\n  if (typeof value === 'string') return value.trim();\n  if (Array.isArray(value)) return value.map(readValue).filter(Boolean).join(' ').trim();\n  if (!value || typeof value !== 'object') return '';\n  if (typeof value.url === 'string') return value.url.trim();\n  if (typeof value.plain_text === 'string') return value.plain_text.trim();\n  if (typeof value.text === 'string') return value.text.trim();\n  if (value.text && typeof value.text.content === 'string') return value.text.content.trim();\n  return readValue(value.rich_text ?? value.title ?? value.value);\n}\n\nconst youtubeUrl = readValue(\n  fields['Youtube URL'] ?? fields['YouTube URL'] ?? fields['YouTube Link'] ?? fields['URL'] ?? fields['url']\n);\nif (!youtubeUrl) throw new Error('Notion page has no YouTube URL. Check the property name and value.');\n\nlet parsed;\ntry { parsed = new URL(youtubeUrl); } catch { throw new Error(`Invalid YouTube URL: ${youtubeUrl}`); }\nconst host = parsed.hostname.toLowerCase();\nif (!['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be'].includes(host)) {\n  throw new Error(`Expected a YouTube video URL, got: ${youtubeUrl}`);\n}\n\nreturn { json: {\n  youtubeUrl,\n  notionTitle: readValue(fields['Name'] ?? fields['Title']),\n  notionPageId: page.id ?? ''\n} };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        112
+      ],
+      "id": "8f21a4c7-f493-4694-944b-fd2c6d8f6d47",
+      "name": "Normalize Notion Page"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const row = $json;\nconst captions = row.captions;\nif (row.transcriptFound === false || captions == null ||\n    (Array.isArray(captions) && captions.length === 0) ||\n    (typeof captions === 'string' && !captions.trim())) {\n  throw new Error(`No transcript available for video ${row.videoId ?? 'unknown'}: ${row.reason ?? row.status ?? 'captions missing'}`);\n}\n\nfunction timestamp(seconds) {\n  const total = Math.max(0, Math.floor(Number(seconds) || 0));\n  const hours = Math.floor(total / 3600);\n  const minutes = Math.floor((total % 3600) / 60);\n  const secs = total % 60;\n  const mmss = `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;\n  return hours ? `${hours}:${mmss}` : mmss;\n}\n\nconst transcript = Array.isArray(captions)\n  ? captions.map(segment => typeof segment === 'string'\n      ? segment\n      : `[${timestamp(segment.start)}] ${segment.text ?? ''}`\n    ).filter(Boolean).join('\\n')\n  : String(captions);\n\nif (!transcript.trim()) throw new Error(`Transcript is empty for video ${row.videoId ?? 'unknown'}`);\nreturn { json: {\n  title: row.title || 'Untitled video',\n  youtubeUrl: row.videoId ? `https://www.youtube.com/watch?v=${row.videoId}` : '',\n  transcript\n} };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        112
+      ],
+      "id": "c003656a-829c-4819-bfb9-de9055bf0803",
+      "name": "Prepare Transcript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Video title: {{ $json.title }}\nVideo URL: {{ $json.youtubeUrl }}\n\nBelow is the video's timestamped transcript. Use this transcript as the source for the breakdown. Do not infer content from the URL alone.\n\nTRANSCRIPT:\n{{ $json.transcript }}\n\nTASK:\nWrite a detailed English breakdown of the video. Divide it into meaningful sections. Format each section heading as \"### Section name MM:SS\" (or H:MM:SS for a video longer than one hour), using timestamps supported by the transcript. Leave a blank line after each heading. Explain the useful content so readers can understand it without watching the video. Use paragraphs, bullets, or numbered lists where helpful. Omit sections that only contain sponsorships, subscription reminders, self-promotion, or calls to action. Link important people, concepts, technologies, and named ideas to Obsidian notes using [[Wiki Link]] syntax where relevant. Do not create links for generic terms or invent concepts. Do not invent sections, timestamps, or claims absent from the transcript."
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        304,
+        112
+      ],
+      "id": "6e47cbdc-511e-43b5-8785-1c4e6acddc77",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        304,
+        288
+      ],
+      "id": "574e7e00-8189-4dd6-aa25-1115b977102d",
+      "name": "OpenAI Chat Model1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/karamelo~youtube-transcripts/run-sync-get-dataset-items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ urls: [$json.youtubeUrl], outputFormat: 'textWithTimestamps', maxRetries: 4 }) }}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "2872f89f-103a-464a-8455-caf681cc4c7e",
+      "name": "Apify scrape1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -144,
+        112
+      ]
+    }
+  ],
+  "connections": {
+    "Notion Trigger": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dropbox": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetChannelTitle": {
+      "main": [
+        [
+          {
+            "node": "DataFormat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DataFormat": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Normalize Notion Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Notion Page": {
+      "main": [
+        [
+          {
+            "node": "Apify scrape1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Transcript": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "GetChannelTitle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apify scrape1": {
+      "main": [
+        [
+          {
+            "node": "Prepare Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
