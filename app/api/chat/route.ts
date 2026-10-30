@@ -1,5 +1,5 @@
-import { createHmac, randomUUID, timingSafeEqual } from "node:crypto"
 import { NextResponse } from "next/server"
+import { nextSession, setSession, SESSION_CAP } from "@/lib/chat-session"
 import { findProjectRedirect, listedOnlySkills } from "@/lib/chat-routing"
 
 export const runtime = "nodejs"
@@ -9,43 +9,12 @@ const MAX_BODY_BYTES = 32 * 1024
 const MAX_QUESTION_CHARS = 1000
 const MAX_HISTORY_MESSAGES = 12
 const MAX_HISTORY_CHARS = 8000
-const SESSION_SECONDS = 24 * 60 * 60
-const configuredCap = Number(process.env.CHAT_SESSION_CAP ?? "30")
-const SESSION_CAP = Number.isSafeInteger(configuredCap) && configuredCap > 0 ? configuredCap : 30
-const COOKIE = "portfolio_chat_session"
 const SOURCES = new Set(["Resume", "About page", "Project page", "In progress"])
 
 type HistoryMessage = { role: "user" | "assistant"; content: string }
-type Session = { id: string; count: number; expires: number }
 
 function response(status: number, kind: "error" | "unavailable", message: string) {
   return NextResponse.json({ kind, message }, { status })
-}
-
-function signature(value: string, secret: string) {
-  return createHmac("sha256", secret).update(value).digest("hex")
-}
-
-function readSession(request: Request, secret: string): Session | undefined {
-  const cookie = request.headers.get("cookie")?.split(";").map((part) => part.trim()).find((part) => part.startsWith(`${COOKIE}=`))?.slice(COOKIE.length + 1)
-  if (!cookie) return undefined
-  const [id, countText, expiresText, given] = cookie.split(".")
-  if (!id || !countText || !expiresText || !given || !/^[0-9a-f-]{36}$/.test(id) || !/^\d+$/.test(countText) || !/^\d+$/.test(expiresText) || !/^[0-9a-f]{64}$/.test(given)) return undefined
-  const expected = signature(`${id}.${countText}.${expiresText}`, secret)
-  if (!timingSafeEqual(Buffer.from(given), Buffer.from(expected))) return undefined
-  const expires = Number(expiresText)
-  const count = Number(countText)
-  if (!Number.isSafeInteger(count) || !Number.isSafeInteger(expires) || expires <= Date.now()) return undefined
-  return { id, count, expires }
-}
-
-function setSession(result: NextResponse, session: Session, secret: string) {
-  const value = `${session.id}.${session.count}.${session.expires}`
-  result.cookies.set(COOKIE, `${value}.${signature(value, secret)}`, {
-    httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production",
-    path: "/api/chat", maxAge: SESSION_SECONDS,
-  })
-  return result
 }
 
 function validatedHistory(value: unknown): HistoryMessage[] | undefined {
@@ -93,8 +62,7 @@ export async function POST(request: Request) {
   const secret = process.env.CHAT_SESSION_SECRET
   if (!backend || !token || !secret) return response(503, "unavailable", "The assistant is temporarily unavailable.")
 
-  const previous = readSession(request, secret)
-  const session: Session = previous ?? { id: randomUUID(), count: 0, expires: Date.now() + SESSION_SECONDS * 1000 }
+  const session = nextSession(request, secret)
   if (session.count >= SESSION_CAP) return response(429, "unavailable", "The assistant is temporarily unavailable. You have reached the session limit.")
 
   // Vercel overwrites this header to prevent client spoofing. Its WAF rule is the

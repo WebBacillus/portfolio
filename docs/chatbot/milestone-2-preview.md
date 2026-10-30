@@ -1,0 +1,9 @@
+# Job Matching milestone 2 preview slice
+
+This preview slice provides one requirement assessment from pasted text. It uses same-origin `POST /api/job-match` and the separate authenticated Python `POST /job-match` endpoint. The user interface appears only when `NEXT_PUBLIC_JOB_MATCH_PREVIEW_ENABLED=true`; the endpoint also requires `JOB_MATCH_PREVIEW_ENABLED=true` and `VERCEL_ENV=preview`. It is deliberately unavailable on production origins.
+
+The pasted input limit is 20,000 characters. PDF upload, follow-up, reassessment, and assessment of every requirement are not in this ticket's preview slice. The Python service asks the model for one requirement. Candidate evidence comes from the reviewed static snapshot in `chat-service/knowledge/job-match.json`; add or correct a fact only after reviewing the source and public page. The Next.js proxy validates response status, reason, evidence status, approved source IDs, and builds links from its own allowlist. There are no request-body or output-content logs in either application route.
+
+The session cookie is shared with CV chat at `Path=/api`, and both spend the existing 30 accepted-send cap. Existing cookies at `/api/chat` cannot be read by the server for migration and will expire naturally; after this deployment a new shared cookie is issued on the next accepted chat or match request. Do not separately raise the counter or expose a reset.
+
+Preview WAF configuration remains an operator deployment step: add `/api/job-match` at 3 requests per 10 minutes per IP, and verify the rule against both direct Vercel and Cloudflare-fronted paths before sharing the private preview. The Python per-instance limiter is only a backup. The preview must use the already-approved API project budget and server-only credentials. This change does not turn on the public CV launcher or change WAF rules remotely.
