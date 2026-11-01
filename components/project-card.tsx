@@ -14,6 +14,7 @@ interface ProjectCardProps {
   description: string
   image: string
   imageFit?: "contain" | "cover"
+  imageBg?: string
   tags: string[]
   liveUrl?: string
   repoUrl?: string
@@ -27,6 +28,7 @@ export default function ProjectCard({
   description,
   image,
   imageFit = "cover",
+  imageBg,
   tags,
   liveUrl,
   repoUrl,
@@ -124,7 +126,11 @@ export default function ProjectCard({
       style={{ opacity: 0 }} // Initial state for animation
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
-        <div ref={imageRef} className={`relative overflow-hidden ${imageFit === "contain" ? "bg-purple/10" : ""} ${featured ? "h-[250px] md:h-[400px]" : "h-[200px]"} ${!featured && "md:h-full"}`}>
+        <div
+          ref={imageRef}
+          className={`relative overflow-hidden ${imageFit === "contain" && !imageBg ? "bg-purple/10" : ""} ${featured ? "h-[250px] md:h-[400px]" : "h-[200px]"} ${!featured && "md:h-full"}`}
+          style={imageBg ? { background: imageBg } : undefined}
+        >
           <Link href={`/work/${slug}`} aria-label={`View details for ${title}`} className="relative block h-full w-full">
             <Image
               src={image || "/placeholder.svg"}

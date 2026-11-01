@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react"
 import gsap from "gsap"
 
 export default function ScrollingText() {
-  const items = ["AI Engineer", "LLM", "RAG", "Backend"]
+  const items = ["AI Engineer", "LLM", "Architecture", "Backend"]
   const repeatedItems = [...items, ...items, ...items, ...items]
   const scrollRef = useRef<HTMLDivElement>(null)
 

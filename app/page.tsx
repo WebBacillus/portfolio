@@ -6,12 +6,38 @@ import AnimatedTitle from "@/components/animated-title"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
+import Link from "next/link"
 import useMobile from "@/hooks/use-mobile"
 import TransitionLink from "@/components/transition-link"
-import QuickStats from "@/components/quick-stats"
-import ProjectCard from "@/components/project-card"
-import { ExternalLink, Github } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import { projects } from "@/data/projects"
+
+const featuredCopy = [
+  {
+    slug: "se-for-ml",
+    status: "ML systems",
+    summary: "An image classification system built around serving, human review, and drift-aware retraining.",
+    imageBg: "bg-[#101116]",
+  },
+  {
+    slug: "customer-support-agent",
+    status: "Research & prototype",
+    summary: "Exploring evidence-guided troubleshooting for Thai and English smart home support.",
+    imageBg: "bg-purple/5",
+  },
+  {
+    slug: "scb-tech-x-loan-origination",
+    status: "Industry work",
+    summary: "Go services and durable Temporal workflows for a multi-step loan process.",
+    imageBg: "bg-[#4B258B]",
+  },
+] as const
+
+const featuredProjects = featuredCopy.map((copy) => {
+  const project = projects.find((item) => item.slug === copy.slug)
+  if (!project) throw new Error(`Featured project not found: ${copy.slug}`)
+  return { ...project, ...copy }
+})
 
 export default function Home() {
   const scrollTextRef = useRef<HTMLDivElement>(null)
@@ -21,27 +47,7 @@ export default function Home() {
   const experienceRef = useRef<HTMLDivElement>(null)
   const aboutSectionRef = useRef<HTMLDivElement>(null)
   const contactSectionRef = useRef<HTMLDivElement>(null)
-  const statsRef = useRef<HTMLDivElement>(null)
   const isMobile = useMobile()
-
-  // Stats data
-  const statsData = [
-    {
-      number: "10+",
-      label: "Projects",
-      description: "AI, backend, and full-stack solutions",
-    },
-    {
-      number: "20+",
-      label: "Months",
-      description: "In industry software engineering roles",
-    },
-    {
-      number: "35+",
-      label: "Technologies",
-      description: "Backend & AI expertise",
-    },
-  ]
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
@@ -83,26 +89,6 @@ export default function Home() {
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 0.5, delay: 0, ease: "power3.out" },
       )
-    }
-
-    // Stats section animation
-    if (statsRef.current) {
-      animatedElements.push(statsRef.current)
-      gsap.set(statsRef.current, { opacity: 0, y: 50 })
-
-      scrollTriggers.push(ScrollTrigger.create({
-        trigger: statsRef.current,
-        start: "top 80%",
-        once: true,
-        onEnter: () => {
-          gsap.to(statsRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
-          })
-        },
-      }))
     }
 
     // Experience section animation
@@ -250,200 +236,77 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Quick Stats Section */}
-        <div ref={statsRef} className="mt-16 mb-12">
-          <QuickStats stats={statsData} />
-        </div>
-
         {/* Featured Projects Showcase */}
-        <div ref={experienceRef} className="mt-16 mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-purple">Featured Projects</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-            {projects.filter((project) => (project.category === "ai" || project.tags.includes("AI")) && project.title !== "Takluz TTS").map((project) => (
-              <div key={project.id} className={`experience-card ${project.featured ? "lg:col-span-2" : ""}`}>
-                <ProjectCard
-                  slug={project.slug}
-                  title={project.title}
-                  description={project.description}
-                  image={project.image}
-                  tags={project.tags}
-                  liveUrl={project.liveUrl}
-                  repoUrl={project.repoUrl}
-                  workflowUrl={project.workflowUrl}
-                  featured={project.featured}
-                />
-              </div>
-            ))}
-            {/* Takluz TTS is also an AI project; keep its existing featured layout here. */}
-            <div className="experience-card lg:col-span-2">
-              <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-purple/10 overflow-hidden">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-                  <div className="relative h-[250px] md:h-[300px] overflow-hidden">
+        <section ref={experienceRef} aria-labelledby="featured-projects-heading" className="mt-20 mb-12">
+          <h2 id="featured-projects-heading" className="mb-8 text-center text-3xl font-bold text-purple md:text-4xl">Featured Projects</h2>
+          <div className="grid gap-5 md:grid-cols-2">
+            <article className="experience-card group overflow-hidden rounded-2xl bg-[#241735] text-white md:col-span-2">
+              <Link
+                href={`/work/${featuredProjects[0].slug}`}
+                aria-label={`View ${featuredProjects[0].title} case study`}
+                className="grid h-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+              >
+                <div className="order-2 flex flex-col justify-between gap-6 p-6 sm:p-9 lg:order-1 lg:p-12">
+                  <div>
+                    <span className="inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold">{featuredProjects[0].status}</span>
+                    <h3 className="mt-5 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">{featuredProjects[0].title}</h3>
+                    <p className="mt-4 max-w-[45ch] text-base leading-relaxed text-white/85 sm:text-lg">{featuredProjects[0].summary}</p>
+                  </div>
+                  <span className="inline-flex min-h-11 items-center gap-2 font-semibold transition-[gap] group-hover:gap-3">
+                    View case study <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+                  </span>
+                </div>
+                <div className={`relative order-1 min-h-48 overflow-hidden sm:min-h-72 lg:order-2 lg:min-h-[22rem] ${featuredProjects[0].imageBg}`}>
+                  <Image
+                    src={featuredProjects[0].image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 52vw"
+                    className="object-contain transition-transform duration-500 group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                  />
+                </div>
+              </Link>
+            </article>
+
+            {featuredProjects.slice(1).map((project) => (
+              <article key={project.slug} className="experience-card group overflow-hidden rounded-2xl border border-purple/15 bg-white">
+                <Link
+                  href={`/work/${project.slug}`}
+                  aria-label={`View ${project.title} case study`}
+                  className="flex h-full flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple"
+                >
+                  <div className={`relative aspect-[16/9] overflow-hidden ${project.imageBg}`}>
                     <Image
-                      src="/images/projects/takluz-tts.gif"
-                      alt="Takluz TTS - AI-powered text-to-speech for Twitch streams"
+                      src={project.image}
+                      alt=""
                       fill
-                      className="object-cover"
                       sizes="(max-width: 768px) 100vw, 50vw"
+                      unoptimized={project.image.toLowerCase().endsWith(".gif")}
+                      className="object-contain transition-transform duration-500 group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                     />
                   </div>
-                  <div className="p-6 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-bold mb-3 text-black">Takluz TTS</h3>
-                      <p className="text-black/70 mb-4 text-sm md:text-base leading-relaxed">
-                        AI-powered text-to-speech system for Twitch streams using OpenAI&apos;s TTS model with channel points
-                        integration. Offers diverse voices for enhanced viewer engagement.
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {["Go", "AI", "API", "Text-to-speech"].map((tag, index) => (
-                          <span
-                            key={index}
-                            className="text-xs px-2 py-1 bg-purple/10 text-purple rounded-full font-medium"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <a
-                        href="https://www.twitch.tv/takluz/clip/CorrectEvilButterPogChamp-PmfPRK0Lz6-wpMai"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center text-purple hover:text-dark-purple transition-colors text-sm"
-                      >
-                        <ExternalLink className="w-4 h-4 mr-1" />
-                        Live Demo
-                      </a>
-                      <a
-                        href="https://github.com/WebBacillus/Takluz_TTS"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center text-purple hover:text-dark-purple transition-colors text-sm"
-                      >
-                        <Github className="w-4 h-4 mr-1" />
-                        Repository
-                      </a>
-                    </div>
+                  <div className="flex flex-1 flex-col p-6 sm:p-8">
+                    <span className="w-fit rounded-full bg-purple/10 px-3 py-1 text-xs font-semibold text-dark-purple">{project.status}</span>
+                    <h3 className="mt-4 text-2xl font-bold tracking-tight text-black">{project.title}</h3>
+                    <p className="mt-3 max-w-[48ch] leading-relaxed text-black/75">{project.summary}</p>
+                    <span className="mt-auto inline-flex min-h-11 items-center gap-2 pt-6 font-semibold text-dark-purple transition-[gap] group-hover:gap-3">
+                      View case study <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+                    </span>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Featured Project 2 - Employee Management */}
-            <div className="experience-card">
-              <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-purple/10 overflow-hidden h-full">
-                <div className="relative h-[200px] overflow-hidden">
-                  <Image
-                    src="/images/projects/employee-management.jpg"
-                    alt="Employee Management System - Microservices architecture"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-                <div className="p-6 flex flex-col justify-between flex-1">
-                  <div>
-                    <h3 className="text-lg md:text-xl font-bold mb-2 text-black">Employee Management System</h3>
-                    <p className="text-black/70 mb-3 text-sm leading-relaxed">
-                      Comprehensive web application with microservices architecture for managing employees, attendance
-                      tracking, and leave requests.
-                    </p>
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {["Go", "Microservices", "PostgreSQL"].map((tag, index) => (
-                        <span
-                          key={index}
-                          className="text-xs px-2 py-1 bg-purple/10 text-purple rounded-full font-medium"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <a
-                      href="https://github.com/night-sornram/employee-management"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-purple hover:text-dark-purple transition-colors text-sm"
-                    >
-                      <Github className="w-4 h-4 mr-1" />
-                      Repository
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Featured Project 3 - Takluz Leaderboards */}
-            <div className="experience-card">
-              <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm border border-purple/10 overflow-hidden h-full">
-                <div className="relative h-[200px] overflow-hidden">
-                  <Image
-                    src="/images/projects/takluz-leaderboards.gif"
-                    alt="Takluz Leaderboards - Real-time Twitch chat analytics"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-                <div className="p-6 flex flex-col justify-between flex-1">
-                  <div>
-                    <h3 className="text-lg md:text-xl font-bold mb-2 text-black">Takluz Leaderboards</h3>
-                    <p className="text-black/70 mb-3 text-sm leading-relaxed">
-                      Real-time analytics platform for Twitch chat data with Go IRC integration, deployed on AWS for
-                      scalability.
-                    </p>
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {["Next.js", "Go", "Supabase", "AWS-ECR", "AWS-ECS"].map((tag, index) => (
-                        <span
-                          key={index}
-                          className="text-xs px-2 py-1 bg-purple/10 text-purple rounded-full font-medium"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <a
-                      href="https://v0-leaderboard-pi.vercel.app"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-purple hover:text-dark-purple transition-colors text-sm"
-                    >
-                      <ExternalLink className="w-4 h-4 mr-1" />
-                      Live Demo
-                    </a>
-                    <a
-                      href="https://github.com/WebBacillus/Takluz_Leaderboard"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-purple hover:text-dark-purple transition-colors text-sm"
-                    >
-                      <Github className="w-4 h-4 mr-1" />
-                      Repository
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
+                </Link>
+              </article>
+            ))}
           </div>
 
-          {/* Call to Action */}
-          <div className="experience-cta text-center mt-8">
+          <div className="experience-cta mt-8 text-center">
             <TransitionLink
               href="/work"
-              className="inline-flex items-center px-8 py-4 bg-purple text-white rounded-full hover:bg-dark-purple transition-colors transform hover:scale-105 duration-300 font-medium"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-purple px-8 py-4 font-medium text-white transition-colors hover:bg-dark-purple focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple"
             >
-              View All Projects
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              View All Projects <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
             </TransitionLink>
           </div>
-        </div>
+        </section>
 
       </div>
     </main>
