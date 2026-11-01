@@ -13,6 +13,7 @@ interface ProjectCardProps {
   title: string
   description: string
   image: string
+  imageFit?: "contain" | "cover"
   tags: string[]
   liveUrl?: string
   repoUrl?: string
@@ -25,6 +26,7 @@ export default function ProjectCard({
   title,
   description,
   image,
+  imageFit = "cover",
   tags,
   liveUrl,
   repoUrl,
@@ -122,15 +124,16 @@ export default function ProjectCard({
       style={{ opacity: 0 }} // Initial state for animation
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
-        <div ref={imageRef} className={`relative overflow-hidden ${featured ? "h-[250px] md:h-[400px]" : "h-[200px]"} ${!featured && "md:h-full"}`}>
+        <div ref={imageRef} className={`relative overflow-hidden ${imageFit === "contain" ? "bg-purple/10" : ""} ${featured ? "h-[250px] md:h-[400px]" : "h-[200px]"} ${!featured && "md:h-full"}`}>
           <Link href={`/work/${slug}`} aria-label={`View details for ${title}`} className="relative block h-full w-full">
-          <Image
-            src={image || "/placeholder.svg"}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-500 loaded"
-            priority
-          />
+            <Image
+              src={image || "/placeholder.svg"}
+              alt={title}
+              fill
+              sizes={featured ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 25vw"}
+              unoptimized={image.toLowerCase().endsWith(".gif")}
+              className={`${imageFit === "contain" ? "object-contain" : "object-cover"} transition-transform duration-500 loaded`}
+            />
           </Link>
         </div>
 

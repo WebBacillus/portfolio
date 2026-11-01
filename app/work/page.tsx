@@ -180,6 +180,7 @@ export default function WorkPage() {
                 title={project.title}
                 description={project.description}
                 image={project.image}
+                imageFit={project.imageFit}
                 tags={project.tags}
                 liveUrl={project.liveUrl}
                 repoUrl={project.repoUrl}
