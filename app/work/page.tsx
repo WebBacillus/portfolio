@@ -7,7 +7,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import AnimatedTitle from "@/components/animated-title"
-import { categories, projects } from "@/data/projects"
+import { projectTopics, projects, type ProjectTopicId } from "@/data/projects"
 
 const selectedSlugs = ["se-for-ml", "customer-support-agent", "scb-tech-x-loan-origination"] as const
 // Increase this value to start the featured cards sooner during the WORK title animation.
@@ -17,17 +17,17 @@ const selectedCopy: Record<(typeof selectedSlugs)[number], { summary: string; ro
   "se-for-ml": {
     summary: "An image classification system built around serving, human review, and drift-aware retraining.",
     role: "I designed the C4 diagrams and implemented model serving; the monitoring workflow was designed with my team.",
-    status: "ML systems",
+    status: "AI & ML",
   },
   "customer-support-agent": {
     summary: "Exploring evidence-guided troubleshooting for Thai and English smart home support.",
     role: "I defined the support scope and explored a RAG-based prototype. The application is still in research.",
-    status: "Research & prototype",
+    status: "AI & ML",
   },
   "scb-tech-x-loan-origination": {
     summary: "Go services and durable Temporal workflows for a multi-step loan process.",
     role: "I built the microservices and workflows. The work runs in internal systems, so there is no public demo.",
-    status: "Industry work",
+    status: "Backend & APIs",
   },
 }
 
@@ -38,10 +38,13 @@ const selectedProjects = selectedSlugs.map((slug) => {
 })
 
 const moreProjects = projects.filter((project) => !selectedSlugs.some((slug) => slug === project.slug))
+const availableTopics = projectTopics
+  .map((topic) => ({ ...topic, count: moreProjects.filter((project) => project.topics.includes(topic.id)).length }))
+  .filter((topic) => topic.count > 0)
 
 export default function WorkPage() {
-  const [activeFilter, setActiveFilter] = useState("all")
-  const visibleProjects = activeFilter === "all" ? moreProjects : moreProjects.filter((project) => project.category === activeFilter)
+  const [activeFilter, setActiveFilter] = useState<ProjectTopicId | "all">("all")
+  const visibleProjects = activeFilter === "all" ? moreProjects : moreProjects.filter((project) => project.topics.includes(activeFilter))
   const [lead, ...supporting] = selectedProjects
   const leadRef = useRef<HTMLElement>(null)
   const supportingRef = useRef<HTMLDivElement>(null)
@@ -156,12 +159,15 @@ export default function WorkPage() {
         <section ref={moreSectionRef} aria-labelledby="more-work-heading" className="mt-20 md:mt-28">
           <div ref={moreHeadingRef} className="mb-7 flex flex-wrap items-end justify-between gap-3 motion-safe:invisible motion-safe:opacity-0">
             <h2 id="more-work-heading" className="text-2xl font-bold tracking-tight text-black md:text-3xl">More projects</h2>
-            <p className="text-sm text-black/60">{visibleProjects.length} projects</p>
+            <p className="text-sm text-black/60">{visibleProjects.length} {visibleProjects.length === 1 ? "project" : "projects"}</p>
           </div>
-          <div ref={filtersRef} role="group" aria-label="Filter more projects by category" className="mb-8 flex gap-2 overflow-x-auto pb-3 motion-safe:invisible motion-safe:opacity-0">
-            {categories.map((category) => (
-              <button key={category.id} type="button" aria-pressed={activeFilter === category.id} onClick={() => setActiveFilter(category.id)} className={`min-h-11 shrink-0 rounded-full px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple ${activeFilter === category.id ? "bg-purple text-white" : "bg-purple/10 text-dark-purple hover:bg-purple/20"}`}>
-                {category.label}
+          <div ref={filtersRef} role="group" aria-label="Filter more projects by topic" className="mb-8 flex flex-wrap gap-2 motion-safe:invisible motion-safe:opacity-0">
+            <button type="button" aria-pressed={activeFilter === "all"} onClick={() => setActiveFilter("all")} className={`min-h-11 shrink-0 rounded-full px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple ${activeFilter === "all" ? "bg-purple text-white" : "bg-purple/10 text-dark-purple hover:bg-purple/20"}`}>
+              All projects ({moreProjects.length})
+            </button>
+            {availableTopics.map((topic) => (
+              <button key={topic.id} type="button" aria-pressed={activeFilter === topic.id} onClick={() => setActiveFilter(topic.id)} className={`min-h-11 shrink-0 rounded-full px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple ${activeFilter === topic.id ? "bg-purple text-white" : "bg-purple/10 text-dark-purple hover:bg-purple/20"}`}>
+                {topic.label} ({topic.count})
               </button>
             ))}
           </div>
@@ -175,7 +181,7 @@ export default function WorkPage() {
                         <Image src={project.image} alt="" fill sizes="(max-width: 640px) 96px, 128px" unoptimized={project.image.toLowerCase().endsWith(".gif")} className={project.imageFit === "contain" ? "object-contain" : "object-cover"} />
                       </div>
                       <div className="flex min-w-0 flex-col justify-center">
-                        <span className="mb-1 text-xs font-semibold uppercase tracking-wide text-dark-purple">{categories.find((category) => category.id === project.category)?.label}</span>
+                        <span className="mb-1 text-xs font-semibold uppercase tracking-wide text-dark-purple">{project.topics.map((topicId) => projectTopics.find((topic) => topic.id === topicId)?.label).join(" · ")}</span>
                         <h3 className="flex items-start justify-between gap-2 text-lg font-bold leading-snug text-black sm:text-xl">
                           {project.title}<ArrowRight aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-purple transition-transform group-hover:translate-x-1" />
                         </h3>
@@ -187,7 +193,7 @@ export default function WorkPage() {
               </div>
             ) : (
               <div className="border-t border-purple/20 py-12 text-center">
-                <p className="text-black/70">No more projects in this category yet.</p>
+                <p className="text-black/70">No projects match this topic.</p>
                 <button type="button" onClick={() => setActiveFilter("all")} className="mt-4 min-h-11 rounded-full bg-purple px-5 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple">Show all projects</button>
               </div>
             )}
