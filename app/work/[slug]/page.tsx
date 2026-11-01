@@ -55,34 +55,19 @@ export default async function ProjectPage({
           {project.detail.role}
         </p>
 
-        <div className="relative mb-10 w-full aspect-[16/9] overflow-hidden rounded-lg">
+        <div className="relative mb-10 w-full overflow-hidden rounded-lg">
           <Image
             src={project.image}
             alt={project.title}
-            fill
-            className="object-cover"
+            width={0}
+            height={0}
+            className="h-auto w-full"
             sizes="(max-width: 768px) 100vw, 768px"
             priority
           />
         </div>
 
-        <div className="mb-10 flex flex-wrap justify-center gap-2">
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-purple/10 bg-purple/5 px-3 py-1.5 text-xs font-medium text-purple md:text-sm"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <div
-          className="project-article-content space-y-5 text-black/80 [&_a]:text-purple [&_a]:underline [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_li]:ml-6 [&_li]:list-disc [&_ol]:list-decimal [&_p]:leading-relaxed [&_ul]:space-y-2"
-          dangerouslySetInnerHTML={{ __html: project.detail.html }}
-        />
-
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-6">
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-6">
           {project.liveUrl && (
             <a
               href={project.liveUrl}
@@ -117,6 +102,22 @@ export default async function ProjectPage({
             </a>
           )}
         </div>
+
+        <div className="mb-10 flex flex-wrap justify-center gap-2">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full border border-purple/10 bg-purple/5 px-3 py-1.5 text-xs font-medium text-purple md:text-sm"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div
+          className="project-article-content space-y-5 text-black/80 [&_a]:text-purple [&_a]:underline [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_li]:ml-6 [&_li]:list-disc [&_ol]:list-decimal [&_p]:leading-relaxed [&_ul]:space-y-2"
+          dangerouslySetInnerHTML={{ __html: project.detail.html }}
+        />
       </article>
     </main>
   )

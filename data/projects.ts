@@ -140,6 +140,7 @@ export const projects: Project[] = [
     imageBg: "#4B258B",
     tags: ["Go", "Temporal", "Microservices", "PostgreSQL", "Azure Blob Storage", "Loan Origination"],
     topics: ["backend", "automation"],
+    liveUrl: "https://www.youtube.com/watch?v=DEmfOulmEok",
   },
   {
     id: 11,
