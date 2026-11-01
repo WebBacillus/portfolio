@@ -1,0 +1,40 @@
+{
+  "resume-general": {
+    "label": "Resume",
+    "href": "/resume-general.pdf",
+    "facts": [
+      "Computer Engineering student at Chulalongkorn University; B.Eng.; expected December 2026; GPAX 3.71/4.0.",
+      "True Corporation AI Engineer intern, August 2026 to present: develops a RAG prototype for TrueX smart home support with LLMs and Qdrant; develops Thai PDF processing using Docling.",
+      "NITMX Software Engineer (Part-time), April 2025 to July 2026: upgraded legacy applications from Java 11 to Java 25; designed and executed automated API testing with Postman and Bruno; developed a secure interbank financial adjustment web application using Go, Clean Architecture and Hexagonal Architecture; contributed to Hyperledger Besu network design and DR plan with Ansible.",
+      "Listed skills: Go, Python, C++, TypeScript, JavaScript, Java; PostgreSQL, MongoDB, MySQL; REST API, gRPC, Microservices, Clean and Hexagonal Architecture, Kafka, RabbitMQ; PyTorch, Torchvision, Scikit-learn, Pandas, NumPy, Apache Airflow, MLflow, Streamlit, Plotly; OpenAI API, LLM Tool Calling, RAG, TTS, n8n, LangChain, Langgraph, Qdrant; unit, integration and load testing, promptfoo.",
+      "The resume's approved skill pairings include Python with SE for ML; Go, TypeScript, JavaScript, MongoDB, OpenAI API, TTS and REST API with Takluz TTS; Go, TypeScript, JavaScript, PostgreSQL, REST API, Microservices, Clean and Hexagonal Architecture and RabbitMQ with Employee Management."
+    ]
+  },
+  "about-page": {
+    "label": "About page",
+    "href": "/about",
+    "facts": [
+      "Computer Engineering student at Chulalongkorn University, graduating in December 2026.",
+      "Hands-on experience developing LLM-powered applications and RAG-based customer support systems."
+    ]
+  },
+  "project-se-for-ml": {
+    "label": "Project page",
+    "href": "/work/se-for-ml",
+    "facts": [
+      "University group project. Candidate designed and created C4 diagrams at all four levels and implemented the model serving layer.",
+      "Drift detection and retraining workflow were designed with teammates.",
+      "Project uses Python, PyTorch, torchvision, scikit-learn, pandas, NumPy, Apache Airflow, MLflow and PostgreSQL.",
+      "Project is not a production deployment."
+    ]
+  },
+  "project-takluz-tts": {"label": "Project page", "href": "/work/takluz-tts", "facts": ["Published project page documents Takluz TTS; resume pairs Go, TypeScript, JavaScript, MongoDB, OpenAI API, Text-to-Speech and REST API with this project."]},
+  "project-employee-management": {"label": "Project page", "href": "/work/employee-management", "facts": ["Published project page documents Employee Management; resume pairs Go, TypeScript, JavaScript, PostgreSQL, REST API, Microservices, Clean and Hexagonal Architecture and RabbitMQ with this project."]},
+  "project-takluz-leaderboards": {"label": "Project page", "href": "/work/takluz-leaderboards", "facts": ["Published project page documents Takluz Leaderboards; resume pairs TypeScript, JavaScript and REST API with this project."]},
+  "project-monkey-massage": {"label": "Project page", "href": "/work/monkey-massage", "facts": ["Published project page documents Monkey Massage; resume pairs MongoDB with this project."]},
+  "project-scopus-gender-prediction": {"label": "Project page", "href": "/work/scopus-gender-prediction", "facts": ["Published project page documents Scopus Gender Prediction; resume pairs Python, scikit-learn, pandas, NumPy, Streamlit, Plotly, PySpark and MongoDB with this project."]},
+  "project-nectec-medical-ai": {"label": "Project page", "href": "/work/nectec-medical-ai", "facts": ["Published project page documents NECTEC Medical AI; resume pairs PyTorch, torchvision and EfficientNetV2 with this project."]},
+  "project-scb-tech-x-loan-origination": {"label": "Project page", "href": "/work/scb-tech-x-loan-origination", "facts": ["Published project page documents SCB Tech X Loan Origination; resume pairs Go, Temporal, PostgreSQL and Azure Blob Storage with this project."]},
+  "project-adozoil": {"label": "Project page", "href": "/work/adozoil", "facts": ["Published project page documents Adozoil."]},
+  "project-profanity-guard": {"label": "Project page", "href": "/work/profanity-guard", "facts": ["Published project page documents ProfanityGuard."]}
+}

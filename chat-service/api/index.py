@@ -13,6 +13,7 @@ import httpx
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, ValidationError, field_validator
+from api.job_match import router as job_match_router
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-6-luna")
 BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
@@ -39,6 +40,7 @@ Approved knowledge:
 """ + KNOWLEDGE
 
 app = FastAPI(title="portfolio-chat", docs_url=None, redoc_url=None, openapi_url=None)
+app.include_router(job_match_router)
 _hits: dict[str, list[float]] = {}
 
 
