@@ -87,7 +87,7 @@ const timelineData = [
 const skillsData = [
   {
     category: "Generative AI",
-    skills: ["OpenAI API", "LLM Tool Calling", "RAG", "Text-to-Speech (TTS)", "n8n", "LangChain", "Langraph", "Qdrant"],
+    skills: ["OpenAI API", "LLM Tool Calling", "RAG", "Text-to-Speech (TTS)", "n8n", "LangChain", "LangGraph", "Qdrant"],
   },
   {
     category: "AI & ML",
