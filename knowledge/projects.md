@@ -22,6 +22,7 @@ matches no row takes the no match template. The chatbot never improvises a path.
 | NECTEC Medical AI | `/work/nectec-medical-ai` | NECTEC, chest X-ray, chest xray, medical imaging, multi-label, EfficientNetV2, EfficientNet, radiology |
 | SCB Tech X Loan Origination | `/work/scb-tech-x-loan-origination` | SCB, loan origination, Temporal, Azure Blob Storage, loan pipeline |
 | YouTube Summarizer | `/work/youtube-summarizer` | YouTube summary, n8n, video summarizer, Obsidian notes, transcript automation, wiki links |
+| MongoDB Monthly Activation | `/work/mongodb-monthly-activation` | MongoDB heartbeat, MongoDB Atlas, monthly activation, n8n database check, Telegram database report |
 
 ## The one line summary for each redirect
 
@@ -39,6 +40,7 @@ rather than writing a new one, so the redirect and the page agree.
 - **NECTEC Medical AI**: A multi-label chest X-ray diagnostic system that predicts several findings at once from a single radiograph.
 - **SCB Tech X Loan Origination**: A loan origination pipeline that replaces manual steps with Go services and durable Temporal workflows.
 - **YouTube Summarizer**: A local n8n workflow that turns videos saved in Notion into timestamped breakdowns and linked Markdown notes for an Obsidian vault.
+- **MongoDB Monthly Activation**: A monthly n8n workflow that sends a lightweight MongoDB heartbeat and reports returned records in Telegram.
 
 ## Not on this site
 

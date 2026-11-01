@@ -1,0 +1,427 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"mongodbList\": [\n    {\n      \"Name\": \"Example Project\",\n      \"collection\": \"YOUR_COLLECTION\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -400,
+        80
+      ],
+      "id": "954cf99b-43c1-4a2f-abf4-601398cf8386",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "collection": "={{ $json.collection }}",
+        "options": {
+          "limit": 1
+        }
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        304,
+        112
+      ],
+      "id": "604c2eb8-c824-407c-b7a8-98d11d17eac3",
+      "name": "MongoDB",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "mongodbList",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        80
+      ],
+      "id": "9b1a79fd-1cc4-4b4e-a761-4d971e44d322",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1072,
+        -160
+      ],
+      "id": "96447e17-11d6-4400-a659-30c74fdf08f8",
+      "name": "Telegram",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        48,
+        80
+      ],
+      "id": "72e7c799-268a-4e21-b867-a2d7ca259731",
+      "name": "Loop Over Items",
+      "alwaysOutputData": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## MongoDB Trigger - Monthly Activation\nTo prevent MongoDB Atlas from pausing our inactive cluster, this n8n workflow is configured to trigger monthly and ensure activity. This is a scheduled activation only. No specific data is processed.",
+        "height": 400,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -928,
+        -96
+      ],
+      "id": "27e76137-8e9d-48be-9c08-0b807d4caf42",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -624,
+        80
+      ],
+      "id": "18991b3b-590f-46b8-b657-c60b14df6e0b",
+      "name": "Monthly Activation"
+    },
+    {
+      "parameters": {
+        "content": "## Add your mongo DB information here"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -96
+      ],
+      "id": "41f2880f-c380-4770-bfee-00347085d6da",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3d69c7c4-38a3-46c1-864b-dbbe75bf9456",
+              "name": "Name",
+              "value": "={{ $('Loop Over Items').item.json.Name }}",
+              "type": "string"
+            },
+            {
+              "id": "59297b2d-f864-42e6-b955-8dcea82f13c8",
+              "name": "_id",
+              "value": "={{ $json._id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        512,
+        112
+      ],
+      "id": "a0589d12-bae0-4909-a942-b92a71fb5ddd",
+      "name": "Match Name and _id"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bc2a70fb-16cc-4c9e-873c-9f7f8795953e",
+              "leftValue": "={{ $json._id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        272,
+        -80
+      ],
+      "id": "7471c0a3-b40a-4d4f-85e4-4e9a7826e343",
+      "name": "Connection fail"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "67eff252-b87f-4ee9-89dc-44134ad762ea",
+              "leftValue": "={{ $json._id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        272,
+        -256
+      ],
+      "id": "43b3bcf2-c776-4108-aaef-e4a0b047b6e9",
+      "name": "Connection successful"
+    },
+    {
+      "parameters": {
+        "jsCode": "let recordNames = [];\n\nfor (const item of $input.all()) {\n  recordNames.push(item.json.Name);\n}\n\nreturn [{\n  json: {\n    existsRecords: recordNames\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        -256
+      ],
+      "id": "026e820f-901b-4d9e-97ba-4229e1e90121",
+      "name": "Flatmap to array"
+    },
+    {
+      "parameters": {
+        "jsCode": "let recordNames = [];\n\nfor (const item of $input.all()) {\n  recordNames.push(item.json.Name);\n}\n\nreturn [{\n  json: {\n    nonExistsRecords: recordNames\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        -80
+      ],
+      "id": "e602fff2-85bb-4969-a056-a52edf340400",
+      "name": "Flatmap to array1"
+    },
+    {
+      "parameters": {
+        "jsCode": "let exists = $input.first().json.existsRecords || []; // Handle potential undefined\nlet nonExists = $input.last().json.nonExistsRecords || []; // Handle potential undefined\n\nconst now = new Date();\nconst formattedDate = now.toLocaleDateString('en-US', { // You can change 'en-US' to your desired locale\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric',\n  hour: 'numeric',\n  minute: 'numeric',\n  second: 'numeric',\n  timeZoneName: 'short'\n});\n\nlet message = `*Report generated on: ${formattedDate}*\\n\\n*Exists:*\\n`;\n\nif (exists.length > 0) {\n  exists.forEach(record => {\n    message += `- ${record}\\n`;\n  });\n} else {\n  message += `_None_\\n`;\n}\n\nmessage += `\\n*Non-Exists:*\\n`;\nif (nonExists.length > 0) {\n  nonExists.forEach(record => {\n    message += `- ${record}\\n`;\n  });\n} else {\n  message += `_None_\\n`;\n}\n\nreturn [{\n  json: {\n    message: message\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        -160
+      ],
+      "id": "569d7ee2-0adc-44ce-b71a-106e1318c049",
+      "name": "Output Structure"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        704,
+        -160
+      ],
+      "id": "5a8392d4-cb27-4d42-a563-08f442f50ba6",
+      "name": "Merge"
+    }
+  ],
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB": {
+      "main": [
+        [
+          {
+            "node": "Match Name and _id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Connection successful",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Connection fail",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monthly Activation": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Match Name and _id": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Connection fail": {
+      "main": [
+        [
+          {
+            "node": "Flatmap to array1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Connection successful": {
+      "main": [
+        [
+          {
+            "node": "Flatmap to array",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flatmap to array": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flatmap to array1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Output Structure": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Output Structure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

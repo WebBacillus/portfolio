@@ -124,6 +124,18 @@ export const projects = [
     workflowUrl: "/workflows/youtube-summarizer.json",
     category: "automation",
   },
+  {
+    id: 12,
+    slug: "mongodb-monthly-activation",
+    title: "MongoDB Monthly Activation",
+    description:
+      "A monthly n8n workflow that queries configured MongoDB collections and sends a Telegram report showing which queries returned a record. It is designed to create recurring activity for older Atlas projects.",
+    image: "/images/projects/mongodb-monthly-activation-workflow.png",
+    tags: ["n8n", "MongoDB", "Telegram", "Automation", "Monitoring"],
+    repoUrl: "https://github.com/WebBacillus/mongodb-monthly-activation",
+    workflowUrl: "/workflows/mongodb-monthly-activation.json",
+    category: "automation",
+  },
 ]
 
 export const categories = [
