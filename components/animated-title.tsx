@@ -7,11 +7,12 @@ import gsap from "gsap"
 interface AnimatedTitleProps {
   children: React.ReactNode
   className?: string
+  accessibleLabel?: string
   onReveal?: () => void
   revealOverlapSeconds?: number
 }
 
-export default function AnimatedTitle({ children, className = "", onReveal, revealOverlapSeconds = 0 }: AnimatedTitleProps) {
+export default function AnimatedTitle({ children, className = "", accessibleLabel, onReveal, revealOverlapSeconds = 0 }: AnimatedTitleProps) {
   const titleRef = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
@@ -24,19 +25,27 @@ export default function AnimatedTitle({ children, className = "", onReveal, reve
 
     // Simple character animation without SplitText for better compatibility
     const title = titleRef.current
-    const text = title.textContent || ""
+    const text = typeof children === "string" ? children : title.textContent || ""
 
     // Clear the title and create spans for each character
     title.innerHTML = ""
 
     const chars: HTMLSpanElement[] = []
-    for (let i = 0; i < text.length; i++) {
-      const char = text[i]
-      const span = document.createElement("span")
-      span.textContent = char === " " ? "\u00A0" : char // Use non-breaking space
-      span.style.display = "inline-block"
-      chars.push(span)
-      title.appendChild(span)
+    const lines = text.split("\n")
+    for (const line of lines) {
+      const lineElement = lines.length > 1 ? document.createElement("span") : title
+      if (lineElement !== title) {
+        lineElement.style.display = "block"
+        lineElement.style.whiteSpace = "nowrap"
+        title.appendChild(lineElement)
+      }
+      for (const char of line) {
+        const span = document.createElement("span")
+        span.textContent = char === " " ? "\u00A0" : char // Use non-breaking space
+        span.style.display = "inline-block"
+        chars.push(span)
+        lineElement.appendChild(span)
+      }
     }
 
     // Create animation timeline
@@ -80,10 +89,13 @@ export default function AnimatedTitle({ children, className = "", onReveal, reve
   return (
     <h1
       ref={titleRef}
+      aria-label={accessibleLabel}
       className={`${className} font-black lg:text-[15vw] md:text-[12vw] text-[15vw] w-full`}
       style={{ fontFamily: "'Gabarito', sans-serif" }}
     >
-      {children}
+      {typeof children === "string" && children.includes("\n")
+        ? children.split("\n").map((line, index) => <span key={index} className="block whitespace-nowrap">{line}</span>)
+        : children}
     </h1>
   )
 }

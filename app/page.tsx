@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useCallback } from "react"
 import ScrollingText from "@/components/scrolling-text"
 import AnimatedTitle from "@/components/animated-title"
 import gsap from "gsap"
@@ -41,24 +41,42 @@ const featuredProjects = featuredCopy.map((copy) => {
 
 export default function Home() {
   const scrollTextRef = useRef<HTMLDivElement>(null)
+  const summaryRef = useRef<HTMLParagraphElement>(null)
+  const heroTimelineRef = useRef<gsap.core.Timeline | null>(null)
+  const titleRevealedRef = useRef(false)
   const profileRef = useRef<HTMLDivElement>(null)
   const introTextRef = useRef<HTMLParagraphElement>(null)
+  const highlightsRef = useRef<HTMLUListElement>(null)
   const buttonsRef = useRef<HTMLDivElement>(null)
   const experienceRef = useRef<HTMLDivElement>(null)
   const aboutSectionRef = useRef<HTMLDivElement>(null)
   const contactSectionRef = useRef<HTMLDivElement>(null)
   const isMobile = useMobile()
+  const onTitleReveal = useCallback(() => {
+    titleRevealedRef.current = true
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) heroTimelineRef.current?.play()
+  }, [])
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
-    const timeline = gsap.timeline()
+    const timeline = gsap.timeline({ paused: true })
+    heroTimelineRef.current = timeline
     const scrollTriggers: ScrollTrigger[] = []
     const animatedElements: Element[] = []
+
+    if (summaryRef.current) {
+      animatedElements.push(summaryRef.current)
+      timeline.fromTo(
+        summaryRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+      )
+    }
 
     // Scrolling text animation
     if (scrollTextRef.current) {
       animatedElements.push(scrollTextRef.current)
-      timeline.fromTo(scrollTextRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5, delay: 1.25 })
+      timeline.fromTo(scrollTextRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5 })
     }
 
     // Profile picture animation
@@ -78,6 +96,15 @@ export default function Home() {
         introTextRef.current,
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 0.5, delay: 0, ease: "power3.out" },
+      )
+    }
+
+    if (highlightsRef.current) {
+      animatedElements.push(highlightsRef.current)
+      timeline.fromTo(
+        highlightsRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
       )
     }
 
@@ -185,7 +212,17 @@ export default function Home() {
       }))
     }
 
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(
+        [summaryRef.current, scrollTextRef.current, profileRef.current, introTextRef.current, highlightsRef.current, buttonsRef.current],
+        { opacity: 1, y: 0, scale: 1, rotation: 0 },
+      )
+    } else if (titleRevealedRef.current) {
+      timeline.play()
+    }
+
     return () => {
+      heroTimelineRef.current = null
       timeline.kill()
       scrollTriggers.forEach((trigger) => trigger.kill())
       gsap.killTweensOf(animatedElements)
@@ -194,50 +231,74 @@ export default function Home() {
 
   return (
     <main className={`min-h-screen ${isMobile ? "pb-nav" : ""}`}>
-      <div className="container mx-auto px-4 pt-16 pb-16">
-        <AnimatedTitle className="text-purple leading-none tracking-normal text-center">WEB</AnimatedTitle>
-        <AnimatedTitle className="text-purple leading-none tracking-normal text-center">BACILLUS</AnimatedTitle>
+      <div className="container mx-auto px-4 pt-20 pb-16">
+        <AnimatedTitle
+          className="text-purple leading-none tracking-normal text-center whitespace-pre-line"
+          accessibleLabel="Pasit Khumsena"
+          onReveal={onTitleReveal}
+          revealOverlapSeconds={0.5}
+        >
+          {"PASIT\nKHUMSENA"}
+        </AnimatedTitle>
+        <p ref={summaryRef} className="mx-auto mt-5 max-w-3xl text-center text-base leading-relaxed text-black/80 opacity-0 sm:text-lg motion-reduce:opacity-100">
+          I&apos;m a Computer Engineering student at Chulalongkorn University, graduating in December 2026, focused on
+          AI engineering and backend development.
+        </p>
         <div ref={scrollTextRef} className="w-full overflow-hidden py-4 border-y border-purple/20 my-4">
           <ScrollingText />
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          <div className="flex justify-center items-center mt-8">
+        <div className="mx-auto mt-8 grid max-w-[880px] grid-cols-1 items-center gap-6 lg:grid-cols-2 lg:gap-20">
+          <div className="flex justify-center items-center">
             <div ref={profileRef} className="relative opacity-0">
               {/* Profile image container - make it responsive */}
-              <div className="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full overflow-hidden border-4 border-white shadow-lg">
+              <div className="relative w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] md:w-[320px] md:h-[320px] lg:w-[400px] lg:h-[400px] rounded-full overflow-hidden border-4 border-white shadow-lg">
                 <Image src="/images/profile.png" alt="Profile pic" fill className="object-cover" priority />
               </div>
             </div>
           </div>
-          <div className="justify-items-end">
-            <div className="flex flex-col items-start">
-              <p ref={introTextRef} className="text-lg text-black/80 mt-6 max-w-xl opacity-0 mb-6">
-                Computer Engineering student at Chulalongkorn University, graduating December 2026, focused on AI
-                engineering and backend development. I build practical products with AI, automation, and reliable
-                software systems.
-              </p>
+          <div className="flex flex-col items-start lg:min-h-[400px] lg:justify-center">
+            <p ref={introTextRef} className="text-lg text-black/80 max-w-xl opacity-0 mb-6">
+              I build practical AI and automation tools alongside reliable backend systems.
+            </p>
 
-              <div ref={buttonsRef} className="flex flex-wrap gap-4 mt-2 opacity-0">
-                <a
-                  href="/resume-general.pdf"
-                  download="resume-general.pdf"
-                  className="px-6 py-3 bg-purple text-white rounded-full hover:bg-dark-purple transition-colors transform hover:scale-105 duration-300"
-                >
-                  Download Resume
-                </a>
-                <TransitionLink
-                  href="/contact"
-                  className="px-6 py-3 border border-purple text-purple rounded-full hover:bg-purple/10 transition-colors transform hover:scale-105 duration-300"
-                >
-                  Get in Touch
-                </TransitionLink>
-              </div>
-            </div>
+              <ul ref={highlightsRef} aria-label="Experience highlights" className="grid gap-5 border-t border-purple/20 pt-6 opacity-0 sm:grid-cols-2">
+                <li className="border-l-2 border-purple/50 pl-3">
+                  <div className="mb-3 flex h-14 items-center">
+                    <Image src="/images/companies/true-corporation.jpg" alt="True Corporation logo" width={722} height={484} className="h-12 w-auto max-w-[130px] object-contain" />
+                  </div>
+                  <p className="font-semibold text-black">True Corporation</p>
+                  <p className="text-sm text-black/70">AI Engineer Intern</p>
+                  <p className="mt-1 text-sm text-black/70">Thai manual pipeline and RAG support prototype</p>
+                </li>
+                <li className="border-l-2 border-purple/50 pl-3">
+                  <div className="mb-3 flex h-14 items-center">
+                    <Image src="/images/companies/nitmx.png" alt="National ITMX logo" width={3360} height={1440} className="h-12 w-auto max-w-[130px] object-contain" />
+                  </div>
+                  <p className="font-semibold text-black">NITMX</p>
+                  <p className="text-sm text-black/70">Software Engineer, Part-time</p>
+                  <p className="mt-1 text-sm text-black/70">Go backend services and automated API tests</p>
+                </li>
+              </ul>
           </div>
+        </div>
+        <div ref={buttonsRef} className="mt-10 flex flex-wrap justify-center gap-4 opacity-0">
+          <a
+            href="/resume-general.pdf"
+            download="resume-general.pdf"
+            className="px-6 py-3 bg-purple text-white rounded-full hover:bg-dark-purple transition-colors transform hover:scale-105 duration-300"
+          >
+            Download Resume
+          </a>
+          <TransitionLink
+            href="/contact"
+            className="px-6 py-3 border border-purple text-purple rounded-full hover:bg-purple/10 transition-colors transform hover:scale-105 duration-300"
+          >
+            Get in Touch
+          </TransitionLink>
         </div>
 
         {/* Featured Projects Showcase */}
-        <section ref={experienceRef} aria-labelledby="featured-projects-heading" className="mt-20 mb-12">
+        <section ref={experienceRef} aria-labelledby="featured-projects-heading" className="mt-12 mb-12">
           <h2 id="featured-projects-heading" className="mb-8 text-center text-3xl font-bold text-purple md:text-4xl">Featured Projects</h2>
           <div className="grid gap-5 md:grid-cols-2">
             <article className="experience-card group overflow-hidden rounded-2xl bg-[#241735] text-white md:col-span-2">
