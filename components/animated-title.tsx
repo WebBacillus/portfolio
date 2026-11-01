@@ -7,13 +7,20 @@ import gsap from "gsap"
 interface AnimatedTitleProps {
   children: React.ReactNode
   className?: string
+  onReveal?: () => void
+  revealOverlapSeconds?: number
 }
 
-export default function AnimatedTitle({ children, className = "" }: AnimatedTitleProps) {
+export default function AnimatedTitle({ children, className = "", onReveal, revealOverlapSeconds = 0 }: AnimatedTitleProps) {
   const titleRef = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
     if (typeof window === "undefined" || !titleRef.current) return
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      onReveal?.()
+      return
+    }
 
     // Simple character animation without SplitText for better compatibility
     const title = titleRef.current
@@ -48,6 +55,8 @@ export default function AnimatedTitle({ children, className = "" }: AnimatedTitl
       ease: "power4.out",
     })
 
+    if (onReveal) tl.call(onReveal, undefined, `-=${Math.max(0, revealOverlapSeconds)}`)
+
     // Handle resize for responsive text
     const handleResize = () => {
       // Simple resize handling without SplitText
@@ -66,7 +75,7 @@ export default function AnimatedTitle({ children, className = "" }: AnimatedTitl
       // Restore original text content
       title.textContent = text
     }
-  }, [children])
+  }, [children, onReveal, revealOverlapSeconds])
 
   return (
     <h1
