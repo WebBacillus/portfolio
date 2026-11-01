@@ -121,7 +121,7 @@ export default function ChatDock() {
       aria-label="Ask me anything: CV questions"
       aria-hidden={!open}
       onKeyDown={onPanelKeyDown}
-      className={`${open ? "chat-dock-enter flex" : "hidden"} fixed inset-0 z-[70] h-[100dvh] flex-col overflow-hidden border border-purple/15 bg-white shadow-2xl md:inset-auto md:bottom-24 md:right-6 md:h-[min(560px,calc(100dvh-8rem))]${expanded ? " md:!h-[min(820px,calc(100dvh-8rem))] md:!w-[520px]" : ""} md:w-[400px] md:rounded-2xl`}
+      className={`${open ? "chat-dock-enter flex" : "hidden"} fixed inset-0 z-[70] h-[100dvh] flex-col overflow-hidden border border-purple/15 bg-white shadow-2xl md:inset-auto md:bottom-24 md:right-6 ${expanded ? "md:!h-[min(820px,calc(100dvh_-_8rem))] md:!w-[520px]" : "md:h-[min(560px,calc(100dvh_-_8rem))] md:w-[400px]"} md:rounded-2xl`}
     >
       <header className="flex shrink-0 items-start gap-3 border-b border-purple/10 bg-purple/5 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] md:rounded-t-2xl md:pt-3">
         <MessageCircle className="mt-0.5 size-5 shrink-0 text-purple" aria-hidden />
