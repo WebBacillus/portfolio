@@ -108,7 +108,8 @@ export const projects = [
     title: "SCB Tech X Loan Origination",
     description:
       "A loan origination pipeline that replaces manual steps with Go microservices and durable Temporal workflows, so a multi-step loan process survives a failed dependency instead of needing a manual re-run. PostgreSQL holds the records and Azure Blob Storage holds the documents.",
-    image: "/images/projects/scb-tech-x-loan-origination.png",
+    image: "/images/projects/scb-tech-x-loan-origination.gif",
+    imageFit: "contain" as const,
     tags: ["Go", "Temporal", "Microservices", "PostgreSQL", "Azure Blob Storage", "Workflows"],
     category: "backend",
   },
@@ -119,6 +120,7 @@ export const projects = [
     description:
       "I built this local n8n workflow to get useful ideas from YouTube videos without sitting through clickbait framing. It turns new Notion entries into timestamped breakdowns and Markdown notes with metadata and inline wiki links for Obsidian.",
     image: "/images/projects/youtube-summarizer-workflow.png",
+    imageFit: "contain" as const,
     tags: ["n8n", "Automation", "Apify", "OpenAI", "Notion", "Dropbox", "Obsidian"],
     repoUrl: "https://github.com/WebBacillus/youtube-summarizer-n8n",
     workflowUrl: "/workflows/youtube-summarizer.json",
@@ -131,6 +133,7 @@ export const projects = [
     description:
       "A monthly n8n workflow that queries configured MongoDB collections and sends a Telegram report showing which queries returned a record. It is designed to create recurring activity for older Atlas projects.",
     image: "/images/projects/mongodb-monthly-activation-workflow.png",
+    imageFit: "contain" as const,
     tags: ["n8n", "MongoDB", "Telegram", "Automation", "Monitoring"],
     repoUrl: "https://github.com/WebBacillus/mongodb-monthly-activation",
     workflowUrl: "/workflows/mongodb-monthly-activation.json",
