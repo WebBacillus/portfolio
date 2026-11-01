@@ -139,6 +139,17 @@ export const projects = [
     workflowUrl: "/workflows/mongodb-monthly-activation.json",
     category: "automation",
   },
+  {
+    id: 13,
+    slug: "customer-support-agent",
+    title: "Customer Support Agent",
+    description:
+      "Research for a Thai and English support agent for TrueX smart home devices. The planned support scope covers ten models and 29 issue groups, with troubleshooting guided by reviewed product evidence.",
+    image: "/images/projects/customer-support-agent.png",
+    imageFit: "contain" as const,
+    tags: ["AI", "Customer Support", "RAG", "Conversational AI", "Python"],
+    category: "ai",
+  },
 ]
 
 export const categories = [
