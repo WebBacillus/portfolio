@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react"
 import Link from "next/link"
 import JobMatchPanel from "./job-match-panel"
-import { ArrowUpRight, Loader2, MessageCircle, RotateCcw, Send, X } from "lucide-react"
+import { ArrowUpRight, Loader2, Maximize2, Minimize2, MessageCircle, RotateCcw, Send, X } from "lucide-react"
 import { useChat, type ChatEntry, type SourceLabel } from "./use-chat"
 
 const scope = "I answer questions about my CV: background, experience, skills, and education. For a project I will point you to its page."
@@ -45,6 +45,7 @@ export default function ChatDock() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState("")
   const [jobMatch, setJobMatch] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const [noticeHidden, setNoticeHidden] = useState(false)
   const jobMatchEnabled = process.env.NEXT_PUBLIC_JOB_MATCH_PREVIEW_ENABLED === "true"
   const { messages, status, send, retry, reset } = useChat()
@@ -120,11 +121,12 @@ export default function ChatDock() {
       aria-label="Ask me anything: CV questions"
       aria-hidden={!open}
       onKeyDown={onPanelKeyDown}
-      className={`${open ? "chat-dock-enter flex" : "hidden"} fixed inset-0 z-[70] h-[100dvh] flex-col overflow-hidden border border-purple/15 bg-white shadow-2xl md:inset-auto md:bottom-24 md:right-6 md:h-[min(560px,calc(100dvh-8rem))] md:w-[400px] md:rounded-2xl`}
+      className={`${open ? "chat-dock-enter flex" : "hidden"} fixed inset-0 z-[70] h-[100dvh] flex-col overflow-hidden border border-purple/15 bg-white shadow-2xl md:inset-auto md:bottom-24 md:right-6 md:h-[min(560px,calc(100dvh-8rem))]${expanded ? " md:!h-[min(820px,calc(100dvh-8rem))] md:!w-[520px]" : ""} md:w-[400px] md:rounded-2xl`}
     >
       <header className="flex shrink-0 items-start gap-3 border-b border-purple/10 bg-purple/5 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] md:rounded-t-2xl md:pt-3">
         <MessageCircle className="mt-0.5 size-5 shrink-0 text-purple" aria-hidden />
         <div className="min-w-0 flex-1"><h2 className="text-sm font-semibold text-black">Ask me anything</h2><p className="mt-0.5 text-xs leading-snug text-black/65">{scope}</p></div>
+        <button type="button" onClick={() => setExpanded((value) => !value)} aria-label={expanded ? "Shrink chat" : "Expand chat"} aria-pressed={expanded} className="hidden rounded-md p-1.5 text-black/60 hover:bg-purple/10 hover:text-purple md:inline-flex">{expanded ? <Minimize2 className="size-4" aria-hidden /> : <Maximize2 className="size-4" aria-hidden />}</button>
         <button ref={closeRef} type="button" onClick={close} aria-label="Close chat" className="rounded-md p-1.5 text-black/60 hover:bg-purple/10 hover:text-purple"><X className="size-4" aria-hidden /></button>
       </header>
 
