@@ -2,8 +2,6 @@
 
 import { z } from "zod"
 import { Resend } from "resend"
-import { render } from "@react-email/render"
-import * as React from "react"
 
 // Bounds for incoming values. The schema enforces both sides so user-controlled
 // data cannot grow unbounded and cannot include whitespace-only payloads.
@@ -87,17 +85,6 @@ export async function sendContactEmail(formData: FormData): Promise<ContactFormR
       return { success: false, message: GENERIC_DELIVERY_ERROR }
     }
 
-    // @react-email/render escapes every interpolated string before serialising
-    // to HTML, so user-controlled fields are safe by construction.
-    const html = await render(
-      React.createElement(
-        React.Fragment,
-        null,
-        React.createElement("p", null, `From: ${name} (${email})`),
-        React.createElement("p", null, "Message:"),
-        React.createElement("p", null, message),
-      ),
-    )
     const text = `From: ${name} (${email})\n\nMessage:\n${message}`
 
     const resend = new Resend(apiKey)
@@ -105,7 +92,6 @@ export async function sendContactEmail(formData: FormData): Promise<ContactFormR
       from: CONTACT_FROM_EMAIL,
       to: CONTACT_TO_EMAIL,
       subject: emailSubject,
-      html,
       text,
     })
 
