@@ -21,7 +21,7 @@ const projectQuestions = [
 function SourceTag({ source, href }: { source: SourceLabel; href?: string }) {
   const target = href ?? (source === "Resume" || source === "About page" ? "/about" : undefined)
   const label = <span className="text-[11px] uppercase tracking-widest text-black/45">Source: {source}</span>
-  return target ? <Link href={target} className="hover:underline">{label}</Link> : label
+  return target ? <Link href={target} target="_blank" rel="noopener noreferrer" className="hover:underline">{label}</Link> : label
 }
 
 function Entry({ entry }: { entry: ChatEntry }) {
@@ -45,6 +45,7 @@ export default function ChatDock() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState("")
   const [jobMatch, setJobMatch] = useState(false)
+  const [noticeHidden, setNoticeHidden] = useState(false)
   const jobMatchEnabled = process.env.NEXT_PUBLIC_JOB_MATCH_PREVIEW_ENABLED === "true"
   const { messages, status, send, retry, reset } = useChat()
   const activeStatus = jobMatch ? "idle" : status
@@ -130,7 +131,7 @@ export default function ChatDock() {
       <div ref={logRef} role="log" aria-live="polite" aria-relevant="additions text" className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
         {jobMatch ? <JobMatchPanel onBack={() => setJobMatch(false)} /> : <>
         {messages.length === 0 && <div className="space-y-4">
-          <p className="rounded-xl border border-black/10 bg-black/[0.025] px-3 py-2.5 text-[11px] leading-relaxed text-black/55">Your question and recent chat are sent through this site to OpenAI. This site does not save the conversation or log its text; hosting may retain request metadata. Prefer not to chat? <Link href="/contact" className="font-medium text-purple underline underline-offset-2">Contact me</Link>.</p>
+          {!noticeHidden && <div className="flex items-start gap-2 rounded-xl border border-black/10 bg-black/[0.025] px-3 py-2.5"><p className="min-w-0 flex-1 text-[11px] leading-relaxed text-black/55">Your question and recent chat are sent through this site to OpenAI. This site does not save the conversation or log its text; hosting may retain request metadata. Prefer not to chat? <Link href="/contact" className="font-medium text-purple underline underline-offset-2">Contact me</Link>.</p><button type="button" onClick={() => setNoticeHidden(true)} aria-label="Hide privacy notice" className="shrink-0 rounded-md p-1 text-black/50 hover:bg-purple/10 hover:text-purple"><X className="size-3.5" aria-hidden /></button></div>}
           <div className="space-y-2.5"><p className="text-sm text-black/70">Try one of these.</p><div className="grid grid-cols-2 gap-2">{cvQuestions.map(({ label, question }) => <button key={question} type="button" onClick={() => submit(question)} disabled={activeStatus === "loading" || activeUnavailable} className="min-h-11 whitespace-nowrap rounded-xl border border-purple/25 px-3 py-1.5 text-left text-xs text-purple hover:bg-purple/10 disabled:opacity-40">{label}</button>)}</div></div>
           <div className="space-y-2.5 border-t border-purple/10 pt-3.5"><p className="text-xs leading-snug text-black/55">Ask about a project and I will link you to its page instead of answering here.</p><div className="grid gap-2">{projectQuestions.map(({ label, question }) => <button key={question} type="button" onClick={() => submit(question)} disabled={activeStatus === "loading" || activeUnavailable} className="flex min-h-11 items-center justify-between gap-2 whitespace-nowrap rounded-xl border border-black/15 px-3 py-1.5 text-left text-xs text-black/65 hover:border-purple/30 hover:text-purple disabled:opacity-40">{label}<ArrowUpRight className="size-3 shrink-0" aria-hidden /></button>)}</div></div>
         </div>}
