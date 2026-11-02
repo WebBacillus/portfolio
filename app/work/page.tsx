@@ -37,7 +37,9 @@ const selectedProjects = selectedSlugs.map((slug) => {
   return { ...project, ...selectedCopy[slug] }
 })
 
-const moreProjects = projects.filter((project) => !selectedSlugs.some((slug) => slug === project.slug))
+const moreProjects = projects
+  .filter((project) => !selectedSlugs.some((slug) => slug === project.slug))
+  .sort((a, b) => Number(b.topics.includes("ai-ml")) - Number(a.topics.includes("ai-ml")))
 const availableTopics = projectTopics
   .map((topic) => ({ ...topic, count: moreProjects.filter((project) => project.topics.includes(topic.id)).length }))
   .filter((topic) => topic.count > 0)
