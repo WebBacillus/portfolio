@@ -54,10 +54,12 @@ export default function RootLayout({
           <AnimatedBackground />
           <BackgroundDebug />
           <PageTransition />
-          <div className="relative z-10">
-            <Header />
-            <MobileMenu variant="sidebar" />
-            {children}
+          <Header />
+          <MobileMenu variant="sidebar" />
+          <div id="smooth-wrapper">
+            <div id="smooth-content" className="relative z-10">
+              {children}
+            </div>
           </div>
           {(process.env.NODE_ENV !== "production" || process.env.CHAT_PUBLIC_ENABLED === "true") && <ChatDock />}
         </GSAPProvider>
