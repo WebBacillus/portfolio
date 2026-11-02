@@ -237,6 +237,7 @@ export default function Home() {
           accessibleLabel="Pasit Khumsena"
           onReveal={onTitleReveal}
           revealOverlapSeconds={0.5}
+          interactiveParticles
         >
           {"PASIT\nKHUMSENA"}
         </AnimatedTitle>

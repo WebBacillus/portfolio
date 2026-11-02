@@ -135,7 +135,7 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto px-4 pt-16">
-        <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8">ABOUT</AnimatedTitle>
+        <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8" interactiveParticles>ABOUT</AnimatedTitle>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
         <AnimatedSection animation="slideInLeft" delay={1.5} className="order-2 md:order-1">

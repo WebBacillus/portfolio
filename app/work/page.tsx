@@ -116,7 +116,7 @@ export default function WorkPage() {
   return (
     <main className="min-h-screen pb-24">
       <div className="container mx-auto px-4 pt-20 md:pt-16">
-        <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8" onReveal={revealSelectedWork} revealOverlapSeconds={CARD_REVEAL_OVERLAP_SECONDS}>WORK</AnimatedTitle>
+        <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8" onReveal={revealSelectedWork} revealOverlapSeconds={CARD_REVEAL_OVERLAP_SECONDS} interactiveParticles>WORK</AnimatedTitle>
 
         <section aria-label="Featured projects">
           <article ref={leadRef} className="group overflow-hidden rounded-2xl bg-[#241735] text-white motion-safe:invisible motion-safe:opacity-0">
