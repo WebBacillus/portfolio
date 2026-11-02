@@ -15,6 +15,8 @@ interface MagneticLinkProps {
   rel?: string
   transition?: boolean
   wiggle?: boolean
+  /** Frames the link with the bracket cursor's target box. */
+  cursorTarget?: boolean
 }
 
 export default function MagneticLink({
@@ -26,6 +28,7 @@ export default function MagneticLink({
   rel,
   transition = false,
   wiggle = false,
+  cursorTarget = false,
 }: MagneticLinkProps) {
   const zoneRef = useRef<HTMLSpanElement>(null)
 
@@ -110,11 +113,18 @@ export default function MagneticLink({
   return (
     <span ref={zoneRef} className="relative inline-flex p-2 -m-2">
       {transition ? (
-        <TransitionLink href={href} className={className}>
+        <TransitionLink href={href} className={className} data-cursor-target={cursorTarget ? "" : undefined}>
           {label}
         </TransitionLink>
       ) : (
-        <a href={href} download={download} target={target} rel={rel} className={className}>
+        <a
+          href={href}
+          download={download}
+          target={target}
+          rel={rel}
+          data-cursor-target={cursorTarget ? "" : undefined}
+          className={className}
+        >
           {label}
         </a>
       )}

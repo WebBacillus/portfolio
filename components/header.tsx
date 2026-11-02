@@ -110,7 +110,7 @@ export default function Header() {
       <div className="container mx-auto h-full px-4">
         <div className="grid h-full grid-cols-[1fr_auto_1fr] items-center">
           {/* Logo */}
-          <TransitionLink href="/" className="flex items-center">
+          <TransitionLink href="/" data-cursor-target className="flex items-center">
             <div
               ref={logoRef}
               className="w-10 h-10 transition-transform duration-300 relative"
@@ -150,6 +150,7 @@ export default function Header() {
                 <TransitionLink
                   key={item.path}
                   href={item.path}
+                  data-cursor-target
                     className={`py-2 px-1 relative transition-[color,transform] duration-150 ease-out hover:-translate-y-0.5 hover:text-purple focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple ${
                     isActive(item.path) ? "text-purple font-medium" : "text-black"
                   }`}
@@ -184,6 +185,7 @@ export default function Header() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
+                  data-cursor-target
                   className="hover:text-purple transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple"
                   onMouseEnter={(e) => {
                     gsap.to(e.currentTarget, {

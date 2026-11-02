@@ -187,7 +187,7 @@ export default function TimelineItem({ year, title, description, index, skills =
   return (
     <div className={`flex ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} flex-col mb-12 relative`}>
       <div className="md:w-1/2 flex justify-center items-center">
-        <div ref={itemRef} className="bg-purple/10 p-4 rounded-lg backdrop-blur-sm w-full md:max-w-md transform-gpu">
+        <div ref={itemRef} data-cursor-target className="bg-purple/10 p-4 rounded-lg backdrop-blur-sm w-full md:max-w-md transform-gpu">
           <div className="text-purple font-bold text-lg md:text-xl mb-2">{year}</div>
           <h3 className="text-xl md:text-2xl font-bold mb-2">{title}</h3>
           <p className="text-black/70 mb-3 text-sm md:text-base">{description}</p>

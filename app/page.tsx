@@ -287,6 +287,7 @@ export default function Home() {
             href="/resume-general.pdf"
             download="resume-general.pdf"
             wiggle
+            cursorTarget
             className="inline-flex items-center justify-center rounded-full bg-purple px-6 py-3 text-white transition-colors duration-300 hover:bg-dark-purple"
           >
             Download Resume
@@ -294,6 +295,7 @@ export default function Home() {
           <MagneticLink
             href="/contact"
             transition
+            cursorTarget
             className="inline-flex items-center justify-center rounded-full border border-purple px-6 py-3 text-purple transition-colors duration-300 hover:bg-purple/10"
           >
             Get in Touch
@@ -304,7 +306,7 @@ export default function Home() {
         <section ref={experienceRef} aria-labelledby="featured-projects-heading" className="mt-12 mb-12">
           <h2 id="featured-projects-heading" className="mb-8 text-center text-3xl font-bold text-purple md:text-4xl">Featured Projects</h2>
           <div className="grid gap-5 md:grid-cols-2">
-            <article className="experience-card group overflow-hidden rounded-2xl bg-[#241735] text-white md:col-span-2">
+            <article data-cursor-target className="experience-card group overflow-hidden rounded-2xl bg-[#241735] text-white md:col-span-2">
               <Link
                 href={`/work/${featuredProjects[0].slug}`}
                 aria-label={`View ${featuredProjects[0].title} case study`}
@@ -333,7 +335,7 @@ export default function Home() {
             </article>
 
             {featuredProjects.slice(1).map((project) => (
-              <article key={project.slug} className="experience-card group overflow-hidden rounded-2xl border border-purple/15 bg-white">
+              <article key={project.slug} data-cursor-target className="experience-card group overflow-hidden rounded-2xl border border-purple/15 bg-white">
                 <Link
                   href={`/work/${project.slug}`}
                   aria-label={`View ${project.title} case study`}
@@ -367,6 +369,7 @@ export default function Home() {
               href="/work"
               transition
               wiggle
+              cursorTarget
               className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-full bg-purple px-8 py-4 font-medium text-white transition-colors hover:bg-dark-purple focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple"
             >
               View All Projects <ArrowUpRight aria-hidden="true" className="h-4 w-4" />

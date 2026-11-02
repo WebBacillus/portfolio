@@ -138,7 +138,7 @@ export default function AboutPage() {
         <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8" interactiveParticles>ABOUT</AnimatedTitle>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
-        <AnimatedSection animation="slideInLeft" delay={1.5} className="order-2 md:order-1">
+        <AnimatedSection animation="slideInLeft" delay={1.5} className="order-2 md:order-1" cursorTarget>
             <h2 className="text-3xl font-bold mb-6">Hello, I&apos;m Pasit Khumsena</h2>
 
             <p className="text-black/80 text-lg leading-relaxed mb-4">
@@ -167,6 +167,7 @@ export default function AboutPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 wiggle
+                cursorTarget
                 className="inline-flex items-center justify-center rounded-full bg-purple px-6 py-3 text-white transition-colors duration-300 hover:bg-dark-purple"
               >
                 Download Resume
@@ -174,6 +175,7 @@ export default function AboutPage() {
               <MagneticLink
                 href="/contact"
                 transition
+                cursorTarget
                 className="inline-flex items-center justify-center rounded-full border border-purple px-6 py-3 text-purple transition-colors duration-300 hover:bg-purple/10"
               >
                 Get in Touch

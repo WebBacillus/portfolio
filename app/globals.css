@@ -203,3 +203,21 @@ button {
   background: rgb(107 70 193 / 8%);
   font-weight: 600;
 }
+
+/* Custom cursor: while the bracket cursor is active the native pointer is
+   hidden everywhere except editable fields, which keep their caret cursor. */
+html.custom-cursor body,
+html.custom-cursor body *:not(input, textarea, select, [contenteditable="true"]) {
+  cursor: none;
+}
+
+html.custom-cursor input,
+html.custom-cursor textarea,
+html.custom-cursor [contenteditable="true"] {
+  cursor: text;
+}
+
+html.custom-cursor select {
+  cursor: auto;
+}
+
