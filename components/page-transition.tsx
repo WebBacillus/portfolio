@@ -21,7 +21,7 @@ export default function PageTransition() {
     <div
       id="page-transition-container"
       ref={containerRef}
-      className="fixed inset-0 pointer-events-none z-50"
+      className="fixed inset-0 pointer-events-none z-[80]"
     >
       <div
         id="banner-1"
