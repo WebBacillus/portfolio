@@ -6,7 +6,7 @@ import TimelineItem from "@/components/timeline-item"
 import AnimatedSection from "@/components/animated-section"
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
-import TransitionLink from "@/components/transition-link"
+import MagneticLink from "@/components/magnetic-link"
 import AnimatedTimelineLine from "@/components/animated-timeline-line"
 
 // Timeline data
@@ -161,21 +161,23 @@ export default function AboutPage() {
             </p>
 
             <div className="flex flex-wrap gap-4 mt-8">
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
+              <MagneticLink
                 href="/resume-general.pdf"
                 download="resume-general.pdf"
-                className="px-6 py-3 bg-purple text-white rounded-full hover:bg-dark-purple transition-colors transform hover:scale-105 duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
+                wiggle
+                className="inline-flex items-center justify-center rounded-full bg-purple px-6 py-3 text-white transition-colors duration-300 hover:bg-dark-purple"
               >
                 Download Resume
-              </a>
-              <TransitionLink
+              </MagneticLink>
+              <MagneticLink
                 href="/contact"
-                className="px-6 py-3 border border-purple text-purple rounded-full hover:bg-purple/10 transition-colors transform hover:scale-105 duration-300"
+                transition
+                className="inline-flex items-center justify-center rounded-full border border-purple px-6 py-3 text-purple transition-colors duration-300 hover:bg-purple/10"
               >
                 Get in Touch
-              </TransitionLink>
+              </MagneticLink>
             </div>
           </AnimatedSection>
 
