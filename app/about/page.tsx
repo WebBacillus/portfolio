@@ -16,7 +16,6 @@ type TimelineEntry = {
   description?: string
   organization?: string
   roles?: TimelineRole[]
-  skills?: string[]
   logo?: CompanyLogo
 }
 
@@ -28,13 +27,6 @@ const timelineData: TimelineEntry[] = [
     organization: "True Corporation",
     description:
       "Own product scope, timelines, and customer workflows for an AI support agent. Built a document pipeline for Thai device manuals with Docling and font-aware Unicode recovery, and developed a RAG prototype for TrueX smart home support with evidence validation and human escalation.",
-    skills: [
-      "RAG",
-      "Qdrant",
-      "OpenAI API",
-      "Docling",
-      "Thai PDF Processing",
-    ],
     logo: companyLogos.true,
   },
   {
@@ -51,7 +43,6 @@ const timelineData: TimelineEntry[] = [
           "Built backend systems for high-traffic, banking-style workloads using Go, Hexagonal Architecture, microservices, Kafka, and gRPC. Applied load balancing and k6 testing, and used test-driven development.",
       },
     ],
-    skills: ["Java", "Go", "Hexagonal Architecture", "Hyperledger Besu", "Ansible"],
     logo: companyLogos.nitmx,
   },
   {
@@ -60,7 +51,6 @@ const timelineData: TimelineEntry[] = [
     organization: "CEDT Innovation Summit 2025",
     description:
       "Managed event budgets and expenses, coordinated with departments, and verified receipts.",
-    skills: ["Accounting", "Budget Management", "Financial Coordination"],
     logo: companyLogos.cedtInnovationSummit,
   },
   {
@@ -77,7 +67,6 @@ const timelineData: TimelineEntry[] = [
     organization: "AI Builders",
     description:
       "Selected for the AI Builders program. Developed an AI and NLP project to detect swear words in Thai videos and presented it at the Bangkok Art and Culture Centre.",
-    skills: ["AI", "NLP", "Automatic Speech Recognition", "Project Presentation"],
     logo: companyLogos.aiBuilders,
   },
 ]
@@ -193,6 +182,7 @@ export default function AboutPage() {
                 alt="Pasit Khumsena presenting at a tech event, gesturing while explaining concepts next to a display screen"
                 fill
                 className="object-cover object-center"
+                data-cursor-target
                 sizes="(max-width: 768px) 280px, (max-width: 1024px) 320px, 360px"
                 priority
               />
@@ -242,7 +232,6 @@ export default function AboutPage() {
                 organization={item.organization}
                 roles={item.roles}
                 index={index}
-                skills={item.skills}
                 logo={item.logo}
               />
             ))}

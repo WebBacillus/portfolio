@@ -16,15 +16,14 @@ interface TimelineItemProps {
   index: number
   organization?: string
   roles?: TimelineRole[]
-  skills?: string[]
   logo?: CompanyLogo
 }
 
-export default function TimelineItem({ year, title, description, index, organization, roles, skills = [], logo }: TimelineItemProps) {
+export default function TimelineItem({ year, title, description, index, organization, roles, logo }: TimelineItemProps) {
   return (
     <div className={`flex ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} flex-col mb-12 relative`}>
       <div className="md:w-1/2 flex justify-center items-center">
-        <article className="bg-purple/10 p-4 rounded-lg w-full md:max-w-md">
+        <article data-cursor-target className="bg-purple/10 p-4 rounded-lg w-full md:max-w-md">
           <header className="mb-4 flex flex-col items-start gap-3 md:flex-row md:justify-between">
             <div className="min-w-0">
               <p className="mb-1 text-sm font-semibold text-purple md:text-base">{year}</p>
@@ -60,18 +59,6 @@ export default function TimelineItem({ year, title, description, index, organiza
             </div>
           )}
 
-          {skills.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {skills.map((skill, i) => (
-                <span
-                  key={i}
-                  className="skill-tag-timeline text-xs px-2 py-1 rounded-full bg-purple/20 text-purple font-medium"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          )}
         </article>
       </div>
 
