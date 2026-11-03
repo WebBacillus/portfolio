@@ -121,7 +121,7 @@ export default function AboutPage() {
   }, [])
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen pb-20">
       <div className="container mx-auto px-4 pt-16">
         <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8" interactiveParticles>ABOUT</AnimatedTitle>
 
@@ -217,7 +217,7 @@ export default function AboutPage() {
         </AnimatedSection>
 
         {/* Timeline section with scroll-triggered animations */}
-        <div className="mt-20 mb-20">
+        <div className="mt-20">
           <h2 className="text-3xl font-bold mb-12 text-center">My Journey</h2>
           <div className="relative">
             {/* Animated vertical line */}
