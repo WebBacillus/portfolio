@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import AnimatedTitle from "@/components/animated-title"
-import TimelineItem, { type TimelineRole } from "@/components/timeline-item"
+import TimelineItem, { type TimelineEvidence, type TimelineRole } from "@/components/timeline-item"
 import AnimatedSection from "@/components/animated-section"
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
@@ -17,6 +17,7 @@ type TimelineEntry = {
   organization?: string
   roles?: TimelineRole[]
   logo?: CompanyLogo
+  evidence?: TimelineEvidence
 }
 
 // Timeline data
@@ -60,6 +61,7 @@ const timelineData: TimelineEntry[] = [
     description:
       "Expected Dec 2026 · GPAX 3.71/4.0. Coursework: Software Engineering for ML Systems; Digital and AI Transformation; Introduction to Data Science and Data Engineering; System Design for Software Development; Software Engineering.",
     logo: companyLogos.chulalongkorn,
+    evidence: { href: "/documents/cr-60-redacted.pdf", label: "View academic transcript (PDF)" },
   },
   {
     year: "Mar 2023 – Jun 2023",
@@ -233,6 +235,7 @@ export default function AboutPage() {
                 roles={item.roles}
                 index={index}
                 logo={item.logo}
+                evidence={item.evidence}
               />
             ))}
           </div>

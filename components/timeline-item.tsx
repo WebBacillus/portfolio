@@ -1,12 +1,19 @@
 "use client"
 
 import Image from "next/image"
+import { FileText } from "lucide-react"
 import type { CompanyLogo } from "@/data/company-logos"
+import MagneticLink from "@/components/magnetic-link"
 
 export interface TimelineRole {
   year: string
   title: string
   description: string
+}
+
+export interface TimelineEvidence {
+  href: string
+  label: string
 }
 
 interface TimelineItemProps {
@@ -17,9 +24,10 @@ interface TimelineItemProps {
   organization?: string
   roles?: TimelineRole[]
   logo?: CompanyLogo
+  evidence?: TimelineEvidence
 }
 
-export default function TimelineItem({ year, title, description, index, organization, roles, logo }: TimelineItemProps) {
+export default function TimelineItem({ year, title, description, index, organization, roles, logo, evidence }: TimelineItemProps) {
   return (
     <div className={`flex ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} flex-col mb-12 relative`}>
       <div className="md:w-1/2 flex justify-center items-center">
@@ -57,6 +65,18 @@ export default function TimelineItem({ year, title, description, index, organiza
                 </section>
               ))}
             </div>
+          )}
+
+          {evidence && (
+            <MagneticLink
+              href={evidence.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md border border-purple/20 bg-white px-3 py-2 text-sm font-medium text-purple transition-colors duration-300 hover:bg-purple/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple"
+            >
+                <FileText aria-hidden="true" />
+                {evidence.label}
+            </MagneticLink>
           )}
 
         </article>
