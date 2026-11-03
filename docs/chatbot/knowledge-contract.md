@@ -33,7 +33,7 @@ discrepancies this contract surfaced, and which ones are now fixed.
 
 ## 2. What the chatbot is allowed to talk about
 
-Milestone 1 answers questions about the CV only: background, education, experience, and skills. It does not answer project questions. When a visitor asks about a project, the chatbot hands over the project's own page.
+Milestone 1 answers questions about the CV only: background, education, experience, and skills. A later exception covers questions asking which projects fit an AI Engineer role: the site shows a curated comparison drawn from published project pages, including each personal contribution and the in-progress status of the Customer Support Agent. Questions about one named project still hand the visitor to that project's own page.
 
 The line between "CV question" and "project question" is drawn by source, not by topic:
 

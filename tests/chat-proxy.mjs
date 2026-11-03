@@ -36,6 +36,11 @@ try {
   assert.equal(redirect.body.kind, "redirect")
   assert.equal(upstream.calls, 0, "redirect must not spend a model call")
 
+  const recommendation = await ask("what's project relate to ai engineer role")
+  assert.equal(recommendation.body.kind, "project_recommendation")
+  assert.equal(recommendation.body.projects.length, 4)
+  assert.equal(upstream.calls, 0, "project recommendation must not spend a model call")
+
   const invalid = await ask("   ")
   assert.equal(invalid.status, 422)
   assert.equal(upstream.calls, 0)

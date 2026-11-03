@@ -43,6 +43,22 @@ for (const [question, slug] of [
   assert.equal(result.answer, undefined, question)
 }
 
+for (const question of [
+  "what's project relate to ai engineer role",
+  "Which projects are relevant to an AI Engineer role?",
+]) {
+  const result = await ask(question)
+  assert.equal(result.status, 200, question)
+  assert.equal(result.kind, "project_recommendation", question)
+  assert.equal(result.source, "Project page", question)
+  assert.deepEqual(result.projects.map((project) => project.href), [
+    "/work/se-for-ml", "/work/nectec-medical-ai", "/work/profanity-guard", "/work/customer-support-agent",
+  ], question)
+  assert.match(result.projects[0].reason, /model serving/i)
+  assert.match(result.projects[3].reason, /not a completed support application/i)
+  assert.equal(result.answer, undefined, question)
+}
+
 const listOnly = await ask("Which company did you use promptfoo at?")
 assert.equal(listOnly.status, 200)
 assert.equal(listOnly.kind, "answer")
@@ -52,7 +68,7 @@ assert.doesNotMatch(listOnly.answer, /at True|at NITMX|at SCB/i)
 assert.notEqual((await ask("Which skills do you list?")).kind, "redirect")
 assert.notEqual((await ask("Did you use MongoDB?")).kind, "redirect")
 assert.notEqual((await ask("What is SCBooking?")).kind, "redirect")
-console.log("Routing: ten project redirects use exact page summaries; skills do not redirect")
+console.log("Routing: project redirects and AI Engineer project recommendations use published pages")
 } finally {
   if (server.pid) process.kill(-server.pid)
 }

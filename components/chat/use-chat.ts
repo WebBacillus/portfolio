@@ -7,11 +7,13 @@ export type ChatEntry =
   | { id: string; role: "user"; text: string }
   | { id: string; role: "assistant"; text: string; source: SourceLabel | null; kind: "answer" | "decline" }
   | { id: string; role: "redirect"; title: string; href: string; summary: string }
+  | { id: string; role: "project_recommendation"; intro: string; projects: Array<{ title: string; href: string; reason: string }> }
 export type ChatStatus = "idle" | "loading" | "error" | "unavailable"
 
 type ApiResponse =
   | { kind: "answer" | "decline"; answer: string; source: SourceLabel | null }
   | { kind: "redirect"; redirect: { title: string; href: string; summary: string }; source: "Project page" }
+  | { kind: "project_recommendation"; intro: string; projects: Array<{ title: string; href: string; reason: string }>; source: "Project page" }
   | { kind: "error" | "unavailable"; message: string }
 
 function historyFrom(entries: ChatEntry[]) {
@@ -70,7 +72,9 @@ export function useChat() {
         setChatStatus("error")
         return
       }
-      if (data.kind === "redirect") {
+      if (data.kind === "project_recommendation") {
+        setEntries([...messagesRef.current, { id: nextId(), role: "project_recommendation", intro: data.intro, projects: data.projects }])
+      } else if (data.kind === "redirect") {
         const { title, href, summary } = data.redirect
         setEntries([...messagesRef.current, { id: nextId(), role: "redirect", title, href, summary }])
       } else if (data.kind === "answer" && data.source) {

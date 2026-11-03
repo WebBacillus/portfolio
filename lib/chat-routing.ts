@@ -52,3 +52,28 @@ export function findProjectRedirect(question: string) {
     summary: best.project.detail.summary,
   }
 }
+
+// A role-fit question needs a comparison across projects, not a single project redirect.
+// Keep each reason tied to the published project's role line and page content.
+export function findAiEngineerProjects(question: string) {
+  const mentionsProjects = /\bprojects?\b/i.test(question) || /โปรเจกต์|โครงการ|ผลงาน/.test(question)
+  const mentionsRole = /\b(?:ai|artificial intelligence|machine learning|ml)\s+engineer(?:ing)?\b/i.test(question)
+    || /วิศวกร(?:เอไอ|ปัญญาประดิษฐ์|แมชชีนเลิร์นนิง)/.test(question)
+  if (!mentionsProjects || !mentionsRole) return undefined
+
+  const catalog = new Map(getProjectCatalog().map((project) => [project.slug, project]))
+  const choices = [
+    { slug: "se-for-ml", reason: "I implemented model serving for an image classifier and helped design drift detection and retraining workflows. It shows work across the ML lifecycle, beyond model training." },
+    { slug: "nectec-medical-ai", reason: "I built the model and training pipeline for multi-label chest X-ray classification, including work on class imbalance." },
+    { slug: "profanity-guard", reason: "I developed this Thai speech recognition and profanity detection project solo during AI Builders." },
+    { slug: "customer-support-agent", reason: "This ongoing research explores a Thai and English support agent guided by reviewed product evidence. It is not a completed support application." },
+  ]
+  return {
+    intro: "These projects are the clearest evidence for an AI Engineer role. My contribution differs by project:",
+    projects: choices.map(({ slug, reason }) => {
+      const project = catalog.get(slug)
+      if (!project) throw new Error(`Missing project: ${slug}`)
+      return { title: project.title, href: `/work/${slug}`, reason }
+    }),
+  }
+}

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { nextSession, setSession, SESSION_CAP } from "@/lib/chat-session"
-import { findProjectRedirect, listedOnlySkills } from "@/lib/chat-routing"
+import { findAiEngineerProjects, findProjectRedirect, listedOnlySkills } from "@/lib/chat-routing"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -43,6 +43,9 @@ export async function POST(request: Request) {
   const question = typeof body.question === "string" ? body.question.trim() : ""
   const history = validatedHistory(body.history)
   if (!question || question.length > MAX_QUESTION_CHARS || !history) return response(422, "error", "That request is not valid.")
+
+  const recommendation = findAiEngineerProjects(question)
+  if (recommendation) return NextResponse.json({ kind: "project_recommendation", ...recommendation, source: "Project page" })
 
   const redirect = findProjectRedirect(question)
   if (redirect) return NextResponse.json({ kind: "redirect", redirect, source: "Project page" })

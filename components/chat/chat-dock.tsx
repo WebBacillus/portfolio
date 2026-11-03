@@ -6,7 +6,7 @@ import JobMatchPanel from "./job-match-panel"
 import { ArrowUpRight, Loader2, Maximize2, Minimize2, MessageCircle, RotateCcw, Send, X } from "lucide-react"
 import { useChat, type ChatEntry, type SourceLabel } from "./use-chat"
 
-const scope = "I answer questions about my CV: background, experience, skills, and education. For a project I will point you to its page."
+const scope = "Ask about my background, experience, skills, education, or which projects fit an AI Engineer role. For a specific project, I will point you to its page."
 const cvQuestions = [
   { label: "Current role?", question: "What is your current role?" },
   { label: "Work at NITMX?", question: "What did you do at NITMX?" },
@@ -36,6 +36,16 @@ function Entry({ entry }: { entry: ChatEntry }) {
         <ArrowUpRight className="size-4 shrink-0 text-purple group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
       </Link>
       <SourceTag source="Project page" href={entry.href} />
+    </div>
+  }
+  if (entry.role === "project_recommendation") {
+    return <div className="space-y-2">
+      <p className="text-sm leading-relaxed text-black/85">{entry.intro}</p>
+      {entry.projects.map((project) => <Link key={project.href} href={project.href} className="group flex items-start justify-between gap-3 rounded-xl border border-purple/20 bg-purple/5 px-4 py-3 hover:border-purple/40 hover:bg-purple/10">
+        <span className="min-w-0"><strong className="block text-sm text-purple">{project.title}</strong><span className="mt-1 block text-xs leading-relaxed text-black/70">{project.reason}</span></span>
+        <ArrowUpRight className="mt-0.5 size-4 shrink-0 text-purple" aria-hidden />
+      </Link>)}
+      <SourceTag source="Project page" />
     </div>
   }
   return <div className="space-y-1.5"><p className="text-sm leading-relaxed text-black/85">{entry.text}</p>{entry.source && <SourceTag source={entry.source} />}</div>
