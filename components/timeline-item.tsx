@@ -72,10 +72,11 @@ export default function TimelineItem({ year, title, description, index, organiza
               href={evidence.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md border border-purple/20 bg-white px-3 py-2 text-sm font-medium text-purple transition-colors duration-300 hover:bg-purple/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple"
+              cursorTarget
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-purple px-6 py-3 text-white transition-colors duration-300 hover:bg-dark-purple"
             >
-                <FileText aria-hidden="true" />
-                {evidence.label}
+              <FileText aria-hidden="true" />
+              {evidence.label}
             </MagneticLink>
           )}
 
