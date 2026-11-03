@@ -38,20 +38,17 @@ const timelineData: TimelineEntry[] = [
     logo: companyLogos.true,
   },
   {
-    year: "May–Jul 2024 and Apr 2025–Jul 2026",
-    title: "National ITMX",
+    year: "Apr 2025–Jul 2026",
+    title: "Software Engineer (Part-time)",
+    organization: "National ITMX",
+    description:
+      "Upgraded legacy systems from Java 11 to Java 25 and addressed security issues; automated API tests for a national anti-mule account project with Postman and Bruno. Built a secure interbank financial-adjustment web app in Go with Clean and Hexagonal Architecture, and contributed to Hyperledger Besu with Ansible disaster-recovery automation.",
     roles: [
-      {
-        year: "Apr 2025–Jul 2026",
-        title: "Software Engineer (Part-time)",
-        description:
-          "Upgraded legacy systems from Java 11 to Java 25 and addressed security issues; automated API tests for a national anti-mule account project with Postman and Bruno. Built a secure interbank financial-adjustment web app in Go with Clean and Hexagonal Architecture, and contributed to Hyperledger Besu with Ansible disaster-recovery automation.",
-      },
       {
         year: "May–Jul 2024",
         title: "Backend Developer Intern",
         description:
-          "Developed backend systems for high-traffic banking-style workloads and gained experience across backend technologies.",
+          "Built backend systems for high-traffic, banking-style workloads using Go, Hexagonal Architecture, microservices, Kafka, and gRPC. Applied load balancing and k6 testing, and used test-driven development.",
       },
     ],
     skills: ["Java", "Go", "Hexagonal Architecture", "Hyperledger Besu", "Ansible"],
