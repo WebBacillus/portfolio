@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import AnimatedTitle from "@/components/animated-title"
-import TimelineItem from "@/components/timeline-item"
+import TimelineItem, { type TimelineRole } from "@/components/timeline-item"
 import AnimatedSection from "@/components/animated-section"
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
@@ -15,7 +15,7 @@ type TimelineEntry = {
   title: string
   description?: string
   organization?: string
-  roles?: { year: string; title: string; description: string }[]
+  roles?: TimelineRole[]
   skills?: string[]
   logo?: CompanyLogo
 }
@@ -38,7 +38,7 @@ const timelineData: TimelineEntry[] = [
     logo: companyLogos.true,
   },
   {
-    year: "May–Jul 2024 · Apr 2025–Jul 2026",
+    year: "May–Jul 2024 and Apr 2025–Jul 2026",
     title: "National ITMX",
     roles: [
       {

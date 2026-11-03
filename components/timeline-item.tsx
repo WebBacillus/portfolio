@@ -3,7 +3,7 @@
 import Image from "next/image"
 import type { CompanyLogo } from "@/data/company-logos"
 
-interface TimelineRole {
+export interface TimelineRole {
   year: string
   title: string
   description: string
