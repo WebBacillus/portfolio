@@ -18,6 +18,7 @@ interface Square {
   initialY: number
   rotationSpeed: number
   pulsePhase: number
+  createdAt: number
 }
 
 interface AdaptiveSettings {
@@ -66,11 +67,10 @@ export default function AnimatedBackground() {
     // Monitor performance
     performanceMonitor.current?.update()
 
-    const currentTime = Date.now() * 0.001
-    const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1)
-    const scrollProgress = Math.min(scrollY.current / maxScroll, 1)
+    const currentTime = performance.now() * 0.001
+    const scrollProgress = Math.min(scrollY.current / Math.max(window.innerHeight * 0.6, 1), 1)
 
-    squares.current.forEach((square) => {
+    squares.current.forEach((square, index) => {
       // Update position with bounds checking
       square.x += square.speedX * settings.animationSpeed
       square.y += square.speedY * settings.animationSpeed
@@ -90,18 +90,20 @@ export default function AnimatedBackground() {
       const parallaxX = settings.enableParallax ? mouseX.current * square.depth * 10 : 0
       const parallaxY = settings.enableParallax ? mouseY.current * square.depth * 10 : 0
       const scrollOffset = scrollProgress * square.depth * 50
+      const scrollWave = Math.sin(scrollProgress * Math.PI * 4 + index * 0.1) * 20 * scrollProgress
 
       // Pulse effect
       const pulseScale = settings.enablePulse ? 1 + Math.sin(currentTime * 2 + square.pulsePhase) * 0.2 : 1
+      const entranceProgress = Math.min((currentTime - square.createdAt) / 0.5, 1)
 
-      // Color intensity
-      const baseOpacity = square.opacity * (0.3 + scrollProgress * 0.4)
-      const finalOpacity = Math.min(Math.max(baseOpacity, 0.1), 0.6)
+      // Bring the background into view immediately, then finish its scroll response within a short scroll.
+      const baseOpacity = square.opacity * (0.65 + scrollProgress * 0.35) * entranceProgress
+      const finalOpacity = Math.min(Math.max(baseOpacity, 0), 0.6)
 
       // Apply all transformations at once
       gsap.set(square.element, {
         x: square.x + parallaxX,
-        y: square.y + parallaxY - scrollOffset,
+        y: square.y + parallaxY - scrollOffset + scrollWave,
         scale: pulseScale,
         opacity: finalOpacity,
         backgroundColor: `rgba(107, 70, 193, ${finalOpacity})`,
@@ -166,6 +168,7 @@ export default function AnimatedBackground() {
           initialY: 0,
           rotationSpeed: (Math.random() - 0.5) * 0.5,
           pulsePhase: Math.random() * Math.PI * 2,
+          createdAt: performance.now() * 0.001,
           element,
         }
 
@@ -180,14 +183,6 @@ export default function AnimatedBackground() {
           force3D: true,
         })
 
-        // Animate in
-        gsap.to(element, {
-          opacity: square.opacity,
-          duration: 1,
-          delay: Math.random() * 2,
-          ease: "power2.out",
-        })
-
         squares.current.push(square)
       }
     }
@@ -196,7 +191,7 @@ export default function AnimatedBackground() {
     const scrollTrigger = ScrollTrigger.create({
       trigger: document.body,
       start: "top top",
-      end: "bottom bottom",
+      end: () => `+=${window.innerHeight * 0.6}`,
       scrub: 1,
       onUpdate: (self) => {
         const progress = self.progress
@@ -209,15 +204,6 @@ export default function AnimatedBackground() {
             duration: 0.3,
           })
         }
-
-        // Add wave effect to squares based on scroll
-        squares.current.forEach((square, index) => {
-          const wave = Math.sin(progress * Math.PI * 4 + index * 0.1) * 20
-          gsap.set(square.element, {
-            y: square.y + wave,
-            duration: 0.1,
-          })
-        })
       },
     })
 
@@ -237,13 +223,17 @@ export default function AnimatedBackground() {
     // Initialize performance monitor
     performanceMonitor.current = new PerformanceMonitor((fps, isLowPerformance) => {
       if (isLowPerformance) {
-        // Reduce quality if performance is poor
-        setSettings((prev) => ({
-          ...prev,
-          particleCount: Math.max(prev.particleCount * 0.7, 10),
-          enableParallax: false,
-          enablePulse: false,
-        }))
+        // Reduce quality once; returning the existing settings prevents needless particle reinitialization.
+        setSettings((prev) => {
+          if (prev.particleCount <= 10 && !prev.enableParallax && !prev.enablePulse) return prev
+
+          return {
+            ...prev,
+            particleCount: 10,
+            enableParallax: false,
+            enablePulse: false,
+          }
+        })
       }
     })
 

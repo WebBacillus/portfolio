@@ -10,6 +10,7 @@ import MobileMenu from "@/components/mobile-menu"
 import PageTransition from "@/components/page-transition"
 import BackgroundDebug from "@/components/background-debug"
 import ChatDock from "@/components/chat/chat-dock"
+import CustomCursor from "@/components/custom-cursor"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -54,10 +55,14 @@ export default function RootLayout({
           <AnimatedBackground />
           <BackgroundDebug />
           <PageTransition />
-          <div className="relative z-10">
-            <Header />
-            <MobileMenu variant="sidebar" />
-            {children}
+          <Header />
+          <MobileMenu variant="sidebar" />
+          {/* Fixed overlay: must stay outside #smooth-wrapper so ScrollSmoother transforms do not drag it. */}
+          <CustomCursor />
+          <div id="smooth-wrapper">
+            <div id="smooth-content" className="relative z-10">
+              {children}
+            </div>
           </div>
           {(process.env.NODE_ENV !== "production" || process.env.CHAT_PUBLIC_ENABLED === "true") && <ChatDock />}
         </GSAPProvider>

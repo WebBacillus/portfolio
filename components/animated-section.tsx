@@ -9,6 +9,8 @@ interface AnimatedSectionProps {
   animation?: "fadeIn" | "slideInLeft" | "slideInRight" | "slideInTop" | "slideInBottom"
   delay?: number
   threshold?: string
+  /** Frames the section with the bracket cursor's target box. */
+  cursorTarget?: boolean
 }
 
 export default function AnimatedSection({
@@ -17,13 +19,19 @@ export default function AnimatedSection({
   animation = "fadeIn",
   delay = 0,
   threshold = "top 80%",
+  cursorTarget = false,
 }: AnimatedSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null)
 
   useScrollAnimation(sectionRef, animation, { delay, start: threshold })
 
   return (
-    <div ref={sectionRef} className={className} style={{ opacity: 0 }}>
+    <div
+      ref={sectionRef}
+      data-cursor-target={cursorTarget ? "" : undefined}
+      className={className}
+      style={{ opacity: 0 }}
+    >
       {children}
     </div>
   )

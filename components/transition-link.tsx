@@ -2,19 +2,19 @@
 
 import type React from "react"
 import { useRouter } from "next/navigation"
-import type { ReactNode } from "react"
+import type { AnchorHTMLAttributes, ReactNode } from "react"
 import { useState, useEffect, useRef } from "react"
 import { animatePageOut } from "@/lib/transition-utils"
 import useMobile from "@/hooks/use-mobile"
 
-interface TransitionLinkProps {
+type TransitionLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "onClick"> & {
   href: string
   children: ReactNode
   className?: string
   onClick?: () => void
 }
 
-export default function TransitionLink({ href, children, className = "", onClick }: TransitionLinkProps) {
+export default function TransitionLink({ href, children, className = "", onClick, ...props }: TransitionLinkProps) {
   const router = useRouter()
   const isMobile = useMobile()
   const [isNavigating, setIsNavigating] = useState(false)
@@ -71,7 +71,7 @@ export default function TransitionLink({ href, children, className = "", onClick
   }
 
   return (
-    <a href={href} onClick={handleClick} className={className} aria-disabled={isNavigating}>
+    <a href={href} {...props} onClick={handleClick} className={className} aria-disabled={isNavigating}>
       {children}
     </a>
   )

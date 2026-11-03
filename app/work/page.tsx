@@ -116,10 +116,10 @@ export default function WorkPage() {
   return (
     <main className="min-h-screen pb-24">
       <div className="container mx-auto px-4 pt-20 md:pt-16">
-        <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8" onReveal={revealSelectedWork} revealOverlapSeconds={CARD_REVEAL_OVERLAP_SECONDS}>WORK</AnimatedTitle>
+        <AnimatedTitle className="text-purple text-center leading-none tracking-normal mb-8" onReveal={revealSelectedWork} revealOverlapSeconds={CARD_REVEAL_OVERLAP_SECONDS} interactiveParticles>WORK</AnimatedTitle>
 
         <section aria-label="Featured projects">
-          <article ref={leadRef} className="group overflow-hidden rounded-2xl bg-[#241735] text-white motion-safe:invisible motion-safe:opacity-0">
+          <article ref={leadRef} data-cursor-target className="group overflow-hidden rounded-2xl bg-[#241735] text-white motion-safe:invisible motion-safe:opacity-0">
             <div className="grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
               <div className="order-2 flex flex-col justify-between gap-6 p-6 sm:p-9 lg:order-1 lg:gap-9 lg:p-12">
                 <div>
@@ -140,7 +140,7 @@ export default function WorkPage() {
 
           <div ref={supportingRef} className="mt-5 grid gap-5 md:grid-cols-2">
             {supporting.map((project) => (
-              <article key={project.slug} className="group flex flex-col overflow-hidden rounded-2xl border border-purple/15 bg-white motion-safe:invisible motion-safe:opacity-0">
+              <article key={project.slug} data-cursor-target className="group flex flex-col overflow-hidden rounded-2xl border border-purple/15 bg-white motion-safe:invisible motion-safe:opacity-0">
                 <Link href={`/work/${project.slug}`} aria-label={`View ${project.title} case study`} className={`relative block aspect-[16/9] overflow-hidden ${project.slug === "scb-tech-x-loan-origination" ? "bg-[#4B258B]" : "bg-purple/5"}`}>
                   <Image src={project.image} alt={project.title} fill sizes="(max-width: 768px) 100vw, 50vw" unoptimized={project.image.toLowerCase().endsWith(".gif")} className="object-contain transition-transform duration-500 group-hover:scale-[1.025] motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
                 </Link>
@@ -178,7 +178,7 @@ export default function WorkPage() {
               <div className="grid gap-x-8 md:grid-cols-2">
                 {visibleProjects.map((project) => (
                   <article key={project.slug} className="border-t border-purple/20 py-6">
-                    <Link href={`/work/${project.slug}`} className="group grid min-h-36 grid-cols-[6rem_minmax(0,1fr)] gap-4 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-5">
+                    <Link href={`/work/${project.slug}`} data-cursor-target className="group grid min-h-36 grid-cols-[6rem_minmax(0,1fr)] gap-4 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple sm:grid-cols-[8rem_minmax(0,1fr)] sm:gap-5">
                       <div className="relative aspect-square overflow-hidden rounded-lg bg-purple/5" style={project.imageBg ? { background: project.imageBg } : undefined}>
                         <Image src={project.image} alt="" fill sizes="(max-width: 640px) 96px, 128px" unoptimized={project.image.toLowerCase().endsWith(".gif")} className={project.imageFit === "contain" ? "object-contain" : "object-cover"} />
                       </div>

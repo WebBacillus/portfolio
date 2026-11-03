@@ -3,6 +3,7 @@
 import type React from "react"
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
+import InteractiveParticleTitle from "@/components/interactive-particle-title"
 
 interface AnimatedTitleProps {
   children: React.ReactNode
@@ -10,13 +11,21 @@ interface AnimatedTitleProps {
   accessibleLabel?: string
   onReveal?: () => void
   revealOverlapSeconds?: number
+  interactiveParticles?: boolean
 }
 
-export default function AnimatedTitle({ children, className = "", accessibleLabel, onReveal, revealOverlapSeconds = 0 }: AnimatedTitleProps) {
+export default function AnimatedTitle({
+  children,
+  className = "",
+  accessibleLabel,
+  onReveal,
+  revealOverlapSeconds = 0,
+  interactiveParticles = false,
+}: AnimatedTitleProps) {
   const titleRef = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
-    if (typeof window === "undefined" || !titleRef.current) return
+    if (interactiveParticles || typeof window === "undefined" || !titleRef.current) return
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       onReveal?.()
@@ -84,7 +93,19 @@ export default function AnimatedTitle({ children, className = "", accessibleLabe
       // Restore original text content
       title.textContent = text
     }
-  }, [children, onReveal, revealOverlapSeconds])
+  }, [children, onReveal, revealOverlapSeconds, interactiveParticles])
+
+  if (interactiveParticles) {
+    return (
+      <InteractiveParticleTitle
+        className={className}
+        accessibleLabel={accessibleLabel}
+        onReveal={onReveal}
+      >
+        {children}
+      </InteractiveParticleTitle>
+    )
+  }
 
   return (
     <h1

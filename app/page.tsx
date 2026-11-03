@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
 import Link from "next/link"
 import useMobile from "@/hooks/use-mobile"
-import TransitionLink from "@/components/transition-link"
+import MagneticLink from "@/components/magnetic-link"
 import { ArrowUpRight } from "lucide-react"
 import { projects } from "@/data/projects"
 
@@ -237,6 +237,7 @@ export default function Home() {
           accessibleLabel="Pasit Khumsena"
           onReveal={onTitleReveal}
           revealOverlapSeconds={0.5}
+          interactiveParticles
         >
           {"PASIT\nKHUMSENA"}
         </AnimatedTitle>
@@ -282,26 +283,30 @@ export default function Home() {
           </div>
         </div>
         <div ref={buttonsRef} className="mt-10 flex flex-wrap justify-center gap-4 opacity-0">
-          <a
+          <MagneticLink
             href="/resume-general.pdf"
             download="resume-general.pdf"
-            className="px-6 py-3 bg-purple text-white rounded-full hover:bg-dark-purple transition-colors transform hover:scale-105 duration-300"
+            wiggle
+            cursorTarget
+            className="inline-flex items-center justify-center rounded-full bg-purple px-6 py-3 text-white transition-colors duration-300 hover:bg-dark-purple"
           >
             Download Resume
-          </a>
-          <TransitionLink
+          </MagneticLink>
+          <MagneticLink
             href="/contact"
-            className="px-6 py-3 border border-purple text-purple rounded-full hover:bg-purple/10 transition-colors transform hover:scale-105 duration-300"
+            transition
+            cursorTarget
+            className="inline-flex items-center justify-center rounded-full border border-purple px-6 py-3 text-purple transition-colors duration-300 hover:bg-purple/10"
           >
             Get in Touch
-          </TransitionLink>
+          </MagneticLink>
         </div>
 
         {/* Featured Projects Showcase */}
         <section ref={experienceRef} aria-labelledby="featured-projects-heading" className="mt-12 mb-12">
           <h2 id="featured-projects-heading" className="mb-8 text-center text-3xl font-bold text-purple md:text-4xl">Featured Projects</h2>
           <div className="grid gap-5 md:grid-cols-2">
-            <article className="experience-card group overflow-hidden rounded-2xl bg-[#241735] text-white md:col-span-2">
+            <article data-cursor-target className="experience-card group overflow-hidden rounded-2xl bg-[#241735] text-white md:col-span-2">
               <Link
                 href={`/work/${featuredProjects[0].slug}`}
                 aria-label={`View ${featuredProjects[0].title} case study`}
@@ -330,7 +335,7 @@ export default function Home() {
             </article>
 
             {featuredProjects.slice(1).map((project) => (
-              <article key={project.slug} className="experience-card group overflow-hidden rounded-2xl border border-purple/15 bg-white">
+              <article key={project.slug} data-cursor-target className="experience-card group overflow-hidden rounded-2xl border border-purple/15 bg-white">
                 <Link
                   href={`/work/${project.slug}`}
                   aria-label={`View ${project.title} case study`}
@@ -360,12 +365,15 @@ export default function Home() {
           </div>
 
           <div className="experience-cta mt-8 text-center">
-            <TransitionLink
+            <MagneticLink
               href="/work"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-purple px-8 py-4 font-medium text-white transition-colors hover:bg-dark-purple focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple"
+              transition
+              wiggle
+              cursorTarget
+              className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-full bg-purple px-8 py-4 font-medium text-white transition-colors hover:bg-dark-purple focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple"
             >
               View All Projects <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
-            </TransitionLink>
+            </MagneticLink>
           </div>
         </section>
 
