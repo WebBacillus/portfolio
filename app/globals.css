@@ -228,9 +228,9 @@ button {
   display: flex;
   align-items: center;
   width: max-content;
-  height: 3.125vw;
-  padding: 1.25vw 1.875vw;
-  border-radius: 1.875vw;
+  height: 2.4vw;
+  padding: 0.8vw 1.5vw;
+  border-radius: 1.5vw;
   box-sizing: border-box;
   overflow: hidden;
   line-height: 1;
@@ -239,9 +239,9 @@ button {
 
 @media (max-width: 768px) {
   .nav-pill {
-    height: 4.63vw;
-    padding: 1.852vw 2.778vw;
-    border-radius: 2.778vw;
+    height: 3.6vw;
+    padding: 1.4vw 2.2vw;
+    border-radius: 2.2vw;
   }
 }
 

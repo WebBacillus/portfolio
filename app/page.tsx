@@ -11,6 +11,7 @@ import useMobile from "@/hooks/use-mobile"
 import MagneticLink from "@/components/magnetic-link"
 import { ArrowUpRight } from "lucide-react"
 import { projects } from "@/data/projects"
+import { companyLogos } from "@/data/company-logos"
 
 const featuredCopy = [
   {
@@ -265,7 +266,7 @@ export default function Home() {
               <ul ref={highlightsRef} aria-label="Experience highlights" className="grid gap-5 border-t border-purple/20 pt-6 opacity-0 sm:grid-cols-2">
                 <li className="border-l-2 border-purple/50 pl-3">
                   <div className="mb-3 flex h-14 items-center">
-                    <Image src="/images/companies/true-corporation.jpg" alt="True Corporation logo" width={722} height={484} className="h-12 w-auto max-w-[130px] object-contain" />
+                    <Image src={companyLogos.true.src} alt={companyLogos.true.alt} width={companyLogos.true.width} height={companyLogos.true.height} className="h-12 w-auto max-w-[130px] object-contain" />
                   </div>
                   <p className="font-semibold text-black">True Corporation</p>
                   <p className="text-sm text-black/70">AI Engineer Intern</p>
@@ -273,10 +274,10 @@ export default function Home() {
                 </li>
                 <li className="border-l-2 border-purple/50 pl-3">
                   <div className="mb-3 flex h-14 items-center">
-                    <Image src="/images/companies/nitmx.png" alt="National ITMX logo" width={3360} height={1440} className="h-12 w-auto max-w-[130px] object-contain" />
+                    <Image src={companyLogos.nitmx.src} alt={companyLogos.nitmx.alt} width={companyLogos.nitmx.width} height={companyLogos.nitmx.height} className="h-12 w-auto max-w-[130px] object-contain" />
                   </div>
                   <p className="font-semibold text-black">NITMX</p>
-                  <p className="text-sm text-black/70">Software Engineer, Part-time</p>
+                  <p className="text-sm text-black/70 whitespace-nowrap">Software Engineer, Part-time</p>
                   <p className="mt-1 text-sm text-black/70">Go backend services and automated API tests</p>
                 </li>
               </ul>
