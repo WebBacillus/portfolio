@@ -8,78 +8,80 @@ import { useRef, useEffect } from "react"
 import gsap from "gsap"
 import MagneticLink from "@/components/magnetic-link"
 import AnimatedTimelineLine from "@/components/animated-timeline-line"
+import { companyLogos, type CompanyLogo } from "@/data/company-logos"
+
+type TimelineEntry = {
+  year: string
+  title: string
+  description?: string
+  organization?: string
+  roles?: { year: string; title: string; description: string }[]
+  skills?: string[]
+  logo?: CompanyLogo
+}
 
 // Timeline data
-const timelineData = [
+const timelineData: TimelineEntry[] = [
   {
-    year: "August 2026 - Present",
-    title: "AI Engineer (Intern), True Corporation",
+    year: "Aug 2026 – Present",
+    title: "AI Engineer (Intern)",
+    organization: "True Corporation",
     description:
-      "Product ownership for an AI customer support agent, including scope, timelines, and customer workflows. Built a document processing pipeline for Thai device manuals using Docling and font-aware Unicode recovery, prepared them for a RAG knowledge base, and developed a RAG prototype for TrueX smart home support with retrieval, evidence validation, and escalation to human support.",
+      "Own product scope, timelines, and customer workflows for an AI support agent. Built a document pipeline for Thai device manuals with Docling and font-aware Unicode recovery, and developed a RAG prototype for TrueX smart home support with evidence validation and human escalation.",
     skills: [
       "RAG",
       "Qdrant",
       "OpenAI API",
-      "LLM Tool Calling",
       "Docling",
       "Thai PDF Processing",
-      "Product Ownership",
     ],
+    logo: companyLogos.true,
   },
   {
-    year: "April 2025 - July 2026",
-    title: "Software Engineer (Part-time), NITMX",
-    description:
-      "Upgraded critical legacy applications from Java 11 to Java 25 while identifying and mitigating security vulnerabilities. Designed and ran automated API testing with Postman and Bruno for a national anti-mule account project. Developed a secure interbank financial adjustment web application in Go using Clean and Hexagonal Architecture, and contributed to a Hyperledger Besu blockchain network with DR automation through Ansible playbooks.",
-    skills: [
-      "Java",
-      "Go",
-      "Clean Architecture",
-      "Hexagonal Architecture",
-      "Hyperledger Besu",
-      "NestJS",
-      "Next.js",
-      "Ansible",
-      "Postman",
-      "Bruno",
+    year: "May–Jul 2024 · Apr 2025–Jul 2026",
+    title: "National ITMX",
+    roles: [
+      {
+        year: "Apr 2025–Jul 2026",
+        title: "Software Engineer (Part-time)",
+        description:
+          "Upgraded legacy systems from Java 11 to Java 25 and addressed security issues; automated API tests for a national anti-mule account project with Postman and Bruno. Built a secure interbank financial-adjustment web app in Go with Clean and Hexagonal Architecture, and contributed to Hyperledger Besu with Ansible disaster-recovery automation.",
+      },
+      {
+        year: "May–Jul 2024",
+        title: "Backend Developer Intern",
+        description:
+          "Developed backend systems for high-traffic banking-style workloads and gained experience across backend technologies.",
+      },
     ],
+    skills: ["Java", "Go", "Hexagonal Architecture", "Hyperledger Besu", "Ansible"],
+    logo: companyLogos.nitmx,
   },
   {
-    year: "Oct 2024 - May 2025",
-    title: "Accountant, CEDT Innovation Summit 2025",
+    year: "Oct 2024 – May 2025",
+    title: "Accountant",
+    organization: "CEDT Innovation Summit 2025",
     description:
-      "Managed the financial aspects of the CEDT Innovation Summit, including budget oversight, expense management, and coordination with various departments. Verified the accuracy of receipts.",
-    skills: ["Accounting", "Budget Management", "Financial Coordination", "Expense Tracking"],
+      "Managed event budgets and expenses, coordinated with departments, and verified receipts.",
+    skills: ["Accounting", "Budget Management", "Financial Coordination"],
+    logo: companyLogos.cedtInnovationSummit,
   },
   {
-    year: "May 2024 - July 2024",
-    title: "Backend Developer Intern, NITMX",
+    year: "Jul 2023 – Dec 2026",
+    title: "Bachelor of Engineering in Computer Engineering",
+    organization: "Chulalongkorn University",
     description:
-      "Developed backend systems capable of handling high user traffic, similar to banking systems. Gained experience with various backend technologies.",
-    skills: [
-      "Backend Development",
-      "Go",
-      "Hexagonal Architecture",
-      "Microservices",
-      "Kafka",
-      "gRPC",
-      "Load Balancing",
-      "k6",
-      "Test-driven development",
-    ],
+      "Expected Dec 2026 · GPAX 3.71/4.0. Coursework: Software Engineering for ML Systems; Digital and AI Transformation; Introduction to Data Science and Data Engineering; System Design for Software Development; Software Engineering.",
+    logo: companyLogos.chulalongkorn,
   },
   {
-    year: "July 2023 - December 2026",
-    title: "Bachelors of Engineering in Computer Engineering, Chulalongkorn University",
-    description:
-      "Expected December 2026, GPAX 3.71 out of 4.0. Coursework included Software Engineering for ML Systems, Digital and AI Transformation, Introduction to Data Science and Data Engineering, System Design for Software Development, and Software Engineering.",
-  },
-  {
-    year: "March 2023 - June 2023",
+    year: "Mar 2023 – Jun 2023",
     title: "AI Builders Program Participant",
+    organization: "AI Builders",
     description:
-      "Selected to participate in the AI Builders program, developing a project for swear word detection in Thai videos using AI and NLP. Presented the project at the Bangkok Art and Culture Centre.",
-    skills: ["AI", "NLP", "Data Science", "Automatic Speech Recognition", "Project Presentation"],
+      "Selected for the AI Builders program. Developed an AI and NLP project to detect swear words in Thai videos and presented it at the Bangkok Art and Culture Centre.",
+    skills: ["AI", "NLP", "Automatic Speech Recognition", "Project Presentation"],
+    logo: companyLogos.aiBuilders,
   },
 ]
 
@@ -240,8 +242,11 @@ export default function AboutPage() {
                 year={item.year}
                 title={item.title}
                 description={item.description}
+                organization={item.organization}
+                roles={item.roles}
                 index={index}
                 skills={item.skills}
+                logo={item.logo}
               />
             ))}
           </div>

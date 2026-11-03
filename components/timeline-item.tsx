@@ -1,196 +1,64 @@
 "use client"
 
-import { useRef, useEffect } from "react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
+import Image from "next/image"
+import type { CompanyLogo } from "@/data/company-logos"
+
+interface TimelineRole {
+  year: string
+  title: string
+  description: string
+}
 
 interface TimelineItemProps {
   year: string
   title: string
-  description: string
+  description?: string
   index: number
+  organization?: string
+  roles?: TimelineRole[]
   skills?: string[]
+  logo?: CompanyLogo
 }
 
-export default function TimelineItem({ year, title, description, index, skills = [] }: TimelineItemProps) {
-  const itemRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (typeof window === "undefined" || !itemRef.current) return
-
-    gsap.registerPlugin(ScrollTrigger)
-
-    const item = itemRef.current
-    const isLeft = index % 2 === 0
-    const dot = item.querySelector(".timeline-dot")
-
-    // Set initial states
-    gsap.set(item, {
-      opacity: 0,
-      x: isLeft ? -120 : 120,
-      y: 60,
-      scale: 0.8,
-      rotationY: isLeft ? -15 : 15,
-    })
-
-    if (dot) {
-      gsap.set(dot, {
-        scale: 0,
-        opacity: 0,
-        rotation: 180,
-      })
-    }
-
-    // Create scroll trigger for each timeline item
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: item,
-        start: "top 85%",
-        end: "bottom 15%",
-        toggleActions: "play none none reverse",
-        onEnter: () => {
-          // Add pulse animation to dot when item enters
-          if (dot) {
-            gsap.to(dot, {
-              boxShadow: "0 0 20px rgba(107, 70, 193, 0.6)",
-              duration: 1,
-              yoyo: true,
-              repeat: -1,
-              ease: "sine.inOut",
-            })
-          }
-        },
-        onLeave: () => {
-          // Stop pulse animation when leaving
-          if (dot) {
-            gsap.killTweensOf(dot)
-            gsap.set(dot, { boxShadow: "none" })
-          }
-        },
-        onEnterBack: () => {
-          // Restart pulse animation when scrolling back
-          if (dot) {
-            gsap.to(dot, {
-              boxShadow: "0 0 20px rgba(107, 70, 193, 0.6)",
-              duration: 1,
-              yoyo: true,
-              repeat: -1,
-              ease: "sine.inOut",
-            })
-          }
-        },
-        onLeaveBack: () => {
-          // Stop pulse animation when leaving upward
-          if (dot) {
-            gsap.killTweensOf(dot)
-            gsap.set(dot, { boxShadow: "none" })
-          }
-        },
-      },
-    })
-
-    // Animate the timeline dot first
-    if (dot) {
-      tl.to(dot, {
-        scale: 1,
-        opacity: 1,
-        rotation: 0,
-        duration: 0.6,
-        ease: "back.out(1.7)",
-      })
-    }
-
-    // Then animate the main content
-    tl.to(
-      item,
-      {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        scale: 1,
-        rotationY: 0,
-        duration: 1,
-        ease: "power3.out",
-      },
-      "-=0.3",
-    )
-
-    // Animate skills tags if they exist
-    const skillTags = item.querySelectorAll(".skill-tag-timeline")
-    if (skillTags.length > 0) {
-      gsap.set(skillTags, {
-        opacity: 0,
-        scale: 0.7,
-        y: 20,
-      })
-
-      tl.to(
-        skillTags,
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.1,
-          ease: "back.out(1.7)",
-        },
-        "-=0.5",
-      )
-    }
-
-    // Add hover animations
-    const handleMouseEnter = () => {
-      gsap.to(item, {
-        scale: 1.03,
-        y: -8,
-        duration: 0.4,
-        ease: "power2.out",
-      })
-
-      if (dot) {
-        gsap.to(dot, {
-          scale: 1.3,
-          duration: 0.3,
-          ease: "back.out(1.7)",
-        })
-      }
-    }
-
-    const handleMouseLeave = () => {
-      gsap.to(item, {
-        scale: 1,
-        y: 0,
-        duration: 0.4,
-        ease: "power2.out",
-      })
-
-      if (dot) {
-        gsap.to(dot, {
-          scale: 1,
-          duration: 0.3,
-          ease: "power2.out",
-        })
-      }
-    }
-
-    item.addEventListener("mouseenter", handleMouseEnter)
-    item.addEventListener("mouseleave", handleMouseLeave)
-
-    return () => {
-      tl.kill()
-      item.removeEventListener("mouseenter", handleMouseEnter)
-      item.removeEventListener("mouseleave", handleMouseLeave)
-      tl.scrollTrigger?.kill()
-      gsap.killTweensOf([item, ...(dot ? [dot] : []), ...Array.from(skillTags)])
-    }
-  }, [index])
-
+export default function TimelineItem({ year, title, description, index, organization, roles, skills = [], logo }: TimelineItemProps) {
   return (
     <div className={`flex ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} flex-col mb-12 relative`}>
       <div className="md:w-1/2 flex justify-center items-center">
-        <div ref={itemRef} data-cursor-target className="bg-purple/10 p-4 rounded-lg backdrop-blur-sm w-full md:max-w-md transform-gpu">
-          <div className="text-purple font-bold text-lg md:text-xl mb-2">{year}</div>
-          <h3 className="text-xl md:text-2xl font-bold mb-2">{title}</h3>
-          <p className="text-black/70 mb-3 text-sm md:text-base">{description}</p>
+        <article className="bg-purple/10 p-4 rounded-lg w-full md:max-w-md">
+          <header className="mb-4 flex flex-col items-start gap-3 md:flex-row md:justify-between">
+            <div className="min-w-0">
+              <p className="mb-1 text-sm font-semibold text-purple md:text-base">{year}</p>
+              <h3 className="text-xl font-bold md:text-2xl">{title}</h3>
+            </div>
+            {logo && (
+              <div className="timeline-logo flex h-10 w-28 shrink-0 items-center justify-center self-start rounded-md bg-white px-2 md:self-auto">
+                <Image
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={logo.width}
+                  height={logo.height}
+                  style={{ height: logo.displayHeight, width: "auto", maxWidth: "100%" }}
+                  className="object-contain"
+                />
+              </div>
+            )}
+          </header>
+
+          {organization && <p className="-mt-2 mb-3 text-sm font-medium text-black/70">{organization}</p>}
+
+          {description && <p className="mb-3 text-sm text-black/70 md:text-base">{description}</p>}
+
+          {roles && roles.length > 0 && (
+            <div className="mb-3 space-y-3 border-t border-purple/15 pt-3">
+              {roles.map((role) => (
+                <section key={`${role.year}-${role.title}`}>
+                  <p className="mb-1 text-xs font-semibold text-purple">{role.year}</p>
+                  <h4 className="mb-1 text-base font-semibold">{role.title}</h4>
+                  <p className="text-sm text-black/70">{role.description}</p>
+                </section>
+              ))}
+            </div>
+          )}
 
           {skills.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
@@ -204,7 +72,7 @@ export default function TimelineItem({ year, title, description, index, skills =
               ))}
             </div>
           )}
-        </div>
+        </article>
       </div>
 
       <div className="md:w-1/2 relative flex justify-center">
