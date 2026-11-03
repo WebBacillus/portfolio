@@ -35,8 +35,10 @@ export function findProjectRedirect(question: string) {
   let best: { score: number; project: ReturnType<typeof getProjectCatalog>[number] } | undefined
 
   for (const project of getProjectCatalog()) {
-    if (!aliases.has(project.slug)) throw new Error(`Missing routing aliases for ${project.slug}`)
-    for (const phrase of [project.title, ...(aliases.get(project.slug) ?? [])]) {
+    const projectAliases = aliases.get(project.slug)
+    if (!projectAliases) continue
+
+    for (const phrase of [project.title, ...projectAliases]) {
       if (skillsThatAreAlsoAliases.has(phrase.toLowerCase())) continue
       if (!phraseMatches(question, phrase)) continue
       if (!best || phrase.length > best.score) best = { score: phrase.length, project }

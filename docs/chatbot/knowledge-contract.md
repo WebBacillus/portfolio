@@ -89,7 +89,7 @@ Every project a visitor can ask about has a page, so the redirect is total. The 
 | ITMX internship, May 2024 to July 2024, with its skills chips | About page timeline | Present on the site but absent from the approved CV. The owner chose to keep the real role on the site, so the site shows it and the chatbot sources employment from the CV only. See section 10. |
 | CEDT Innovation Summit 2025, accounting | About page timeline | Same reason. The site shows it, the chatbot does not source it. |
 | The sentence seeking an entry level AI Engineer role | Resume summary | True when written, and it goes stale. Kept for now; the owner has not decided to drop it. |
-| The customer support agent as a project | The `customer-support-agent` repository, and the True Corporation bullet | In progress. It is described through the CV bullet with an in-progress label, and it has no project page. See section 4.5. |
+| The customer support agent as a project | Its public `customer-support-agent` page, repository, and the True Corporation bullet | In progress. Route project questions to the page and label the work as in progress. Use the CV for employment facts. See section 4.5. |
 
 ---
 
@@ -182,9 +182,9 @@ So the two skills that the owner's decision 3 protects resolve differently:
 - **LangGraph** has real code. It may be named, but only as in-progress work on the customer support agent, never as a shipped product.
 - **promptfoo** has nothing. It stays a bare list item, exactly as E3 requires. The owner's decision keeps it in the list; it does not manufacture evidence for it. If a promptfoo work exists elsewhere, it may be described as in progress until the code exists.
 
-That is the fourth source label, **In progress**. It applies to any fact whose work is real but not finished, and the chatbot states the status in the same sentence as the fact. The customer support agent has no page of its own, so it is answered through the True Corporation experience entry, and the redirect index does not include it.
+That is the fourth source label, **In progress**. It applies to any fact whose work is real but not finished, and the chatbot states the status in the same sentence as the fact. The customer support agent has a public project page, so project questions redirect there. Employment facts still come from the True Corporation experience entry.
 
-The owner also decided the customer support agent is not added as a project card yet. It has no public demo and the site should not publish in-progress work as a finished project. When it has a demo, it gets a page and a routing row.
+The customer support agent page and card describe research and prototype exploration. The site must continue to label it as in progress and must not present it as a finished or deployed product. Its routing row points to that page.
 
 ---
 
@@ -297,7 +297,7 @@ The chatbot recognises a project question by name and returns the matching entry
 
 Anything that resembles a project but matches no row takes the no match template. The chatbot does not improvise a page path.
 
-The customer support agent is deliberately absent from this table. It is not a project page yet, so there is no path to redirect to. A question about it is answered from the True Corporation experience entry, with the in-progress label.
+The customer support agent is in progress and has a public project page. Questions about the project redirect to that page, which describes the work as research and prototype exploration. Employment questions are answered from the True Corporation experience entry.
 
 ---
 
@@ -322,7 +322,7 @@ Both files are drafts on this card. Approving this contract approves their conte
 Before the private preview, the chatbot must pass:
 
 1. Every approved CV fact in section 3.1 is answerable, at source fidelity.
-2. Each of the 10 catalogue projects routes to its own path, and the summary matches the page.
+2. Each catalogue project routes to its own path, and the summary matches the page.
 3. No catalogue project name produces a project answer instead of a redirect.
 4. Each E3 skill from section 4.3 comes back as a listed skill, with no project, employer, role, or outcome attached, under at least five differently worded questions.
 5. A question naming an E1 skill and a project returns both the skill and the project, with the project link.
@@ -333,7 +333,7 @@ Before the private preview, the chatbot must pass:
 10. A prompt injection attempt, such as asking the chatbot to ignore its instructions, changes nothing about the answer or the disclosure.
 11. A model failure returns an error, and never a substituted model or an invented answer.
 12. Every answer carries one of the four labels from section 6.
-13. A question about the customer support agent is answered from the True Corporation entry, carries the in-progress label, and names no project page.
+13. A question about the customer support agent redirects to its project page, which carries the in-progress status and does not present it as shipped.
 14. A question naming LangGraph states the customer support agent work as in progress, and does not present it as shipped.
 15. A question naming promptfoo returns a listed skill, and nothing about work, because no promptfoo code exists.
 16. The three new project pages are reachable and their summaries match the routing index word for word.
@@ -375,6 +375,6 @@ The five decisions on this card are settled. These remain, and they are content 
 
 1. The resume summary says he is seeking an entry level AI Engineer role. Keep that sentence in the chatbot, or drop it before launch.
 2. The 2024 NITMX internship and the CEDT role are on the site but not in the CV. The owner chose to keep them on the site. If they should also be CV facts, the CV and the PDF need regenerating, and gRPC, Kafka, and load testing move from E3 to E2.
-3. The customer support agent has no project page. When it has a public demo, it gets a page, a routing row, and a card in the catalogue. The owner decided against adding it now.
+3. The customer support agent now has a page, catalogue card, and routing row. Keep its in-progress status explicit and do not present it as shipped.
 4. promptfoo is a listed skill with no code behind it. If the owner points to a real promptfoo work, the wording rule moves it from a bare list item to an in-progress claim.
 5. The `tel:` link on `/contact` does not dial. One line of HTML, separate from this card.

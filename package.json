@@ -6,7 +6,7 @@
   "packageManager": "pnpm@12.3.4",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/validate-chat-routing.mjs && next build",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit"
   },

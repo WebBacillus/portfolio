@@ -23,6 +23,7 @@ matches no row takes the no match template. The chatbot never improvises a path.
 | SCB Tech X Loan Origination | `/work/scb-tech-x-loan-origination` | SCB, loan origination, Temporal, Azure Blob Storage, loan pipeline |
 | YouTube Summarizer | `/work/youtube-summarizer` | YouTube summary, n8n, video summarizer, Obsidian notes, transcript automation, wiki links |
 | MongoDB Monthly Activation | `/work/mongodb-monthly-activation` | MongoDB heartbeat, MongoDB Atlas, monthly activation, n8n database check, Telegram database report |
+| Customer Support Agent | `/work/customer-support-agent` | TrueX, smart home support, Thai and English support, troubleshooting agent |
 
 ## The one line summary for each redirect
 
@@ -41,12 +42,13 @@ rather than writing a new one, so the redirect and the page agree.
 - **SCB Tech X Loan Origination**: A loan origination pipeline that replaces manual steps with Go services and durable Temporal workflows.
 - **YouTube Summarizer**: A local n8n workflow that turns videos saved in Notion into timestamped breakdowns and linked Markdown notes for an Obsidian vault.
 - **MongoDB Monthly Activation**: A monthly n8n workflow that sends a lightweight MongoDB heartbeat and reports returned records in Telegram.
+- **Customer Support Agent**: Research for a Thai and English support agent for TrueX smart home devices. The planned support scope covers ten models and 29 issue groups, with troubleshooting guided by reviewed product evidence.
 
-## Not on this site
+## In-progress project
 
-The customer support agent work at True Corporation is in progress and has no page of
-its own. It is covered by the True Corporation experience entry in `cv.md`, not by a
-redirect. The chatbot may answer about the role from the CV bullet and must label the
-work as in progress. It must not invent a project page for it.
+The customer support agent is an in-progress research project with a public page. Route
+questions about it to that page; describe it as research and prototype exploration, not
+as a completed or deployed support application. The True Corporation experience entry
+remains the source for employment facts.
 
 ChuMaiNichi is not the candidate's project and must never appear here.
