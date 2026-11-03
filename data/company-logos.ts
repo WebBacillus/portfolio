@@ -5,6 +5,7 @@ export type CompanyLogo = {
   height: number
   /** Optical height used in the compact timeline logo plate. */
   displayHeight: number
+  background?: "dark"
 }
 
 /**
@@ -43,10 +44,11 @@ export const companyLogos = {
   },
   cedtInnovationSummit: {
     src: "/images/companies/cedt-innovation-summit.png",
-    alt: "CEDT Innovation Summit logo",
-    width: 1437,
-    height: 359,
-    displayHeight: 24,
+    alt: "CEDT Innovation Summit 2026 logo",
+    width: 391,
+    height: 165,
+    displayHeight: 30,
+    background: "dark",
   },
 } satisfies Record<string, CompanyLogo>
 

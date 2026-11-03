@@ -30,7 +30,7 @@ export default function TimelineItem({ year, title, description, index, organiza
               <h3 className="text-xl font-bold md:text-2xl">{title}</h3>
             </div>
             {logo && (
-              <div className="timeline-logo flex h-10 w-28 shrink-0 items-center justify-center self-start rounded-md bg-white px-2 md:self-auto">
+              <div className={`timeline-logo flex h-10 w-28 shrink-0 items-center justify-center self-start rounded-md px-2 md:self-auto ${logo.background === "dark" ? "bg-black" : "bg-white"}`}>
                 <Image
                   src={logo.src}
                   alt={logo.alt}
