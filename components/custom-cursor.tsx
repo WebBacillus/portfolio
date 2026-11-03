@@ -6,13 +6,17 @@ import gsap from "gsap"
 /**
  * Bracket cursor adapted from maimaiproleague.net: a center dot plus four
  * L-shaped corner brackets that slowly spin while idle and snap to the
- * bounding box of any element carrying `data-cursor-target`.
+ * bounding box of the surface under the pointer.
  *
- * Mark interactive surfaces with `data-cursor-target` and they get the frame.
+ * Snap targets are resolved in two steps: an explicit `data-cursor-target`
+ * marker wins, otherwise the nearest natively clickable element is used, so
+ * buttons and links frame themselves without extra markup. Mark non-clickable
+ * surfaces (cards, text blocks, images) with `data-cursor-target`.
  *
  * Geometry is ported from the reference site (verified against its live DOM):
- * each bracket is a 12px box whose visible L sits BRACKET_OUTSET px outside
- * the target corner, positioned relative to the cursor origin via GSAP x/y.
+ * each bracket is a BRACKET_SIZE box whose visible L sits BRACKET_OUTSET px
+ * outside the target corner, positioned relative to the cursor origin via GSAP
+ * x/y.
  *
  * Improvements over the reference: disabled for coarse pointers and
  * reduced-motion users, native caret kept over editable fields, and bracket
@@ -21,10 +25,13 @@ import gsap from "gsap"
  */
 
 const TARGET_SELECTOR = "[data-cursor-target]"
+/** Natively clickable elements, used when no explicit target is marked. */
+const INTERACTIVE_SELECTOR =
+  "a[href], button, [role='button'], summary, [role='tab'], input[type='submit'], input[type='button'], input[type='reset']"
 const EDITABLE_SELECTOR = "input, textarea, select, [contenteditable='true']"
 
 /** Bracket box size in px. */
-const BRACKET_SIZE = 12
+const BRACKET_SIZE = 16
 /** Gap between each bracket and the target edge in px. */
 const BRACKET_OUTSET = 3
 /** Pointer-driven bracket drift; the reference uses 5e-5 (effectively static). */
@@ -47,10 +54,10 @@ const IDLE_OFFSETS = [
 ]
 
 const BRACKET_CLASSES = [
-  "border-l-[1.5px] border-t-[1.5px]",
-  "border-r-[1.5px] border-t-[1.5px]",
-  "border-b-[1.5px] border-r-[1.5px]",
-  "border-b-[1.5px] border-l-[1.5px]",
+  "border-l-2 border-t-2",
+  "border-r-2 border-t-2",
+  "border-b-2 border-r-2",
+  "border-b-2 border-l-2",
 ]
 
 interface TargetRect {
@@ -114,6 +121,13 @@ export default function CustomCursor() {
     let hiddenOverEditable = false
     let moveFrame = 0
     let scrollFrame = 0
+
+    // An explicit marker wins so a whole card can stay framed, otherwise the
+    // nearest natively clickable element frames itself.
+    const resolveTarget = (element: Element | null): HTMLElement | null => {
+      if (!element) return null
+      return element.closest<HTMLElement>(TARGET_SELECTOR) ?? element.closest<HTMLElement>(INTERACTIVE_SELECTOR)
+    }
 
     const readRect = (element: HTMLElement): TargetRect => {
       const rect = element.getBoundingClientRect()
@@ -199,7 +213,7 @@ export default function CustomCursor() {
           hiddenOverEditable = overEditable
           gsap.to(container, { opacity: overEditable ? 0 : 1, duration: 0.2, overwrite: "auto" })
         }
-        setTarget(element?.closest<HTMLElement>(TARGET_SELECTOR) ?? null)
+        setTarget(resolveTarget(element))
         if (target) targetRect = readRect(target)
       })
     }
@@ -211,7 +225,7 @@ export default function CustomCursor() {
       scrollFrame = requestAnimationFrame(() => {
         scrollFrame = 0
         const element = document.elementFromPoint(pointer.x, pointer.y)
-        setTarget(element?.closest<HTMLElement>(TARGET_SELECTOR) ?? null)
+        setTarget(resolveTarget(element))
         if (target) targetRect = readRect(target)
       })
     }
@@ -264,14 +278,14 @@ export default function CustomCursor() {
     >
       <span
         ref={dotRef}
-        className="absolute left-0 top-0 -ml-px -mt-px block h-0.5 w-0.5 rounded-full bg-white"
+        className="absolute left-0 top-0 -ml-0.5 -mt-0.5 block h-1 w-1 rounded-full bg-white"
         style={{ willChange: "transform" }}
       />
       <div ref={bracketsRef}>
         {BRACKET_CLASSES.map((className) => (
           <span
             key={className}
-            className={`absolute left-0 top-0 block h-3 w-3 border-white ${className}`}
+            className={`absolute left-0 top-0 block h-4 w-4 border-white ${className}`}
             style={{ willChange: "transform" }}
           />
         ))}
