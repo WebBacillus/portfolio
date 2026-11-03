@@ -204,6 +204,135 @@ button {
   font-weight: 600;
 }
 
+/* ---------------------------------------------------------------------------
+   Navigation pill
+
+   Ported from meesverberne.com. The reference site builds its header as a
+   centred pill whose translucent background carries a backdrop blur that
+   ramps up with the scroll, separated by hairline dividers that grow in
+   once the header is scrolled. The bar itself stays fixed while the logo
+   and the social icons ride the scroll up and out of view.
+
+   --nav-blur is written by the header component as the scroll position
+   changes; the rest is pure CSS driven by the .nav-scrolled state class.
+--------------------------------------------------------------------------- */
+.nav-bar {
+  position: relative;
+  /* The bar spans the viewport, so it must not swallow clicks on the
+     content underneath. Only the interactive parts opt back in. */
+  pointer-events: none;
+}
+
+.nav-pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  height: 3.125vw;
+  padding: 1.25vw 1.875vw;
+  border-radius: 1.875vw;
+  box-sizing: border-box;
+  overflow: hidden;
+  line-height: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .nav-pill {
+    height: 4.63vw;
+    padding: 1.852vw 2.778vw;
+    border-radius: 2.778vw;
+  }
+}
+
+.nav-pill-bg {
+  position: absolute;
+  inset: 0;
+  background-color: transparent;
+  -webkit-backdrop-filter: blur(var(--nav-blur, 0px));
+  backdrop-filter: blur(var(--nav-blur, 0px));
+  transition: background-color 0.3s ease-out;
+}
+
+.nav-pill-list {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-pill-item {
+  position: relative;
+  padding: 0 0.625vw;
+}
+
+/* Hairline divider between items. It stays collapsed until the header
+   is scrolled, then grows to the full height of the item. */
+.nav-pill-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 0;
+  background-color: var(--purple);
+  opacity: 0.2;
+  transition: height 0.3s ease-out;
+}
+
+.nav-pill-item:last-child::after {
+  display: none;
+}
+
+.nav-pill-link {
+  position: relative;
+  display: inline-block;
+  padding: 0.25rem 0;
+  color: var(--black);
+  font-size: 0.875vw;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s ease-out;
+}
+
+/* Underline. It wipes in from the right edge, mirroring the reference,
+   which grows the line from right to left. */
+.nav-pill-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: var(--black);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.6s ease-out, background-color 0.3s ease-out;
+}
+
+.nav-pill-link:hover::before,
+.nav-pill-item.is-active .nav-pill-link::before {
+  transform: scaleX(1);
+}
+
+.nav-scrolled .nav-pill-bg {
+  background-color: rgb(26 26 26 / 0.58);
+}
+
+.nav-scrolled .nav-pill-link {
+  color: var(--white);
+}
+
+.nav-scrolled .nav-pill-link::before {
+  background-color: var(--purple);
+}
+
+.nav-scrolled .nav-pill-item::after {
+  height: 100%;
+}
+
 /* Custom cursor: while the bracket cursor is active the native pointer is
    hidden everywhere except editable fields, which keep their caret cursor. */
 html.custom-cursor body,
