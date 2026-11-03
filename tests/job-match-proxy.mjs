@@ -22,9 +22,9 @@ upstream.jobMatchCalls = 0
 await new Promise(resolve => upstream.listen(0, "127.0.0.1", resolve))
 
 let serverOutput = ""
-const commonEnv = { ...process.env, CHAT_API_URL: `http://127.0.0.1:${upstream.address().port}`, CHAT_INTERNAL_TOKEN: "test-internal-token", CHAT_SESSION_SECRET: "test-session-signing-secret", NEXT_PUBLIC_JOB_MATCH_PREVIEW_ENABLED: "true" }
-const productionServer = spawn("./node_modules/.bin/next", ["start", "-p", "3103"], { env: { ...commonEnv, JOB_MATCH_PREVIEW_ENABLED: "true", VERCEL_ENV: "production" }, stdio: "ignore", detached: true })
-const previewServer = spawn("./node_modules/.bin/next", ["start", "-p", "3104"], { env: { ...commonEnv, JOB_MATCH_PREVIEW_ENABLED: "true", VERCEL_ENV: "preview" }, stdio: ["ignore", "pipe", "pipe"] })
+const commonEnv = { ...process.env, CHAT_API_URL: `http://127.0.0.1:${upstream.address().port}`, CHAT_INTERNAL_TOKEN: "test-internal-token", CHAT_SESSION_SECRET: "test-session-signing-secret" }
+const productionServer = spawn("./node_modules/.bin/next", ["start", "-p", "3103"], { env: { ...commonEnv, VERCEL_ENV: "production" }, stdio: "ignore", detached: true })
+const previewServer = spawn("./node_modules/.bin/next", ["start", "-p", "3104"], { env: { ...commonEnv, JOB_MATCH_ENABLED: "true", VERCEL_ENV: "preview" }, stdio: ["ignore", "pipe", "pipe"] })
 previewServer.stdout.on("data", chunk => { serverOutput += chunk.toString() })
 previewServer.stderr.on("data", chunk => { serverOutput += chunk.toString() })
 const productionOrigin = "http://127.0.0.1:3103"

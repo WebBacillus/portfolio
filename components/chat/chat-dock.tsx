@@ -41,13 +41,12 @@ function Entry({ entry }: { entry: ChatEntry }) {
   return <div className="space-y-1.5"><p className="text-sm leading-relaxed text-black/85">{entry.text}</p>{entry.source && <SourceTag source={entry.source} />}</div>
 }
 
-export default function ChatDock() {
+export default function ChatDock({ jobMatchEnabled }: { jobMatchEnabled: boolean }) {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState("")
   const [jobMatch, setJobMatch] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [noticeHidden, setNoticeHidden] = useState(false)
-  const jobMatchEnabled = process.env.NEXT_PUBLIC_JOB_MATCH_PREVIEW_ENABLED === "true"
   const { messages, status, send, retry, reset } = useChat()
   const activeStatus = jobMatch ? "idle" : status
   const activeUnavailable = jobMatch ? false : status === "unavailable"

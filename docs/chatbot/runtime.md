@@ -15,8 +15,7 @@
 | Next.js server | `CHAT_SESSION_SECRET` | Independent random HMAC key for the 24-hour signed session cookie |
 | Next.js server | `CHAT_SESSION_CAP` | Optional positive integer; defaults to 30 accepted sends per session |
 | Next.js build | `CHAT_PUBLIC_ENABLED` | Set to `true` and redeploy only after launch checks pass; production launcher is hidden otherwise |
-| Next.js preview | `NEXT_PUBLIC_JOB_MATCH_PREVIEW_ENABLED` | Set to `true` to show Match a job in previews only |
-| Next.js preview | `JOB_MATCH_PREVIEW_ENABLED` | Set to `true` to enable the private preview endpoint only when `VERCEL_ENV=preview` |
+| Next.js server | `JOB_MATCH_ENABLED` | Set to `true` to show Match a job and enable `/api/job-match` when `VERCEL_ENV=preview` or `production`; redeploy after changing it |
 | Python server | `OPENAI_API_KEY` | Dedicated API Platform project key |
 | Python server | `OPENAI_MODEL` | Optional; defaults to `gpt-6-luna` |
 
@@ -28,7 +27,7 @@ The Python service keeps a 20 requests/minute/IP in-process brake. The durable p
 
 The signed cookie cap is a secondary friction control. It can be reset by deleting or replaying an older cookie, so it must not be treated as the primary abuse boundary. The WAF rule, shared token and owner-confirmed OpenAI hard cap protect the spend. The $5 cap still needs a launch-time check against the correct API project.
 
-The job-match route shares `portfolio_chat_session` with `/api/chat`, moved from `Path=/api/chat` to `Path=/api`. Both endpoints increment the same signed 24-hour counter. Existing path-scoped cookies stop being sent and are replaced with a new shared cookie on the visitor's next accepted request; an already-issued legacy cookie cannot be migrated by the server. The job-match endpoint is enabled only when both preview flags are true and `VERCEL_ENV=preview`; production fails closed. Configure a dedicated public-path WAF rule for `/api/job-match` at 3 requests per 10 minutes per IP before preview traffic is shared. The Python service applies a matching per-instance backup brake. Confirm rate limiting through both Cloudflare and direct Vercel origins; those controls are deployment gates, not implemented by this code.
+The job-match route shares `portfolio_chat_session` with `/api/chat`, moved from `Path=/api/chat` to `Path=/api`. Both endpoints increment the same signed 24-hour counter. Existing path-scoped cookies stop being sent and are replaced with a new shared cookie on the visitor's next accepted request; an already-issued legacy cookie cannot be migrated by the server. One server-only flag, `JOB_MATCH_ENABLED=true`, controls both the Match a job button and `/api/job-match`; `VERCEL_ENV` must be `preview` or `production`. Unset flags and other environments fail closed. Before enabling production traffic, configure a dedicated public-path WAF rule for `/api/job-match` at 3 requests per 10 minutes per IP. The Python service applies a matching per-instance backup brake. Confirm rate limiting through both Cloudflare and direct Vercel origins; those controls are deployment gates, not implemented by this code.
 
 ## Local checks
 

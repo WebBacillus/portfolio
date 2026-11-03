@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { nextSession, SESSION_CAP, setSession } from "@/lib/chat-session"
+import { isJobMatchEnabled } from "@/lib/job-match-enabled"
 import { APPROVED_EVIDENCE, MAX_JOB_RESULT_BYTES, MAX_JOB_TEXT_CHARS, type EvidenceSourceId, type EvidenceStatus, type PublicEvidence, type PublicJobAssessment } from "@/lib/job-match-contract"
 
 export const runtime = "nodejs"
@@ -9,10 +10,6 @@ const RESULT_TIMEOUT_MS = 45_000
 
 function error(status: number, kind: "error" | "unavailable", message: string) {
   return NextResponse.json({ kind, message }, { status })
-}
-
-function enabledForPreview() {
-  return process.env.VERCEL_ENV === "preview" && process.env.JOB_MATCH_PREVIEW_ENABLED === "true"
 }
 
 function validIp(request: Request) {
@@ -63,7 +60,7 @@ async function readLimitedBody(request: Request, limit: number): Promise<Uint8Ar
 }
 
 export async function POST(request: Request) {
-  if (!enabledForPreview()) return error(404, "unavailable", "Job matching is not available.")
+  if (!isJobMatchEnabled()) return error(404, "unavailable", "Job matching is not available.")
   const backend = process.env.CHAT_API_URL
   const token = process.env.CHAT_INTERNAL_TOKEN
   const secret = process.env.CHAT_SESSION_SECRET

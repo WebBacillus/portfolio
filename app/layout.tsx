@@ -11,6 +11,7 @@ import PageTransition from "@/components/page-transition"
 import BackgroundDebug from "@/components/background-debug"
 import ChatDock from "@/components/chat/chat-dock"
 import CustomCursor from "@/components/custom-cursor"
+import { isJobMatchEnabled } from "@/lib/job-match-enabled"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -39,6 +40,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const jobMatchEnabled = isJobMatchEnabled()
+
   return (
     <html lang="en">
       <head>
@@ -64,7 +67,9 @@ export default function RootLayout({
               {children}
             </div>
           </div>
-          {(process.env.NODE_ENV !== "production" || process.env.CHAT_PUBLIC_ENABLED === "true") && <ChatDock />}
+          {(process.env.NODE_ENV !== "production" || process.env.CHAT_PUBLIC_ENABLED === "true") && (
+            <ChatDock jobMatchEnabled={jobMatchEnabled} />
+          )}
         </GSAPProvider>
       </body>
     </html>
