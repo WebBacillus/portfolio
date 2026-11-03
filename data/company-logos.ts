@@ -31,8 +31,8 @@ export const companyLogos = {
   chulalongkorn: {
     src: "/images/companies/chulalongkorn.png",
     alt: "Chulalongkorn University logo",
-    width: 960,
-    height: 481,
+    width: 844,
+    height: 319,
     displayHeight: 28,
   },
   aiBuilders: {
