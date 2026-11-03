@@ -110,7 +110,7 @@ export default function Header() {
       <div className="container mx-auto h-full px-4">
         <div className="grid h-full grid-cols-[1fr_auto_1fr] items-center">
           {/* Logo */}
-          <TransitionLink href="/" data-cursor-target className="flex items-center">
+          <TransitionLink href="/" className="flex w-fit items-center">
             <div
               ref={logoRef}
               className="w-10 h-10 transition-transform duration-300 relative"
