@@ -77,18 +77,18 @@ const timelineData: TimelineEntry[] = [
 const skillsData = [
   {
     category: "Generative AI",
-    skills: ["OpenAI API", "LLM Tool Calling", "RAG", "Text-to-Speech (TTS)", "n8n", "LangChain", "LangGraph", "Qdrant"],
+    skills: ["OpenAI API", "LLM Tool Calling", "RAG", "Text-to-Speech (TTS)", "n8n", "LangChain", "LangGraph", "Qdrant", "Opik"],
   },
   {
     category: "AI & ML",
-    skills: ["PyTorch", "Torchvision", "Scikit-learn", "Pandas", "NumPy", "Apache Airflow", "MLflow", "Streamlit", "Plotly"],
+    skills: ["PyTorch", "Torchvision", "Scikit-learn", "Pandas", "NumPy", "Apache Airflow", "MLflow", "Streamlit", "Plotly", "Docling"],
   },
   {
     category: "Backend & Architecture",
-    skills: ["REST API", "gRPC", "Microservices", "Clean Architecture", "Hexagonal Architecture", "Kafka", "RabbitMQ"],
+    skills: ["REST API", "gRPC", "Microservices", "Clean Architecture", "Hexagonal Architecture", "Kafka", "RabbitMQ", "FastAPI"],
   },
   { category: "Languages", skills: ["Go", "Python", "C++", "TypeScript", "JavaScript", "Java"] },
-  { category: "Databases", skills: ["PostgreSQL", "MongoDB", "MySQL"] },
+  { category: "Databases", skills: ["PostgreSQL", "MongoDB", "MySQL", "SQLite"] },
   {
     category: "Testing & Quality",
     skills: ["Unit Testing", "Integration Testing", "Load Testing", "promptfoo (Red Teaming/Agent Evaluation)"],

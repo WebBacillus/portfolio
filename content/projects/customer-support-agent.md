@@ -32,6 +32,19 @@ The private repository contains a reviewed device and issue matrix, dated scope 
 
 Some early HTML prototypes are in the private repository. This page describes the research and planned support flow.
 
+## Planned technical stack
+
+The selected stack is designed around traceability — every answer should be traceable back to a reviewed source passage. Components and their roles:
+
+- **Python** with **Ruff** and pre-commit hooks for consistent code quality.
+- **FastAPI** for the support agent API, with **Streamlit** as the inspection UI.
+- **LangGraph** for the multi-turn conversation flow, backed by **SQLite** persistence so state, recorded checks, and identified device context survive across turns.
+- **OpenAI Responses API** using `gpt-6-luna` for generation and `text-embedding-3-large` for embeddings.
+- **Qdrant** for dense Top-K retrieval over the reviewed FAQ and manual artifacts.
+- **Opik** for experiment tracking and observability.
+
+Source content is drawn from reviewed extracted TrueX model manuals, selected TrueX Help Center FAQ articles, and vetted Tuya FAQ troubleshooting content. Manual pipeline provenance is retained so each retrieved passage can be traced back to its originating document.
+
 ## Current limits
 
 The project has not established an end to end support experience, a deployment, or measured customer outcomes. Some device paths, source reviews, safety wording, and evaluation cases remain preparation work. Planned technical choices in the repository describe a possible implementation and should not be read as running services or installed application components.
